@@ -13,7 +13,21 @@ import Search from 'shared/ui/icons/Search';
 import Button from 'shared/ui/Button';
 import Pagination from 'shared/ui/Pagination';
 import ArrowDownIcon from 'shared/ui/icons/ArrowDownIcon';
+import Skeleton from 'shared/ui/Skeleton';
 import classNames from 'classnames';
+import { Meta } from 'shared/lib/meta';
+
+const SKELETON_COUNT = 6;
+
+const AchievementCardSkeleton: React.FC = () => (
+  <div className={styles.achievements__skeletonCard}>
+    <Skeleton light borderRadius={12} className={styles.achievements__skeletonCover} />
+    <div className={styles.achievements__skeletonInfo}>
+      <Skeleton light width="70%" height={16} />
+      <Skeleton light width="90%" height={14} />
+    </div>
+  </div>
+);
 
 const AchievementsSection: React.FC = observer(() => {
   const store = useLocalStore(() => new AchievementListStore());
@@ -29,6 +43,8 @@ const AchievementsSection: React.FC = observer(() => {
       store.setSort(field, 'desc');
     }
   };
+
+  const isLoading = store.meta === Meta.initial || store.meta === Meta.loading;
 
   return (
     <section className={styles.achievements} id="achievements">
@@ -105,14 +121,21 @@ const AchievementsSection: React.FC = observer(() => {
         </div>
 
         <div className={styles.achievements__list}>
-          {store.achievements.length > 0 ? (
+          {isLoading &&
+            Array.from({ length: SKELETON_COUNT }, (_, i) => (
+              <AchievementCardSkeleton key={i} />
+            ))}
+
+          {!isLoading &&
+            store.achievements.length > 0 &&
             store.achievements.map((achievement) => (
               <AchievementCard achievement={achievement} key={achievement.id} />
-            ))
-          ) : (
+            ))}
+
+          {!isLoading && store.achievements.length === 0 && (
             <div className={styles.achievements__empty}>
               <Text view="p-16" color="secondary">
-                {store.search ? 'Ничего не найдено' : 'Загрузка...'}
+                Ничего не найдено
               </Text>
             </div>
           )}

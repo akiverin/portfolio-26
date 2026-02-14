@@ -90,6 +90,7 @@
     grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
     gap: 36px;
     justify-content: space-evenly;
+    min-height: 520px;
 
     @include smallerThanLaptop {
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -114,5 +115,24 @@
   &__pagination {
     display: flex;
     justify-content: flex-end;
+  }
+
+  // ─── Skeleton card ─────────────────────────────────
+  &__skeletonCard {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__skeletonCover {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+
+  &__skeletonInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 12px;
   }
 }

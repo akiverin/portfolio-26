@@ -8,8 +8,8 @@ const HeroSection: React.FC = () => {
   return (
     <section className={styles.hero}>
       <div className={styles.hero__info}>
-        <Text view="p-24" weight="medium" color="secondary" className={styles.hero__desc}>
-          Добро пожаловать на веб сайт – портфолио с моими работами в веб-разработке и веб-дизайне.
+        <Text view="p-18" weight="medium" color="secondary" className={styles.hero__desc}>
+          Создаю цифровой опыт — от концепции до пикселя.
         </Text>
         <AnimatedText text="Андрей Киверин" />
       </div>

@@ -1,9 +1,4 @@
-import {
-  makeAutoObservable,
-  runInAction,
-  IReactionDisposer,
-  reaction,
-} from 'mobx';
+import { makeAutoObservable, runInAction, IReactionDisposer, reaction } from 'mobx';
 import { Meta } from 'shared/lib/meta';
 import { ILocalStore } from 'shared/types/ILocalStore';
 import { Achievement } from '../model/types';
@@ -11,6 +6,7 @@ import { getAllAchievements } from '../api/getAllAchievements';
 import { PaginationStore } from 'shared/stores/PaginationStore';
 
 const PAGE_SIZE = 6;
+const SEARCH_DEBOUNCE_MS = 400;
 
 export type SortField = 'date' | 'title';
 export type SortDirection = 'asc' | 'desc';
@@ -18,6 +14,7 @@ export type SortDirection = 'asc' | 'desc';
 export class AchievementListStore implements ILocalStore {
   private _allAchievements: Achievement[] = [];
   private _disposers: IReactionDisposer[] = [];
+  private _searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
   search: string = '';
   sortField: SortField = 'date';
@@ -33,10 +30,10 @@ export class AchievementListStore implements ILocalStore {
 
     makeAutoObservable(this);
 
-    // Keep pagination total in sync with filtered results
+    // Keep pagination total in sync with fetched results
     this._disposers.push(
       reaction(
-        () => this.filteredAchievements.length,
+        () => this._allAchievements.length,
         (total) => {
           this.pagination.setPagination({
             page: Math.min(this.pagination.page, Math.max(1, Math.ceil(total / PAGE_SIZE))),
@@ -49,27 +46,14 @@ export class AchievementListStore implements ILocalStore {
     );
   }
 
-  /** Filtered achievements based on search query */
-  get filteredAchievements(): Achievement[] {
-    if (!this.search.trim()) {
-      return this._allAchievements;
-    }
-
-    const query = this.search.toLowerCase().trim();
-
-    return this._allAchievements.filter(
-      (a) => a.title.toLowerCase().includes(query) || a.desc.toLowerCase().includes(query),
-    );
-  }
-
-  /** Current page of achievements */
+  /** Current page of achievements (already filtered & sorted by Firebase) */
   get achievements(): Achievement[] {
     const start = (this.pagination.page - 1) * PAGE_SIZE;
-    return this.filteredAchievements.slice(start, start + PAGE_SIZE);
+    return this._allAchievements.slice(start, start + PAGE_SIZE);
   }
 
   get totalPages(): number {
-    return Math.max(1, Math.ceil(this.filteredAchievements.length / PAGE_SIZE));
+    return Math.max(1, Math.ceil(this._allAchievements.length / PAGE_SIZE));
   }
 
   get hasNextPage(): boolean {
@@ -80,12 +64,14 @@ export class AchievementListStore implements ILocalStore {
     return this.pagination.page > 1;
   }
 
-  /** Fetch achievements from Firebase with current sort order */
+  /** Fetch achievements from Firebase with current search/sort params */
   async fetchAchievements(): Promise<void> {
+    if (this.meta === Meta.loading) return;
+
     this.meta = Meta.loading;
     this.error = '';
 
-    const response = await getAllAchievements(this.sortField, this.sortDirection);
+    const response = await getAllAchievements(this.sortField, this.sortDirection, this.search);
 
     if (response.isError) {
       runInAction(() => {
@@ -104,11 +90,15 @@ export class AchievementListStore implements ILocalStore {
   setSearch(value: string): void {
     this.search = value;
     this.pagination.setPage(1);
+    this._debouncedFetch();
   }
 
   setSort(field: SortField, direction: SortDirection): void {
+    if (this.sortField === field && this.sortDirection === direction) return;
     this.sortField = field;
     this.sortDirection = direction;
+    // Reset loading guard so sort always triggers a new fetch
+    this.meta = Meta.initial;
     this.fetchAchievements();
   }
 
@@ -116,7 +106,19 @@ export class AchievementListStore implements ILocalStore {
     this.pagination.setPage(Math.min(page, this.totalPages));
   }
 
+  private _debouncedFetch(): void {
+    if (this._searchTimeout) clearTimeout(this._searchTimeout);
+    this._searchTimeout = setTimeout(() => {
+      runInAction(() => {
+        // Reset guard so the debounced fetch can proceed
+        if (this.meta === Meta.loading) return;
+        this.fetchAchievements();
+      });
+    }, SEARCH_DEBOUNCE_MS);
+  }
+
   destroy(): void {
     this._disposers.forEach((d) => d());
+    if (this._searchTimeout) clearTimeout(this._searchTimeout);
   }
 }

@@ -32,83 +32,121 @@ const RegisterForm: React.FC = observer(() => {
   };
 
   return (
-    <div className={styles['registration-page']}>
-      <div className={styles['registration-page__wrapper']}>
-        <form onSubmit={handleSubmit} className={styles['registration-page__form']}>
-          <div className={styles['registration-page__titles']}>
-            <Text view="p-24" tag="h1" color="primary">
-              Registration account
+    <div className={styles.register}>
+      <div className={styles.register__card}>
+        <form onSubmit={handleSubmit} className={styles.register__form}>
+          <div className={styles.register__header}>
+            <Text view="p-24" tag="h1" weight="bold" color="primary">
+              Регистрация
             </Text>
             <Text view="p-14" color="secondary">
-              If you have an account, please{' '}
-              <Link href={ROUTES.AUTH} className={styles['registration-page__link']}>
-                login
+              Уже есть аккаунт?{' '}
+              <Link href={ROUTES.AUTH} className={styles.register__link}>
+                Войдите
               </Link>
-              .
             </Text>
           </div>
 
-          <div className={styles['registration-page__form-group']}>
-            <Text color="primary" tag="label" view="p-14" htmlFor="displayName">
-              Name
-            </Text>
-            <Input
-              id="displayName"
-              type="text"
-              value={form.displayName}
-              onChange={(v) => form.setField('displayName', v)}
-              placeholder="Enter your name"
-            />
-            {form.errors.displayName && (
-              <Text view="p-14" color="accent">
-                {form.errors.displayName}
+          <div className={styles.register__fields}>
+            <div className={styles.register__field}>
+              <Text color="primary" tag="label" view="p-14" htmlFor="displayName">
+                Имя
               </Text>
-            )}
-          </div>
-          <div className={styles['registration-page__form-group']}>
-            <Text color="primary" tag="label" view="p-14" htmlFor="email">
-              Email
-            </Text>
-            <Input
-              id="email"
-              type="email"
-              value={form.email}
-              onChange={(v) => form.setField('email', v)}
-              placeholder="Enter your email"
-            />
-            {form.errors.email && (
-              <Text view="p-14" color="accent">
-                {form.errors.email}
+              <Input
+                id="displayName"
+                type="text"
+                value={form.displayName}
+                onChange={(v) => form.setField('displayName', v)}
+                placeholder="Введите имя"
+              />
+              {form.errors.displayName && (
+                <Text view="p-14" color="accent">
+                  {form.errors.displayName}
+                </Text>
+              )}
+            </div>
+
+            <div className={styles.register__field}>
+              <Text color="primary" tag="label" view="p-14" htmlFor="email">
+                Email
               </Text>
-            )}
-          </div>
-          <div className={styles['registration-page__form-group']}>
-            <Text color="primary" tag="label" view="p-14" htmlFor="password">
-              Password
-            </Text>
-            <Input
-              id="password"
-              type="password"
-              value={form.password}
-              onChange={(v) => form.setField('password', v)}
-              placeholder="Enter your password"
-            />
-            {form.errors.password && (
-              <Text view="p-14" color="accent">
-                {form.errors.password}
+              <Input
+                id="email"
+                type="email"
+                value={form.email}
+                onChange={(v) => form.setField('email', v)}
+                placeholder="Введите email"
+              />
+              {form.errors.email && (
+                <Text view="p-14" color="accent">
+                  {form.errors.email}
+                </Text>
+              )}
+            </div>
+
+            <div className={styles.register__field}>
+              <Text color="primary" tag="label" view="p-14" htmlFor="password">
+                Пароль
               </Text>
-            )}
+              <Input
+                id="password"
+                type="password"
+                value={form.password}
+                onChange={(v) => form.setField('password', v)}
+                placeholder="Введите пароль"
+              />
+              {form.errors.password && (
+                <Text view="p-14" color="accent">
+                  {form.errors.password}
+                </Text>
+              )}
+            </div>
           </div>
+
+          <label className={styles.register__terms}>
+            <input
+              type="checkbox"
+              checked={form.termsAccepted}
+              onChange={(e) => form.setTermsAccepted(e.target.checked)}
+              className={styles.register__checkbox}
+            />
+            <Text view="p-12" color="secondary">
+              Я принимаю{' '}
+              <Link href={ROUTES.TERMS} className={styles.register__link} target="_blank">
+                пользовательское соглашение
+              </Link>{' '}
+              и{' '}
+              <Link href={ROUTES.PRIVACY} className={styles.register__link} target="_blank">
+                политику конфиденциальности
+              </Link>
+            </Text>
+          </label>
+          {form.errors.terms && (
+            <Text view="p-14" color="accent">
+              {form.errors.terms}
+            </Text>
+          )}
+
           {userStore.meta === Meta.error && (
             <Text view="p-14" color="accent">
               {userStore.error}
             </Text>
           )}
-          <Button type="submit" loading={userStore.meta === Meta.loading}>
-            <Text color="primary" view="p-16">
-              Register
+
+          <Button type="submit" theme="accent" loading={userStore.meta === Meta.loading}>
+            <Text view="p-16" weight="medium">
+              Зарегистрироваться
             </Text>
           </Button>
+
+          <div className={styles.register__divider}>
+            <span />
+            <Text view="p-12" color="secondary">
+              или
+            </Text>
+            <span />
+          </div>
+
           <Button
             onClick={(e) => {
               e.preventDefault();
@@ -118,7 +156,7 @@ const RegisterForm: React.FC = observer(() => {
           >
             <Google width={16} height={16} />
             <Text color="primary" view="p-16">
-              Sign up with Google
+              Войти через Google
             </Text>
           </Button>
         </form>

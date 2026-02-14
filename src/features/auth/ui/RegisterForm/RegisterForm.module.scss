@@ -2,25 +2,62 @@
 @use "mixins" as *;
 @use "colors" as *;
 
-.registration-page {
+.register {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: calc(100vh - 64px);
+  position: relative;
+  overflow: hidden;
+
   @include wrapper;
 
-  &__wrapper {
-    background-color: rgb(13 13 13 / 0.2);
+  // Animated grid pattern
+  background-image:
+    linear-gradient(rgb(66 189 218 / 5%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(66 189 218 / 5%) 1px, transparent 1px);
+  background-size: 60px 60px;
+
+  // Floating blob 1
+  &::before {
+    content: "";
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    top: -150px;
+    right: -100px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgb(66 189 218 / 15%), transparent 70%);
+    animation: reg-float-1 9s ease-in-out infinite;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  // Floating blob 2
+  &::after {
+    content: "";
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    bottom: -100px;
+    left: -100px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgb(120 80 220 / 10%), transparent 70%);
+    animation: reg-float-2 11s ease-in-out infinite;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  &__card {
     position: relative;
-    justify-content: center;
-    color: $text-primary;
-    border-radius: 20px;
-    padding: 40px;
-    border: 1px solid $border-color;
-    backdrop-filter: blur(30px) opacity(0.8);
-    -webkit-backdrop-filter: blur(30px) opacity(0.8);
+    z-index: 1;
     width: 100%;
     max-width: 440px;
+    padding: 40px;
+    border-radius: 24px;
+    border: 1px solid $border-color;
+    background-color: rgb(13 13 13 / 30%);
+    backdrop-filter: blur(40px);
   }
 
   &__form {
@@ -29,19 +66,25 @@
     gap: $space-m;
   }
 
-  &__titles {
+  &__header {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     gap: $space-xxs;
-    margin-bottom: $space-m;
+    margin-bottom: $space-xxs;
   }
 
-  &__form-group {
+  &__fields {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: $space-m;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
   }
 
   &__link {
@@ -50,5 +93,51 @@
     &:hover {
       opacity: 0.8;
     }
+  }
+
+  &__terms {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  &__checkbox {
+    margin-top: 2px;
+    flex-shrink: 0;
+    accent-color: $brand;
+  }
+
+  &__divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    & span {
+      flex: 1;
+      height: 1px;
+      background: $border-color;
+    }
+  }
+}
+
+@keyframes reg-float-1 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(-35px, 25px) scale(1.12);
+  }
+}
+
+@keyframes reg-float-2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(25px, -35px) scale(1.1);
   }
 }

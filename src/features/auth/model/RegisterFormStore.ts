@@ -6,10 +6,12 @@ export class RegisterFormStore implements ILocalStore {
   displayName = '';
   email = '';
   password = '';
-  errors: Record<'displayName' | 'email' | 'password', string> = {
+  termsAccepted = false;
+  errors: Record<'displayName' | 'email' | 'password' | 'terms', string> = {
     displayName: '',
     email: '',
     password: '',
+    terms: '',
   };
 
   constructor() {
@@ -21,21 +23,30 @@ export class RegisterFormStore implements ILocalStore {
     this.errors[field] = '';
   }
 
+  setTermsAccepted(value: boolean): void {
+    this.termsAccepted = value;
+    this.errors.terms = '';
+  }
+
   validateAll(): boolean {
     const e1 = validateDisplayName(this.displayName);
     const e2 = validateEmail(this.email);
     const e3 = validatePassword(this.password);
+    const e4 = this.termsAccepted ? '' : 'Необходимо принять условия';
+
     runInAction(() => {
-      this.errors = { displayName: e1, email: e2, password: e3 };
+      this.errors = { displayName: e1, email: e2, password: e3, terms: e4 };
     });
-    return !e1 && !e2 && !e3;
+
+    return !e1 && !e2 && !e3 && !e4;
   }
 
   reset(): void {
     this.displayName = '';
     this.email = '';
     this.password = '';
-    this.errors = { displayName: '', email: '', password: '' };
+    this.termsAccepted = false;
+    this.errors = { displayName: '', email: '', password: '', terms: '' };
   }
 
   destroy(): void {
