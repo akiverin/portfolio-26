@@ -1,0 +1,14 @@
+{
+  "bracketSameLine": false,
+  "bracketSpacing": true,
+  "endOfLine": "auto",
+  "singleQuote": true,
+  "overrides": [
+    {
+      "files": ["**.*.scss", "*.scss"],
+      "options": {
+        "singleQuote": false
+      }
+    }
+  ]
+}

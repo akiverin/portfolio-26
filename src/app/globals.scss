@@ -1,0 +1,59 @@
+@use "resets" as *;
+
+/* ------------------------- Big Cursor ------------------------- */
+
+/* Default cursor */
+body,
+body * {
+  cursor: url("../assets/cursors/cursor-default.svg") 2 0, auto;
+}
+
+/* Text cursor */
+body p,
+body p span,
+body h1,
+body h1 *,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6,
+body input[type="text"],
+body input[type="email"],
+body textarea,
+body [data-text] {
+  cursor: url("../assets/cursors/cursor-text.svg") 9 19, text;
+}
+
+/* Hover cursor */
+body a,
+body a *,
+body a p,
+body button,
+body button *,
+body input[type="submit"],
+body input[type="submit"] *,
+body input[type="button"],
+body input[type="button"] *,
+body [data-hover],
+body [data-hover] *,
+body [data-gsap-slider-list-status] [data-hover]:hover,
+body [data-gsap-slider-list-status] [data-hover]:hover * {
+  cursor: url("../assets/cursors/cursor-pointer.svg") 12 0, pointer;
+}
+
+/* Grab */
+body [data-gsap-slider-list-status="grab"]:hover,
+body [data-gsap-slider-list-status="grab"] *:hover,
+body [data-flick-drag-status="grab"],
+body [data-flick-drag-status="grab"] .flick-group__top {
+  cursor: url("../assets/cursors/cursor-drag.svg") 12 0, text;
+}
+
+/* Grabbing */
+body [data-flick-drag-status="grabbing"],
+body [data-flick-drag-status="grabbing"] .flick-group__top,
+body [data-gsap-slider-list-status="grabbing"]:hover,
+body [data-gsap-slider-list-status="grabbing"] *:hover {
+  cursor: url("../assets/cursors/cursor-dragging.svg") 12 0, text;
+}

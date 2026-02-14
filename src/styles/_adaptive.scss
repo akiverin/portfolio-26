@@ -1,0 +1,120 @@
+// ===============================
+// Breakpoints
+// ===============================
+$xs: 340px; // Extra Small devices
+$sm: 768px; // Small devices (tablets)
+$xm: 1024px; // Medium devices (small laptops)
+$md: 1280px; // Medium-Large (notebooks)
+$lg: 1440px; // Large devices (desktop)
+$xl: 1920px; // Extra Large (wide screens)
+
+// ===============================
+// Device Specific Mixins
+// ===============================
+
+// Phones: 0 - 339px
+@mixin mini {
+  @media screen and (max-width: ($xs - 1)) {
+    @content;
+  }
+}
+
+// Phones: 340px - 767px
+@mixin phone {
+  @media screen and (min-width: $xs) and (max-width: ($sm - 1)) {
+    @content;
+  }
+}
+
+// Tablets: 768px - 1023px
+@mixin tablet {
+  @media screen and (min-width: $sm) and (max-width: ($xm - 1)) {
+    @content;
+  }
+}
+
+// Small laptops: 1024px - 1279px
+@mixin laptop {
+  @media screen and (min-width: $xm) and (max-width: ($md - 1)) {
+    @content;
+  }
+}
+
+// Notebooks / Medium screens: 1280px - 1439px
+@mixin notebook {
+  @media screen and (min-width: $md) and (max-width: ($lg - 1)) {
+    @content;
+  }
+}
+
+// Desktop: 1440px - 1919px
+@mixin desktop {
+  @media screen and (min-width: $lg) and (max-width: ($xl - 1)) {
+    @content;
+  }
+}
+
+// Large screens: 1920px+
+@mixin wide {
+  @media screen and (min-width: $xl) {
+    @content;
+  }
+}
+
+// ===============================
+// Utility Mixins
+// ===============================
+
+@mixin smallerThanPhone {
+  @media screen and (max-width: calc($xs + 100px)) {
+    @content;
+  }
+}
+
+// Everything larger than phone
+@mixin largerThanPhone {
+  @media screen and (min-width: $sm) {
+    @content;
+  }
+}
+
+@mixin smallerThanTablet {
+  @media screen and (max-width: $sm) {
+    @content;
+  }
+}
+
+// Everything larger than tablet
+@mixin largerThanTablet {
+  @media screen and (min-width: $xm) {
+    @content;
+  }
+}
+
+// Everything smaller than tablet
+@mixin smallerThanLaptop {
+  @media screen and (max-width: $xm) {
+    @content;
+  }
+}
+
+// Everything larger than laptop
+@mixin largerThanLaptop {
+  @media screen and (min-width: $md) {
+    @content;
+  }
+}
+
+// Everything smaller than laptop
+@mixin smallerThanDesktop {
+  @media screen and (max-width: $md) {
+    @content;
+  }
+}
+
+// Everything larger than desktop
+@mixin largerThanDesktop {
+  @media screen and (min-width: $xl) {
+    @content;
+  }
+}

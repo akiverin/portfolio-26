@@ -1,0 +1,149 @@
+---
+description: "API layer — Orval generation, withSchemeParsing, Zod validation, error handling"
+globs: ["src/entities/*/api/**/*.ts", "src/shared/utils/api/**/*.ts", "src/entities/generated/**/*.ts"]
+alwaysApply: false
+---
+
+# API & Data Layer
+
+## Auto-Generated API Client (Orval)
+
+API functions and Zod schemas are auto-generated from OpenAPI spec:
+
+```bash
+yarn generate:api
+```
+
+Generated files — **NEVER edit manually**:
+- `src/entities/generated/api.ts` — API functions
+- `src/entities/generated/api.schemas.ts` — TypeScript types
+- `src/entities/generated/zod.ts` — Zod validation schemas
+
+## Creating API Methods
+
+Wrap generated functions with `withSchemeParsing` for runtime Zod validation:
+
+```typescript
+// entities/Volume/api/createVolume.ts
+import { apiV1VolumesCreateVolume } from 'entities/generated/api';
+import { apiV1VolumesCreateVolumeResponse } from 'entities/generated/zod';
+import { withSchemeParsing } from 'shared/utils/api/withSchemeParsing';
+
+export const createVolume = withSchemeParsing(
+  apiV1VolumesCreateVolume,
+  apiV1VolumesCreateVolumeResponse,
+);
+```
+
+## Re-exporting Types
+
+Types from `api.schemas.ts` are re-exported in entity `model/` layer:
+
+```typescript
+// entities/Server/model/ServerSchema.ts
+export type { ServerSchema } from 'entities/generated/api.schemas';
+```
+
+**CRITICAL**: Components and stores import types from `model/`, not from `generated/`:
+
+```typescript
+// ✅ DO
+import { ServerSchema } from 'entities/Server/model/ServerSchema';
+
+// ❌ DON'T
+import { ServerSchema } from 'entities/generated/api.schemas';
+```
+
+## API Response Shape
+
+All API calls return `BaseResponse<T>`:
+
+```typescript
+type BaseResponse<T> =
+  | { isError: false; data: T }
+  | { isError: true; data: null; error: AxiosError };
+```
+
+**Always check `isError` before accessing data:**
+
+```typescript
+const response = await getServers({ params });
+
+if (response.isError) {
+  // Handle error — show notification, set error meta
+  notificationsStore.error('Failed to load servers');
+  return;
+}
+
+// Safe to use response.data
+runInAction(() => {
+  this._servers = response.data.items;
+});
+```
+
+## Error Handling in Stores
+
+```typescript
+async load(): Promise<void> {
+  this.loadMeta.setLoading();
+
+  const response = await getServers({
+    config: { signal: this._abortController.signal },
+  });
+
+  if (response.isError) {
+    this.loadMeta.setError();
+    return;
+  }
+
+  runInAction(() => {
+    this._data = response.data;
+  });
+
+  this.loadMeta.setSuccess();
+}
+```
+
+## Abort Controllers
+
+Long-running or repeatable requests must support cancellation:
+
+```typescript
+export class MyStore implements ILocalStore {
+  private _abortController = new AbortController();
+
+  async load(): Promise<void> {
+    this._abortController.abort();
+    this._abortController = new AbortController();
+
+    const response = await fetchData({
+      config: { signal: this._abortController.signal },
+    });
+    // ...
+  }
+
+  destroy(): void {
+    this._abortController.abort();
+  }
+}
+```
+
+## Notifications on Errors
+
+Use `NotificationsStore` from shared for user-facing error messages:
+
+```typescript
+import { notificationsStore } from 'shared/stores/NotificationsStore';
+
+if (response.isError) {
+  notificationsStore.error('Failed to create volume');
+}
+```
+
+## DON'T
+
+- Don't use axios directly — only through the `call()` wrapper in `shared/utils/api`
+- Don't edit `entities/generated/*` files — they are auto-generated
+- Don't skip `isError` check — always handle API errors
+- Don't hardcode API URLs — they come from the OpenAPI spec via Orval
+- Don't forget abort controllers for requests that can be cancelled

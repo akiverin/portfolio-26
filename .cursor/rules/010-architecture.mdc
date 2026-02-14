@@ -1,0 +1,126 @@
+---
+description: "FSD architecture — layers, dependencies, file structure, public API"
+globs: ["src/**/*.ts", "src/**/*.tsx"]
+alwaysApply: false
+---
+
+# Architecture — Feature-Sliced Design (FSD)
+
+## Layer Hierarchy (top → bottom)
+
+```
+app/        → Initialization, routing, providers
+pages/      → Page components, page-specific logic
+widgets/    → Composite blocks reused across pages
+features/   → User actions (modals, forms, buttons)
+contexts/   → Global MobX stores, shared React contexts
+entities/   → Business entities (Server, Volume, Datacenter, User, Billing...)
+shared/     → Reusable code without business logic
+```
+
+## Import Rules
+
+**Each layer may only import from layers BELOW it.**
+
+| Layer | Can import from |
+|-------|----------------|
+| `app` | pages, widgets, features, contexts, entities, shared |
+| `pages` | widgets, features, contexts, entities, shared |
+| `widgets` | features, contexts, entities, shared |
+| `features` | contexts, entities, shared |
+| `contexts` | entities, shared |
+| `entities` | shared, other entities (cross-import allowed) |
+| `shared` | nothing above — only external packages |
+
+```typescript
+// ❌ DON'T — widget importing from pages
+import { ServersPage } from 'pages/ServersPage/ui/ServersPage';
+
+// ❌ DON'T — feature importing from widget
+import { VolumeCard } from 'widgets/volume/ui/VolumeCard';
+
+// ✅ DO — feature importing from entity
+import { ServerSchema } from 'entities/Server/model/ServerSchema';
+```
+
+## Placement Decision
+
+**Key question**: Will this code be used on multiple pages?
+
+- **No** → Put it in `pages/` (exception: entity schemas always go to `entities/`)
+- **Yes, it's a composite block** → `widgets/`
+- **Yes, it's a user action** → `features/`
+- **Yes, it's an entity representation** → `entities/`
+- **Yes, it's generic utility** → `shared/`
+
+## Slice Structure
+
+```
+SliceName/
+├── ui/                       # React components
+│   └── ComponentName/
+│       ├── ComponentName.tsx
+│       ├── ComponentName.module.scss
+│       ├── index.ts          # Public API for this component
+│       ├── config.ts          # Constants
+│       └── SubComponent/     # Sub-components in separate dirs
+├── model/                    # MobX stores, types
+│   └── SliceStore/
+│       ├── SliceStore.ts
+│       ├── index.ts
+│       └── types.ts
+├── api/                      # API calls (entities only)
+│   └── getEntity.ts
+└── hooks/                    # Slice-specific hooks
+```
+
+## Public API — NO Barrel Files at Segment Level
+
+**CRITICAL**: Export via `index.ts` at the module level, NOT at segment level.
+
+```typescript
+// ✅ DO — module-level index.ts
+// features/volume/ui/VolumeCreateModal/index.ts
+export { default } from './VolumeCreateModal';
+
+// ❌ DON'T — segment-level barrel aggregating multiple modules
+// features/volume/ui/index.ts
+export * from './VolumeCreateModal';
+export * from './VolumeEditModal';
+```
+
+This is enforced for build optimization and tree-shaking.
+
+## Page Structure Pattern
+
+Pages own their store, provide it via context, and compose widgets/features:
+
+```typescript
+// pages/ServersPage/ui/ServersPage/ServersPage.tsx
+const ServersPage: React.FC = () => {
+  const store = useLocalStore(() => new ServersPageStore());
+
+  React.useEffect(() => {
+    store.load();
+  }, [store]);
+
+  return (
+    <ServersPageStoreProvider store={store}>
+      <PageContent headerSlot={<Header />}>
+        <Content />
+      </PageContent>
+      <ServerActionModal store={store.serverActionModal} />
+    </ServersPageStoreProvider>
+  );
+};
+
+export default ServersPage;
+```
+
+## Lazy Loading
+
+Pages are loaded lazily via `React.lazy()` in `RouterProvider`:
+
+```typescript
+const ServersPage = React.lazy(() => import('pages/ServersPage/ui/ServersPage'));
+```

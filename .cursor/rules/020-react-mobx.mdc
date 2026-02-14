@@ -1,0 +1,189 @@
+---
+description: "React + MobX patterns — stores, observer, useLocalStore, context injection, forms"
+globs: ["src/**/*.tsx", "src/**/*.ts"]
+alwaysApply: false
+---
+
+# React + MobX Patterns
+
+## Store Lifecycle — ILocalStore
+
+Every store that needs cleanup MUST implement `ILocalStore`:
+
+```typescript
+import { ILocalStore } from 'shared/types/ILocalStore';
+import { IReactionDisposer, makeObservable, computed, action, reaction } from 'mobx';
+
+export class MyPageStore implements ILocalStore {
+  private readonly _disposers: IReactionDisposer[] = [];
+
+  constructor() {
+    makeObservable(this, {
+      someComputed: computed,
+      someAction: action.bound,
+    });
+
+    this._disposers.push(
+      reaction(() => this.filter.value, () => this.load()),
+    );
+  }
+
+  destroy(): void {
+    this._disposers.forEach((d) => d());
+    // destroy child stores too
+  }
+}
+```
+
+## useLocalStore — Creating Stores in Components
+
+**CRITICAL**: Import from `shared/hooks/useLocalStore`, NOT from `mobx-react-lite`.
+
+```typescript
+import { useLocalStore } from 'shared/hooks/useLocalStore';
+
+const MyPage: React.FC = () => {
+  const store = useLocalStore(() => new MyPageStore());
+  // store.destroy() is called automatically on unmount
+};
+```
+
+## Context Injection — createContextLocalStore
+
+For sharing page store with deeply nested children:
+
+```typescript
+// model/ServersPageStore/context.ts
+import { createContextLocalStore } from 'shared/utils/createContextLocalStore';
+import { ServersPageStore } from './ServersPageStore';
+
+export const {
+  Provider: ServersPageStoreProvider,
+  useStore: useServersPageStore,
+} = createContextLocalStore(ServersPageStore);
+```
+
+Usage in children:
+
+```typescript
+const Content: React.FC = () => {
+  const store = useServersPageStore();
+  return <div>{store.cards.items.length}</div>;
+};
+
+export default observer(Content);
+```
+
+## observer() — When and How
+
+**CRITICAL**: Every component reading MobX observables MUST be wrapped with `observer()`.
+
+```typescript
+import { observer } from 'mobx-react-lite';
+
+const ServerCard: React.FC<Props> = ({ card }) => {
+  const { data, isTransientState } = card;
+  return <div>{data.name}</div>;
+};
+
+export default observer(ServerCard);
+```
+
+## Component Props Pattern
+
+Props are typed as interfaces/types. Stores are passed as props or accessed via context:
+
+```typescript
+type ServerPreviewCardProps = {
+  card: ServerPreviewCardStore;
+  serviceOffering: FlavorSchema | null;
+  onAction: (action: ServerAction) => void;
+};
+
+const ServerPreviewCard: React.FC<ServerPreviewCardProps> = ({ card, serviceOffering, onAction }) => {
+  // ...
+};
+
+export default observer(ServerPreviewCard);
+```
+
+## Store Composition
+
+Page stores orchestrate child stores — they don't inherit, they compose:
+
+```typescript
+export class ServersPageStore implements ILocalStore {
+  readonly search: SearchWithConnectorStore;
+  readonly sort: FieldSelectWithConnectorStore;
+  readonly cards = new ServersListStore({ onDeleteItem: this._onDeleteItem });
+  readonly serverActionModal = new ServerActionModalStore();
+
+  destroy(): void {
+    this.cards.destroy();
+    this.serverActionModal.destroy();
+  }
+}
+```
+
+## ListStore Pattern
+
+For paginated lists, extend `ListStore` from `shared/stores`:
+
+```typescript
+export class ServersListStore extends ListStore<
+  ListResponseServerSchema,  // API response type
+  ServerPreviewCardStore,     // Normalized item type
+  ServerSchema,               // Raw item from API
+  number                      // Key type
+> {
+  constructor({ onDeleteItem }: Params) {
+    super({
+      callApi: getServers,
+      normalize: (data) => new ServerPreviewCardStore({ initialValue: data }),
+      getEntityKey: ({ data }) => data.id,
+      setFromServer: (data) => ({ items: data.items, total: data.count }),
+    });
+  }
+}
+```
+
+## Form Stores
+
+Forms use `FormStore` + field stores from `shared/stores/form/`:
+
+```typescript
+// Field stores: FieldTextStore, FieldSelectStore, FieldSliderStore, FieldDatetimeStore
+// Form components receive store prop, NOT value/onChange:
+
+<FieldText store={store.fieldsMap.name} label="Name" />
+<FieldSelect store={store.fieldsMap.datacenter} label="Datacenter" />
+<FieldSlider store={store.fieldsMap.cpu} label="CPU" />
+```
+
+## MetaStore for Loading States
+
+```typescript
+import { MetaStore } from 'shared/stores/MetaStore';
+
+export class MyStore {
+  readonly loadMeta = new MetaStore();
+
+  async load(): Promise<void> {
+    this.loadMeta.setLoading();
+    const response = await fetchData();
+    if (response.isError) {
+      this.loadMeta.setError();
+      return;
+    }
+    runInAction(() => { this.data = response.data; });
+    this.loadMeta.setSuccess();
+  }
+}
+```
+
+## DON'T
+
+- Don't use `useState`/`useReducer` for complex state — use MobX stores
+- Don't mutate observables outside `action` or `runInAction`
+- Don't forget `destroy()` — memory leaks from reactions/intervals
+- Don't access store fields without `observer()` wrapper — reactivity won't work

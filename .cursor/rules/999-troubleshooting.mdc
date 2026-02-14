@@ -1,0 +1,158 @@
+---
+description: "Troubleshooting — common pitfalls, debugging, PR checklist"
+alwaysApply: true
+---
+
+# Troubleshooting & PR Checklist
+
+## Common Mistakes
+
+### 1. Missing `observer()` wrapper
+
+**Symptom**: Component doesn't re-render when MobX store changes.
+
+```typescript
+// ❌ BUG — no observer
+const ServerCard: React.FC<Props> = ({ store }) => {
+  return <div>{store.name}</div>;  // Won't update!
+};
+export default ServerCard;
+
+// ✅ FIX
+import { observer } from 'mobx-react-lite';
+export default observer(ServerCard);
+```
+
+### 2. Wrong `useLocalStore` import
+
+**Symptom**: Lint error or store doesn't get destroyed on unmount.
+
+```typescript
+// ❌ BUG — wrong import, store won't be destroyed
+import { useLocalStore } from 'mobx-react-lite';
+
+// ✅ FIX — project's custom hook with destroy()
+import { useLocalStore } from 'shared/hooks/useLocalStore';
+```
+
+### 3. Mutating observables outside action
+
+**Symptom**: MobX strict mode error: "Since strict-mode is enabled, changing observed observable values outside actions is not allowed."
+
+```typescript
+// ❌ BUG
+async load() {
+  const response = await fetchData();
+  this._data = response.data;  // Error in strict mode!
+}
+
+// ✅ FIX — wrap in runInAction
+import { runInAction } from 'mobx';
+
+async load() {
+  const response = await fetchData();
+  runInAction(() => {
+    this._data = response.data;
+  });
+}
+```
+
+### 4. Forgetting `destroy()` cleanup
+
+**Symptom**: Memory leaks, reactions running after unmount, stale API calls.
+
+```typescript
+// ❌ BUG — no cleanup
+destroy(): void { }
+
+// ✅ FIX — clean everything
+destroy(): void {
+  this._disposers.forEach((d) => d());
+  this._abortController.abort();
+  this.polling?.stop();
+  this.childStore.destroy();
+}
+```
+
+### 5. Importing from `entities/generated/` directly
+
+**Symptom**: Tight coupling to generated code, breaks on API regeneration.
+
+```typescript
+// ❌ BUG — direct import from generated
+import { ServerSchema } from 'entities/generated/api.schemas';
+
+// ✅ FIX — import from entity model layer
+import { ServerSchema } from 'entities/Server/model/ServerSchema';
+```
+
+### 6. Not checking `isError` on API response
+
+**Symptom**: Runtime error "Cannot read property 'items' of null".
+
+```typescript
+// ❌ BUG
+const response = await getServers();
+this._servers = response.data.items;  // Crash if error!
+
+// ✅ FIX
+const response = await getServers();
+if (response.isError) {
+  this.loadMeta.setError();
+  return;
+}
+this._servers = response.data.items;
+```
+
+### 7. Hardcoded routes
+
+**Symptom**: Route changes break navigation silently.
+
+```typescript
+// ❌ BUG
+navigate('/profile/servers/123');
+
+// ✅ FIX
+import { ROUTES } from 'shared/configs/routes';
+navigate(ROUTES.profile.serverDetail.create('123'));
+```
+
+## Debugging Tips
+
+### MobX DevTools
+
+Check observable state and reactions:
+- Use `mobx-react-lite`'s `trace()` inside `observer` to see which observables trigger re-render
+- Check `console` for MobX strict mode violations
+
+### API Issues
+
+- Check browser Network tab for failed requests
+- Verify Zod validation isn't rejecting valid responses (check `withSchemeParsing` errors)
+- After backend API changes: run `yarn generate:api` to regenerate client
+
+### Build/Lint Issues
+
+```bash
+yarn ts-check      # Shows TypeScript errors with file locations
+yarn eslint        # Checks import order, FSD layer violations, etc.
+yarn stylelint     # Checks SCSS for BEM violations
+```
+
+## PR Checklist
+
+Before submitting a merge request:
+
+- [ ] `yarn check-quality` passes (ts-check + eslint + stylelint)
+- [ ] No `console.log` in committed code
+- [ ] No `any` types without justification comment
+- [ ] No secrets or tokens in code
+- [ ] All new stores implement `ILocalStore` with proper `destroy()`
+- [ ] All MobX-consuming components wrapped with `observer()`
+- [ ] API errors are handled — `isError` checked, notifications shown
+- [ ] New routes use `ROUTES` config, not hardcoded strings
+- [ ] New components use `BaseClickable` for interactive elements
+- [ ] SCSS uses BEM with `.root` + `$self` pattern
+- [ ] Import order follows ESLint config (externals → internals → siblings → styles)
+- [ ] FSD layer boundaries respected — no upward imports
+- [ ] Self-review completed, dev-testing artifacts attached

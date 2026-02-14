@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  portfolio:
+    build: .
+    container_name: portfolio
+    restart: always
+    ports:
+      - '3001:3000'

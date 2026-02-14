@@ -1,0 +1,7 @@
+@use "mixins" as *;
+
+.home {
+  &__wrapper {
+    @include wrapper;
+  }
+}

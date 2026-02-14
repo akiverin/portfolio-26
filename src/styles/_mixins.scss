@@ -1,0 +1,143 @@
+@use "./adaptive.scss" as *;
+@use "sass:list";
+@use "sass:math";
+
+@mixin wrapper {
+  padding: 0 40px;
+  max-width: 1920px;
+  margin: 0 auto;
+
+  @include laptop {
+    padding: 0 32px;
+  }
+
+  @include tablet {
+    padding: 0 24px;
+  }
+
+  @include phone {
+    padding: 0 16px;
+  }
+
+  @include mini {
+    padding: 0 8px;
+  }
+}
+
+@mixin paddingTop {
+  padding-top: 60px;
+}
+
+@mixin wrapper-f-column {
+  @include wrapper;
+  & {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@mixin flex-center($direction: column, $justify: center, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+@mixin square($size) {
+  width: $size;
+  height: $size;
+}
+
+// Миксин для transition
+$transition-default: 0.25s ease-in-out;
+@mixin transition($properties...) {
+  $animated-property: #{""};
+  @if list.length($properties) >1 {
+    @for $i from 1 through list.length($properties) - 1 {
+      $animated-property: $animated-property
+        list.nth($properties, $i)
+        $transition-default
+        #{", "};
+    }
+  }
+  transition: $animated-property list.nth($properties, list.length($properties))
+    $transition-default;
+}
+
+/// Миксин для адаптивного текста с поддержкой clamp()
+/// Автоматически адаптирует font-size, line-height, letter-spacing и word-spacing.
+///
+/// @param {Number} $size - базовый размер шрифта в px (например, 16px)
+/// @param {Number} $min-ratio - минимальный коэффициент уменьшения (по умолчанию 0.8)
+/// @param {Number} $max-ratio - максимальный коэффициент увеличения (по умолчанию 1.2)
+/// @param {Number} $min-width - минимальная ширина экрана для адаптации (по умолчанию 320px)
+/// @param {Number} $max-width - максимальная ширина экрана для адаптации (по умолчанию 1920px)
+/// @param {Number} $tracking - базовое межбуквенное расстояние (по умолчанию 0em)
+/// @param {Number} $word-gap - базовое расстояние между словами (по умолчанию 0em)
+@mixin fontSize(
+  $size,
+  $min-ratio: 1,
+  $max-ratio: 1.2,
+  $min-width: 320px,
+  $max-width: 1920px,
+  $tracking: 0em,
+  $word-gap: 0em
+) {
+  // Расчёт диапазонов размеров
+  $min-size: $size * $min-ratio;
+  $max-size: $size * $max-ratio;
+
+  // --- FONT SIZE ---
+  $slope: math.div(($max-size - $min-size), ($max-width - $min-width));
+  $base: $min-size - $slope * $min-width;
+
+  font-size: clamp(
+    #{$min-size},
+    calc(#{$base} + #{$slope} * 100vw),
+    #{$max-size}
+  );
+
+  // --- LINE HEIGHT ---
+  $min-line: $min-size * 1.3;
+  $max-line: $max-size * 1.4;
+  $slope-line: math.div(($max-line - $min-line), ($max-width - $min-width));
+  $base-line: $min-line - $slope-line * $min-width;
+
+  line-height: clamp(
+    #{$min-line},
+    calc(#{$base-line} + #{$slope-line} * 100vw),
+    #{$max-line}
+  );
+
+  // --- LETTER SPACING ---
+  // Немного адаптивное расстояние между буквами (под мелкие шрифты немного меньше)
+  letter-spacing: clamp(
+    #{($tracking * 0.5)},
+    calc(#{$tracking} + 0.02vw),
+    #{($tracking * 1.5)}
+  );
+
+  // --- WORD SPACING ---
+  word-spacing: clamp(
+    #{($word-gap * 0.5)},
+    calc(#{$word-gap} + 0.05vw),
+    #{($word-gap * 1.5)}
+  );
+
+  // --- Fallback для старых браузеров ---
+  @supports not (font-size: clamp(1rem, 2vw, 3rem)) {
+    font-size: calc(
+      #{$min-size} + (#{$max-size} - #{$min-size}) * ((100vw - #{$min-width}) /
+            (#{$max-width} - #{$min-width}))
+    );
+    line-height: calc(
+      #{$min-size * 1.3} + ((#{$max-size * 1.4} - #{$min-size * 1.3}) *
+            ((100vw - #{$min-width}) / (#{$max-width} - #{$min-width})))
+    );
+  }
+
+  // --- Улучшение читаемости ---
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

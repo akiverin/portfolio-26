@@ -1,0 +1,77 @@
+---
+description: "IaaS panel core principles — naming, quality gates, decision-making"
+alwaysApply: true
+---
+
+# Core Principles — ActiveCloud IaaS Panel
+
+## Context
+
+Cloud infrastructure management panel (datacenters, VMs, networks, volumes, IPs).
+Target users: DevOps, sysadmins, developers. Stack: React 19 + TypeScript + Vite + MobX + Mantine 8.
+
+## Decision Making
+
+1. **Look for existing patterns first** — find similar code in the project before inventing new approaches
+2. **If no pattern exists** — propose 2-3 options with pros/cons
+3. **When in doubt** — ask, don't guess
+
+## Naming Conventions
+
+| What | Convention | Example |
+|------|-----------|---------|
+| Component/Store dirs | PascalCase | `ServerPreviewCard/`, `ServersPageStore/` |
+| Technical/group dirs | camelCase | `model/`, `ui/`, `api/`, `hooks/` |
+| Component files | PascalCase | `ServerPreviewCard.tsx` |
+| Store files | PascalCase | `ServersPageStore.ts` |
+| API/util/hook files | camelCase | `getServers.ts`, `useLocalStore.ts` |
+| SCSS module files | PascalCase | `ServerPreviewCard.module.scss` |
+| Constants (outside render) | UPPER_SNAKE_CASE | `const DEFAULT_PAGE_SIZE = 20` |
+| BEM class elements | kebab-case | `&__control-menu`, `&__status-label` |
+
+## Mandatory Rules
+
+### DO
+
+- Use TypeScript strict mode — all types must be explicit
+- Wrap MobX-consuming components with `observer()`
+- Import `useLocalStore` from `shared/hooks/useLocalStore`, NOT from `mobx-react-lite`
+- Use `BaseClickable` from `shared/ui` for all clickable elements — never raw `<button>`
+- Use `ROUTES` from `shared/configs/routes` — no hardcoded URLs
+- Run `yarn check-quality` before committing (ts-check + eslint + stylelint)
+
+### DON'T
+
+- Don't use `any` without strong justification
+- Don't use inline styles — use SCSS Modules
+- Don't use `console.log` in production code
+- Don't use `enum` — use plain objects or `as const`
+- Don't use class components — only functional with `React.FC`
+- Don't commit secrets, tokens, or `.env` files
+- Don't use `@ts-ignore` or `@ts-expect-error` without a comment explaining why
+- Don't import from `entities/generated/` directly in components — re-export through entity `model/` or `api/` layer
+
+## Quality Commands
+
+```bash
+yarn ts-check        # Type checking
+yarn eslint          # JS/TS linting
+yarn stylelint       # SCSS linting
+yarn check-quality   # All checks combined
+yarn generate:api    # Regenerate API client from OpenAPI spec
+```
+
+## Import Aliases
+
+Use path aliases, never relative paths crossing layer boundaries:
+
+```typescript
+// ✅ DO
+import { MetaStore } from 'shared/stores/MetaStore';
+import { ServerSchema } from 'entities/Server/model/ServerSchema';
+
+// ❌ DON'T
+import { MetaStore } from '../../../shared/stores/MetaStore';
+```
+
+Available aliases: `shared/*`, `entities/*`, `features/*`, `contexts/*`, `widgets/*`, `pages/*`, `assets/*`

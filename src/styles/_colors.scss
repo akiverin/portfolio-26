@@ -1,0 +1,336 @@
+$white: #fff;
+$black: #000;
+
+$brand: #42bdda;
+$brand-hover: #3daec8;
+$brand-active: #39a3ba;
+$brand-bg: #47fff610;
+$light-bg: #0e0e0e;
+$border-color: rgba(255, 255, 255, 0.2);
+
+$dark: #00000044;
+$dark-hover: #00000066;
+$dark-active: #00000088;
+
+$pagination-page-border: #f1f1f1;
+$pagination-arrow-disabled: #e9e9e9;
+
+$loader-bg: $brand;
+
+$primary: #d39f9f10;
+$primary-light: #a3a3a320;
+$primary-white: #a3a3a330;
+
+$text-primary: #ffffffaa;
+$text-secondary: #797979;
+$text-accent: $brand;
+
+$button-primary-text: $text-primary;
+$button-primary-text-hover: $text-primary;
+$button-primary-text-disabled: $text-primary;
+$button-primary-text-active: $text-primary;
+$button-primary-bg: $white;
+$button-primary-bg-disabled: $primary;
+$button-primary-bg-hover: $pagination-arrow-disabled;
+$button-primary-bg-active: $primary-light;
+
+$button-accent-bg: linear-gradient(
+  360deg,
+  rgba(34, 34, 34, 1) 0%,
+  rgba(51, 51, 51, 1) 100%
+);
+$button-accent-bg-disabled: $brand;
+$button-accent-border: #141414;
+$button-accent-bg-hover: linear-gradient(
+  360deg,
+  rgba(34, 34, 34, 0.95) 0%,
+  rgba(51, 51, 51, 0.95) 100%
+);
+$button-accent-bg-active: $brand-active;
+
+$button-dark-bg: linear-gradient(
+  360deg,
+  rgba(226, 226, 226, 1) 0%,
+  rgba(234, 234, 234, 1) 100%
+);
+$button-dark-bg-disabled: linear-gradient(
+  360deg,
+  rgba(226, 226, 226, 1) 0%,
+  rgba(234, 234, 234, 1) 100%
+);
+$button-dark-bg-hover: linear-gradient(
+  360deg,
+  rgba(226, 226, 226, 0.8) 0%,
+  rgba(234, 234, 234, 0.8) 100%
+);
+$button-dark-border: #cfcfcf;
+$button-dark-bg-active: linear-gradient(
+  360deg,
+  rgba(226, 226, 226, 0.9) 0%,
+  rgba(234, 234, 234, 0.9) 100%
+);
+$button-shadow: inset 0px 1px 2px 0 #ffffff16;
+$button-accent-shadow: 0px -2px 2px 0px rgba(0, 0, 0, 0.25) inset;
+
+$input-placeholder: #afadb5;
+$input-border: transparent;
+$input-text: $text-primary;
+$input-border-focus: transparent;
+$input-border-disabled: transparent;
+$input-text-focus: $text-primary;
+$input-text-disabled: #00000033;
+$input-bg: #1a1a1a;
+$input-bg-focus: $input-bg;
+$input-bg-disabled: $primary;
+
+$dropdown-options-bg: $input-bg;
+
+$card-bg: $primary;
+$card-image-bg: $primary;
+$card-text: $text-primary;
+
+$checkbox-border: $white;
+$checkbox-bg: $white;
+$checkbox-border-hover: $brand;
+$checkbox-bg-hover: $white;
+$checkbox-bg-disabled: #ffffff80;
+$checkbox-border-disabled: #ffffff00;
+$checkbox-check-disabled: #00000033;
+$checkbox-check-hover: $brand;
+$checkbox-check: $brand;
+
+$skeleton-primary: #2b2b2b;
+$skeleton-secondary: #3c3c3c;
+$skeleton-gradient: linear-gradient(
+  90deg,
+  $skeleton-primary 25%,
+  $skeleton-secondary 50%,
+  $skeleton-primary 75%
+);
+
+$banner-transparent: #0e0e0e00;
+$banner-primary: #0e0e0ebe;
+$banner-secondary: #0e0e0ee6;
+$banner-dark: $light-bg;
+$banner-gradient: linear-gradient(
+  $banner-transparent 0%,
+  $banner-primary 50%,
+  $banner-secondary 65%,
+  $banner-dark 80%
+);
+
+$shadow: 0 4px 10px 0 rgba(255, 255, 255, 0.08);
+$project-shadow: rgba(0, 0, 0, 0.1) -2px 3px 3px 0px;
+$project-bg: #f5f5f5;
+
+// Badge colors
+// --Default
+$badge-text: #7e7e7e;
+$badge-shadow-color: #00000040;
+$badge-text-shadow: 0px -0.4px 0.01px $badge-shadow-color;
+
+$badge-shadow-color-up: #f7f7f7;
+$badge-shadow-color-down: #a4a4a4;
+$badge-shadow-up: inset 0px 0.4px 0.1px $badge-shadow-color-up;
+$badge-shadow-down: inset 0px -1.4px 0.1px $badge-shadow-color-down;
+$badge-text-shadow: 0px 0.4px 0.1px $badge-shadow-color;
+
+$badge-bg-color-start: rgba(238, 238, 238, 1);
+$badge-bg-color-end: rgba(183, 183, 183, 1);
+$badge-bg: linear-gradient(
+  180deg,
+  $badge-bg-color-start 0%,
+  $badge-bg-color-end 100%
+);
+
+$badge-border-start: #e3e3e3;
+$badge-border-end: #9a9a9a;
+$badge-border: linear-gradient(
+  180deg,
+  $badge-border-start 0%,
+  $badge-border-end 100%
+);
+
+// --Purple
+$badge-text-purple: #ac62e2;
+$badge-shadow-color-up-purple: #fbf3fe;
+$badge-shadow-color-down-purple: #dab7fa;
+$badge-shadow-up-purple: inset 0px 0.4px 0.1px $badge-shadow-color-up-purple;
+$badge-shadow-down-purple: inset 0px -1.4px 0.1px $badge-shadow-color-down-purple;
+
+$badge-bg-color-start-purple: #f0e8fa;
+$badge-bg-color-end-purple: #e6d8fc;
+$badge-bg-purple: linear-gradient(
+  180deg,
+  $badge-bg-color-start-purple 0%,
+  $badge-bg-color-end-purple 100%
+);
+
+$badge-border-start-purple: #e7dbf7;
+$badge-border-end-purple: #b28be8;
+$badge-border-purple: linear-gradient(
+  180deg,
+  $badge-border-start-purple 0%,
+  $badge-border-end-purple 100%
+);
+
+// --Green
+$badge-text-green: #58b08a;
+$badge-shadow-color-up-green: #f7fff6;
+$badge-shadow-color-down-green: #9ee6ad;
+$badge-shadow-up-green: inset 0px 0.4px 0.1px $badge-shadow-color-up-green;
+$badge-shadow-down-green: inset 0px -1.4px 0.1px $badge-shadow-color-down-green;
+
+$badge-bg-color-start-green: #e2fbe1;
+$badge-bg-color-end-green: #cdf8c9;
+$badge-bg-green: linear-gradient(
+  180deg,
+  $badge-bg-color-start-green 0%,
+  $badge-bg-color-end-green 100%
+);
+
+$badge-border-start-green: #d6f8d9;
+$badge-border-end-green: #84cf98;
+$badge-border-green: linear-gradient(
+  180deg,
+  $badge-border-start-green 0%,
+  $badge-border-end-green 100%
+);
+
+// --Orange
+$badge-text-orange: #e59548;
+$badge-shadow-color-up-orange: #fefde9;
+$badge-shadow-color-down-orange: #f6d080;
+$badge-shadow-up-orange: inset 0px 0.4px 0.1px $badge-shadow-color-up-orange;
+$badge-shadow-down-orange: inset 0px -1.4px 0.1px $badge-shadow-color-down-orange;
+
+$badge-bg-color-start-orange: #fef8bc;
+$badge-bg-color-end-orange: #fbeaa2;
+$badge-bg-orange: linear-gradient(
+  180deg,
+  $badge-bg-color-start-orange 0%,
+  $badge-bg-color-end-orange 100%
+);
+
+$badge-border-start-orange: #fae5ba;
+$badge-border-end-orange: #f2b966;
+$badge-border-orange: linear-gradient(
+  180deg,
+  $badge-border-start-orange 0%,
+  $badge-border-end-orange 100%
+);
+
+// --Red
+$badge-text-red: #e5484b;
+$badge-shadow-color-up-red: #fee9e9;
+$badge-shadow-color-down-red: #f68082;
+$badge-shadow-up-red: inset 0px 0.4px 0.1px $badge-shadow-color-up-red;
+$badge-shadow-down-red: inset 0px -1.4px 0.1px $badge-shadow-color-down-red;
+
+$badge-bg-color-start-red: #ffe0e0;
+$badge-bg-color-end-red: #ffa7a8;
+$badge-bg-red: linear-gradient(
+  180deg,
+  $badge-bg-color-start-red 0%,
+  $badge-bg-color-end-red 100%
+);
+
+$badge-border-start-red: #fababb;
+$badge-border-end-red: #f26668;
+$badge-border-red: linear-gradient(
+  180deg,
+  $badge-border-start-red 0%,
+  $badge-border-end-red 100%
+);
+
+// --Blue
+$badge-text-blue: #6c9de9;
+$badge-shadow-color-up-blue: #f2fafe;
+$badge-shadow-color-down-blue: #b0d0f6;
+$badge-shadow-up-blue: inset 0px 0.4px 0.1px $badge-shadow-color-up-blue;
+$badge-shadow-down-blue: inset 0px -1.4px 0.1px $badge-shadow-color-down-blue;
+
+$badge-bg-color-start-blue: #e5f0fb;
+$badge-bg-color-end-blue: #d0e8fc;
+$badge-bg-blue: linear-gradient(
+  180deg,
+  $badge-bg-color-start-blue 0%,
+  $badge-bg-color-end-blue 100%
+);
+
+$badge-border-start-blue: #dde6f1;
+$badge-border-end-blue: #90baea;
+$badge-border-blue: linear-gradient(
+  180deg,
+  $badge-border-start-blue 0%,
+  $badge-border-end-blue 100%
+);
+
+// --Yellow
+$badge-text-yellow: #91b93d;
+$badge-shadow-color-up-yellow: #fdffde;
+$badge-shadow-color-down-yellow: #d5ec74;
+$badge-shadow-up-yellow: inset 0px 0.4px 0.1px $badge-shadow-color-up-yellow;
+$badge-shadow-down-yellow: inset 0px -1.4px 0.1px $badge-shadow-color-down-yellow;
+
+$badge-bg-color-start-yellow: #f4ffaa;
+$badge-bg-color-end-yellow: #edfd89;
+$badge-bg-yellow: linear-gradient(
+  180deg,
+  $badge-bg-color-start-yellow 0%,
+  $badge-bg-color-end-yellow 100%
+);
+
+$badge-border-start-yellow: #eef9ae;
+$badge-border-end-yellow: #a3c551;
+$badge-border-yellow: linear-gradient(
+  180deg,
+  $badge-border-start-yellow 0%,
+  $badge-border-end-yellow 100%
+);
+
+// --Sky
+$badge-text-sky: #3da2b9;
+$badge-shadow-color-up-sky: #defcff;
+$badge-shadow-color-down-sky: #74d8ec;
+$badge-shadow-up-sky: inset 0px 0.4px 0.1px $badge-shadow-color-up-sky;
+$badge-shadow-down-sky: inset 0px -1.4px 0.1px $badge-shadow-color-down-sky;
+
+$badge-bg-color-start-sky: #befaff;
+$badge-bg-color-end-sky: #afddf2;
+$badge-bg-sky: linear-gradient(
+  180deg,
+  $badge-bg-color-start-sky 0%,
+  $badge-bg-color-end-sky 100%
+);
+
+$badge-border-start-sky: #aeeaf9;
+$badge-border-end-sky: #51acc5;
+$badge-border-sky: linear-gradient(
+  180deg,
+  $badge-border-start-sky 0%,
+  $badge-border-end-sky 100%
+);
+
+// --Pink
+$badge-text-pink: #b93db9;
+$badge-shadow-color-up-pink: #ffdefe;
+$badge-shadow-color-down-pink: #de74ec;
+$badge-shadow-up-pink: inset 0px 0.4px 0.1px $badge-shadow-color-up-pink;
+$badge-shadow-down-pink: inset 0px -1.4px 0.1px $badge-shadow-color-down-pink;
+
+$badge-bg-color-start-pink: #f5cffa;
+$badge-bg-color-end-pink: #fec1ff;
+$badge-bg-pink: linear-gradient(
+  180deg,
+  $badge-bg-color-start-pink 0%,
+  $badge-bg-color-end-pink 100%
+);
+
+$badge-border-start-pink: #f9aef7;
+$badge-border-end-pink: #c551b6;
+$badge-border-pink: linear-gradient(
+  180deg,
+  $badge-border-start-pink 0%,
+  $badge-border-end-pink 100%
+);

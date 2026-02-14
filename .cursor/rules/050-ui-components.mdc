@@ -1,0 +1,170 @@
+---
+description: "UI components — Mantine wrappers, SCSS Modules, BEM, shared UI library"
+globs: ["src/**/*.tsx", "src/**/*.module.scss"]
+alwaysApply: false
+---
+
+# UI Components & Styling
+
+## Shared UI Library
+
+Use wrappers from `shared/ui/` — not direct Mantine imports in business layers:
+
+```typescript
+// ✅ DO — shared wrappers
+import { Button } from 'shared/ui/Button';
+import { Modal } from 'shared/ui/Modal';
+import { Card } from 'shared/ui/Card';
+import { TextInput } from 'shared/ui/TextInput';
+import { PageContent } from 'shared/ui/PageContent';
+
+// ❌ DON'T — direct Mantine in pages/widgets/features
+import { Button } from '@mantine/core';
+```
+
+Key shared UI components: `BaseClickable`, `Card`, `Modal`, `Button`, `Select`, `MultiSelect`,
+`Slider`, `TextInput`, `Textarea`, `Table`, `PageContent`, `PageError`, `PageError404`,
+`StatusLabel`, `ConfirmActionModal`, `TextCopy`, `TextWithTooltip`, `SegmentGroup`, `Menu`,
+`StubSection`, `CollapsibleList`, `BarChart`
+
+Form fields: `FieldText`, `FieldTextarea`, `FieldSelect`, `FieldMultiSelect`, `FieldSlider`,
+`FieldDatetime`, `FieldPassword`, `FieldRadioGroup`, `FieldTags`
+
+## BaseClickable — Clickable Elements
+
+**CRITICAL**: Use `BaseClickable` for any interactive element, never raw `<button>` or `<a>`:
+
+```typescript
+import { BaseClickable } from 'shared/ui/BaseClickable';
+
+// Button behavior
+<BaseClickable onClick={handleClick} className={s.root__action}>
+  Delete
+</BaseClickable>
+
+// Link behavior
+<BaseClickable element="link" to={ROUTES.profile.serverDetail.create(String(id))}>
+  View Details
+</BaseClickable>
+```
+
+## Component File Structure
+
+```
+ComponentName/
+├── ComponentName.tsx          # ONE component per file
+├── ComponentName.module.scss  # Styles
+├── index.ts                   # export { default } from './ComponentName'
+├── config.ts                  # Constants, options
+├── SubComponent/              # Sub-components in separate dirs
+│   ├── SubComponent.tsx
+│   ├── SubComponent.module.scss
+│   └── index.ts
+```
+
+## SCSS Modules — BEM with $self Pattern
+
+**All classes nested inside `.root`**, using `$self: &` for cross-references:
+
+```scss
+.root {
+  $self: &;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-md);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__status-label {
+    font-size: var(--mantine-font-size-sm);
+  }
+
+  &__card {
+    cursor: pointer;
+
+    &_disabled {
+      opacity: 0.5;
+      pointer-events: none;
+
+      #{$self}__status-label {
+        color: var(--mantine-color-dimmed);
+      }
+    }
+  }
+}
+```
+
+## BEM Naming in SCSS
+
+```scss
+// ❌ DON'T — camelCase
+&__controlMenu { }
+&__statusLabel { }
+
+// ✅ DO — kebab-case
+&__control-menu { }
+&__status-label { }
+```
+
+## Accessing Classes in TSX
+
+```tsx
+import cn from 'classnames';
+import s from './Component.module.scss';
+
+// Simple
+<div className={s.root} />
+
+// kebab-case → bracket notation
+<div className={s['root__status-label']} />
+
+// Conditional modifier
+<div className={cn(s.root__card, isDisabled && s.root__card_disabled)} />
+```
+
+## SCSS Variables
+
+Use shared SCSS variables (auto-imported via Vite config):
+
+- `$spacing-*` from `shared/styles/spacing.scss`
+- `$color-*` from `shared/styles/colors.scss`
+- `@mixin` from `shared/styles/mixins.scss`
+- `$radius-*` from `shared/styles/radius.scss`
+
+```scss
+// ❌ DON'T — hardcoded
+padding: 16px;
+color: #333;
+border-radius: 8px;
+
+// ✅ DO — variables or Mantine tokens
+padding: var(--mantine-spacing-md);
+color: var(--mantine-color-text);
+border-radius: var(--mantine-radius-sm);
+```
+
+## CSS Modules Convention
+
+Vite config uses `localsConvention: 'dashes'` — kebab-case class names are accessed as-is.
+
+## Icons
+
+Use `@tabler/icons-react` for icons:
+
+```typescript
+import { IconServer, IconTrash } from '@tabler/icons-react';
+```
+
+## DON'T
+
+- Don't use inline styles — use SCSS Modules
+- Don't write flat selectors (`.root__title { }`) — nest inside `.root { }`
+- Don't hardcode colors or spacing
+- Don't put multiple components in one `.tsx` file
+- Don't use `px` for spacing — use `rem` or Mantine spacing tokens
+- `px` is acceptable only for borders (`border: 1px solid ...`)

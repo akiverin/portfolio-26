@@ -1,0 +1,56 @@
+// @use "styles/colors.scss" as *;
+// @use "adaptive" as *;
+// @use "sizes" as *;
+// @use "mixins" as *;
+
+// .loader {
+//   @include square(60px);
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   color: $loader-bg;
+
+//   &__circle {
+//     box-sizing: border-box;
+//     display: inline-block;
+//     border-radius: 50%;
+//     border: 2px solid currentColor;
+//     @include square(40px);
+//     border-bottom-color: transparent;
+//     transform: rotate(-58deg);
+//     animation: rotate 1s linear infinite;
+//   }
+
+//   &--small {
+//     @include square(24px);
+
+//     & .loader__circle {
+//       border-radius: 50%;
+//       border-width: 1px;
+//       height: 16px;
+//       width: 16px;
+//       border-bottom-color: transparent;
+//     }
+//   }
+
+//   &--medium {
+//     @include square(48px);
+
+//     &.loader__circle {
+//       border-radius: 50%;
+//       border-width: 2px;
+//       height: 32px;
+//       width: 32px;
+//       border-bottom-color: transparent;
+//     }
+//   }
+// }
+
+// @keyframes rotate {
+//   0% {
+//     transform: rotate(0deg);
+//   }
+//   100% {
+//     transform: rotate(360deg);
+//   }
+// }

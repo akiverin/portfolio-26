@@ -1,0 +1,46 @@
+// @use "mixins" as *;
+// @use "sizes" as *;
+// @use "styles/colors" as *;
+
+// .errorPage {
+//   @include wrapper;
+//   @include flex-center;
+//   gap: $space-m;
+//   height: calc(100% - 57px);
+
+//   &__actions {
+//     display: flex;
+//     align-items: center;
+//     gap: $space-l;
+//     margin-top: $space-xl;
+//   }
+
+//   &__link {
+//     border-radius: 50px;
+//     backdrop-filter: blur(20px) contrast(1.2);
+//     -webkit-backdrop-filter: blur(20px) contrast(1.2);
+//     @include transition(background-color, color);
+//     display: flex;
+//     align-items: center;
+//     gap: 8px;
+//     justify-content: center;
+//     background-color: $button-accent-bg;
+//     border: none;
+//     border-radius: $border-radius;
+//     color: $black;
+//     height: $height-ui;
+//     padding: 0 $space-l;
+//     font-size: 18px;
+//     line-height: 18px;
+//     -webkit-box-shadow: $button-accent-shadow;
+//     -moz-box-shadow: $button-accent-shadow;
+//     box-shadow: $button-accent-shadow;
+//     &:hover {
+//       background-color: $button-accent-bg-hover;
+//     }
+
+//     &:active {
+//       background-color: $brand-active;
+//     }
+//   }
+// }

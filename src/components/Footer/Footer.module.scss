@@ -1,0 +1,19 @@
+@use "mixins" as *;
+
+.footer {
+  &__wrapper {
+    @include wrapper;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 140px auto 40px;
+  }
+
+  &__infoBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: start;
+  }
+}

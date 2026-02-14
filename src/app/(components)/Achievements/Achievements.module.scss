@@ -1,0 +1,63 @@
+@use "styles/colors" as *;
+@use "adaptive" as *;
+
+.achievements {
+  margin-top: 180px;
+
+  &__info {
+    // display: flex;
+    // flex-direction: column;
+    // justify-content: center;
+    // align-items: center;
+    text-align: center;
+    position: relative;
+    width: fit-content;
+    margin: 0 auto 80px;
+  }
+
+  &__titleSpan {
+    position: relative;
+  }
+
+  &__desc {
+    position: absolute;
+    top: -32px;
+    right: 0;
+    width: auto;
+    transform: rotate(2deg);
+    padding-right: 2px;
+  }
+
+  &__decorate {
+    position: absolute;
+    top: 60%;
+    left: calc(100% - 0.7em);
+    width: 120px;
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 36px;
+    background-color: $project-bg;
+    justify-content: space-evenly;
+    padding: 80px 32px;
+    border-radius: 24px;
+  }
+
+  @include smallerThanLaptop {
+    &__list {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 80px 32px;
+    }
+  }
+
+  @include smallerThanPhone {
+    &__list {
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+      padding: 80px 32px;
+    }
+  }
+}
