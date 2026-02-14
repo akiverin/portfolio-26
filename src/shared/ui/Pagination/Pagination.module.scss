@@ -1,0 +1,67 @@
+@use "sass:color";
+@use "colors.scss" as *;
+@use "sizes" as *;
+@use "mixins" as *;
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  &__arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid transparent;
+    border-radius: $border-radius;
+    background: $white;
+    box-shadow: $project-shadow;
+
+    @include transition(background, box-shadow);
+
+    &:hover:not([disabled]) {
+      background: color.adjust(#fff, $lightness: -4%);
+      box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+    }
+
+    &[disabled] {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+  }
+
+  &__page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 6px;
+    border: 1px solid transparent;
+    border-radius: $border-radius;
+    background: $white;
+    box-shadow: $project-shadow;
+
+    @include transition(background, box-shadow);
+
+    &:hover:not(&--active) {
+      background: color.adjust(#fff, $lightness: -4%);
+    }
+
+    &--active {
+      background: $black;
+      color: $white;
+      box-shadow: none;
+    }
+  }
+
+  &__dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 36px;
+  }
+}

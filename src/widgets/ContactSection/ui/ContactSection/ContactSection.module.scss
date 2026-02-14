@@ -1,0 +1,52 @@
+@use "mixins" as *;
+@use "adaptive" as *;
+@use "colors" as *;
+
+.contact {
+  margin-top: 180px;
+  padding-bottom: 120px;
+
+  &__header {
+    position: relative;
+    width: fit-content;
+    margin: 0 auto 80px;
+  }
+
+  &__subtitle {
+    position: absolute;
+    top: -32px;
+    right: 0;
+    width: auto;
+    transform: rotate(2deg);
+    padding-right: 2px;
+  }
+
+  &__container {
+    background-color: $project-bg;
+    text-align: center;
+    border-radius: 24px;
+    padding: 60px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    color: $black;
+
+    @include smallerThanLaptop {
+      padding: 48px 32px;
+    }
+
+    @include smallerThanTablet {
+      padding: 32px 20px;
+      gap: 32px;
+    }
+  }
+
+  &__intro {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+}

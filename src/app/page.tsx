@@ -4,6 +4,7 @@ import ProjectsSection from 'widgets/ProjectsSection/ui/ProjectsSection';
 import AchievementsSection from 'widgets/AchievementsSection/ui/AchievementsSection';
 import GrantsSection from 'widgets/GrantsSection/ui/GrantsSection';
 import AboutSection from 'widgets/AboutSection/ui/AboutSection';
+import ContactSection from 'widgets/ContactSection/ui/ContactSection';
 
 export default function HomePage() {
   return (
@@ -14,6 +15,7 @@ export default function HomePage() {
         <ProjectsSection />
         <AchievementsSection />
         <GrantsSection />
+        <ContactSection />
       </div>
     </main>
   );

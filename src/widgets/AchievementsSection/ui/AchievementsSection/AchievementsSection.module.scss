@@ -1,5 +1,6 @@
 @use "colors" as *;
 @use "adaptive" as *;
+@use "mixins" as *;
 
 .achievements {
   margin-top: 180px;
@@ -31,29 +32,87 @@
     width: 120px;
   }
 
+  // ─── Light content area ──────────────────────────
+  &__content {
+    background-color: $project-bg;
+    border-radius: 24px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+
+    @include smallerThanTablet {
+      padding: 24px 16px;
+      gap: 24px;
+    }
+  }
+
+  // ─── Search + Sort controls ──────────────────────
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    // Override CSS vars for Input on light bg
+    --input-bg: #{$white};
+    --input-text: #{$black};
+    --input-placeholder: #999;
+
+    @include smallerThanTablet {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+  }
+
+  &__search {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__sort {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  &__sortIcon {
+    @include transition(transform);
+
+    &--asc {
+      transform: rotate(180deg);
+    }
+  }
+
+  // ─── Card grid ───────────────────────────────────
   &__list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
     gap: 36px;
-    background-color: $project-bg;
     justify-content: space-evenly;
-    padding: 80px 32px;
-    border-radius: 24px;
-  }
 
-  @include smallerThanLaptop {
-    &__list {
+    @include smallerThanLaptop {
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 20px;
-      padding: 80px 32px;
+    }
+
+    @include smallerThanPhone {
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
     }
   }
 
-  @include smallerThanPhone {
-    &__list {
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 20px;
-      padding: 80px 32px;
-    }
+  &__empty {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+  }
+
+  // ─── Pagination ──────────────────────────────────
+  &__pagination {
+    display: flex;
+    justify-content: flex-end;
   }
 }

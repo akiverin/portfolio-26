@@ -1,0 +1,43 @@
+@use "colors.scss" as *;
+@use "sizes" as *;
+@use "mixins" as *;
+
+.textarea-container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--input-bg);
+  width: 100%;
+  padding: $space-s $space-0;
+  color: var(--input-text);
+  border-radius: $border-radius;
+
+  & textarea {
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    width: 100%;
+    min-height: 120px;
+    resize: vertical;
+    background-color: transparent;
+    padding: 0;
+    color: inherit;
+
+    &::placeholder {
+      color: var(--input-placeholder);
+    }
+  }
+
+  &:has(textarea[disabled]) {
+    background-color: var(--input-bg-disabled);
+    color: var(--input-text-disabled);
+  }
+
+  &:has(textarea:focus) {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+  }
+}

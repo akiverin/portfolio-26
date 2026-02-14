@@ -1,0 +1,60 @@
+@use "colors.scss" as *;
+@use "adaptive" as *;
+@use "sizes" as *;
+@use "mixins" as *;
+
+.contact {
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: $space-l;
+    max-width: 680px;
+    margin: 0 auto;
+    width: 100%;
+    color: $black;
+
+    // Override CSS vars for Input/Textarea on light bg
+    --input-bg: #{$white};
+    --input-text: #{$black};
+    --input-placeholder: #999;
+    --input-bg-disabled: #f0f0f0;
+    --input-text-disabled: #aaa;
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: $space-m;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $space-m;
+
+    @include smallerThanTablet {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-m;
+    padding: 60px 20px;
+    text-align: center;
+    color: $black;
+  }
+}
