@@ -1,0 +1,97 @@
+@use "colors.scss" as *;
+@use "adaptive" as *;
+@use "sizes" as *;
+@use "mixins" as *;
+
+.badge {
+  position: relative;
+  z-index: 2;
+
+  background:
+    $badge-bg padding-box,
+    $badge-border border-box;
+  color: $badge-text;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  height: 24px;
+  gap: 6px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  border: 0.4px solid transparent;
+  box-shadow: $badge-shadow-up, $badge-shadow-down;
+
+  &__title {
+    color: inherit;
+    padding-bottom: 2px;
+    display: ruby;
+  }
+
+  &__icon {
+    flex-shrink: 0;
+  }
+
+  &--c-purple {
+    background:
+      $badge-bg-purple padding-box,
+      $badge-border-purple border-box;
+    color: $badge-text-purple;
+    box-shadow: $badge-shadow-up-purple, $badge-shadow-down-purple;
+  }
+
+  &--c-green {
+    background:
+      $badge-bg-green padding-box,
+      $badge-border-green border-box;
+    color: $badge-text-green;
+    box-shadow: $badge-shadow-up-green, $badge-shadow-down-green;
+  }
+
+  &--c-orange {
+    background:
+      $badge-bg-orange padding-box,
+      $badge-border-orange border-box;
+    color: $badge-text-orange;
+    box-shadow: $badge-shadow-up-orange, $badge-shadow-down-orange;
+  }
+
+  &--c-red {
+    background:
+      $badge-bg-red padding-box,
+      $badge-border-red border-box;
+    color: $badge-text-red;
+    box-shadow: $badge-shadow-up-red, $badge-shadow-down-red;
+  }
+
+  &--c-blue {
+    background:
+      $badge-bg-blue padding-box,
+      $badge-border-blue border-box;
+    color: $badge-text-blue;
+    box-shadow: $badge-shadow-up-blue, $badge-shadow-down-blue;
+  }
+
+  &--c-yellow {
+    background:
+      $badge-bg-yellow padding-box,
+      $badge-border-yellow border-box;
+    color: $badge-text-yellow;
+    box-shadow: $badge-shadow-up-yellow, $badge-shadow-down-yellow;
+  }
+
+  &--c-sky {
+    background:
+      $badge-bg-sky padding-box,
+      $badge-border-sky border-box;
+    color: $badge-text-sky;
+    box-shadow: $badge-shadow-up-sky, $badge-shadow-down-sky;
+  }
+
+  &--c-pink {
+    background:
+      $badge-bg-pink padding-box,
+      $badge-border-pink border-box;
+    color: $badge-text-pink;
+    box-shadow: $badge-shadow-up-pink, $badge-shadow-down-pink;
+  }
+}

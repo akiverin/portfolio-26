@@ -3,10 +3,17 @@
 import { useEffect } from 'react';
 import styles from './error.module.scss';
 import Link from 'next/link';
-import Text from 'components/Text';
-import Button from 'components/Button';
+import Text from 'shared/ui/Text';
+import Button from 'shared/ui/Button';
+import { ROUTES } from 'shared/configs/routes';
 
-export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -17,7 +24,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
       <Text color="accent">Произошла ошибка. Попробуйте снова или вернитесь на главную.</Text>
       <div className={styles.errorPage__actions}>
         <Button onClick={reset}>Попробовать снова</Button>
-        <Link href="/" className={styles.errorPage__link}>
+        <Link href={ROUTES.HOME} className={styles.errorPage__link}>
           На главную
         </Link>
       </div>

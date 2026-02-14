@@ -1,26 +1,39 @@
-ARG IMAGE_PREFIX_DOCKERHUB
-ARG NODE_IMAGE
-ARG NGINX_IMAGE=nginx:alpine
-
-FROM ${IMAGE_PREFIX_DOCKERHUB}${NODE_IMAGE} as builder
-
+# Stage 1: Dependencies
+FROM node:20-alpine AS deps
+RUN corepack enable
 WORKDIR /app
 
-COPY .yarn .yarn
-COPY package.json package.json
-COPY yarn.lock yarn.lock
-COPY .yarnrc.yml .yarnrc.yml
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
-RUN yarn install && yarn cache clean --all
+# Stage 2: Build
+FROM node:20-alpine AS builder
+RUN corepack enable
+WORKDIR /app
 
-ADD . .
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
 
-RUN yarn build
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN pnpm build
 
-FROM ${IMAGE_PREFIX_DOCKERHUB}${NGINX_IMAGE}
+# Stage 3: Runner
+FROM node:20-alpine AS runner
+WORKDIR /app
 
-COPY --from=builder /app/dist /usr/share/nginx/html
-ADD .nginx/nginx.conf /etc/nginx/conf.d/default.conf
-ADD .kube/scripts/start.sh /docker-entrypoint.d/start.sh
-RUN chmod u+x /docker-entrypoint.d/start.sh
-EXPOSE 80 80
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+ENV PORT=3000
+
+CMD ["node", "server.js"]

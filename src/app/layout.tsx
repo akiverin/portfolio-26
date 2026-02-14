@@ -1,14 +1,17 @@
-import type { Metadata } from "next";
-import { pretendard, caveat } from "styles/fonts";
+import type { Metadata } from 'next';
+import { pretendard, caveat } from 'shared/styles/fonts';
+import { MantineProvider, ColorSchemeScript } from '@mantine/core';
 
-import "./globals.scss";
-import Header from "components/Header";
-import { StoreProvider } from "shared/store/StoreContext";
-import Footer from "components/Footer";
+import '@mantine/core/styles.css';
+import './globals.scss';
+
+import Header from 'widgets/Header/ui/Header';
+import Footer from 'widgets/Footer/ui/Footer';
+import { StoreProvider } from 'shared/stores/StoreContext';
 
 export const metadata: Metadata = {
-  title: "Andrew Kiverin | Portfolio",
-  description: "Web site portfolio",
+  title: 'Andrew Kiverin | Portfolio',
+  description: 'Web site portfolio',
 };
 
 export default function RootLayout({
@@ -18,13 +21,18 @@ export default function RootLayout({
 }>) {
   return (
     <html className={`${pretendard.variable} ${caveat.variable}`} lang="ru">
-      <StoreProvider>
-        <body>
-          <Header />
-          {children}
-          <Footer />
-        </body>
-      </StoreProvider>
+      <head>
+        <ColorSchemeScript />
+      </head>
+      <body>
+        <MantineProvider>
+          <StoreProvider>
+            <Header />
+            {children}
+            <Footer />
+          </StoreProvider>
+        </MantineProvider>
+      </body>
     </html>
   );
 }

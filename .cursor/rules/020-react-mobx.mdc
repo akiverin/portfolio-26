@@ -1,6 +1,6 @@
 ---
-description: "React + MobX patterns — stores, observer, useLocalStore, context injection, forms"
-globs: ["src/**/*.tsx", "src/**/*.ts"]
+description: 'React + MobX patterns — stores, observer, useLocalStore, context injection'
+globs: ['src/**/*.tsx', 'src/**/*.ts']
 alwaysApply: false
 ---
 
@@ -14,7 +14,7 @@ Every store that needs cleanup MUST implement `ILocalStore`:
 import { ILocalStore } from 'shared/types/ILocalStore';
 import { IReactionDisposer, makeObservable, computed, action, reaction } from 'mobx';
 
-export class MyPageStore implements ILocalStore {
+export class MyStore implements ILocalStore {
   private readonly _disposers: IReactionDisposer[] = [];
 
   constructor() {
@@ -24,13 +24,15 @@ export class MyPageStore implements ILocalStore {
     });
 
     this._disposers.push(
-      reaction(() => this.filter.value, () => this.load()),
+      reaction(
+        () => this.filter,
+        () => this.load(),
+      ),
     );
   }
 
   destroy(): void {
     this._disposers.forEach((d) => d());
-    // destroy child stores too
   }
 }
 ```
@@ -42,36 +44,10 @@ export class MyPageStore implements ILocalStore {
 ```typescript
 import { useLocalStore } from 'shared/hooks/useLocalStore';
 
-const MyPage: React.FC = () => {
-  const store = useLocalStore(() => new MyPageStore());
+const MyComponent: React.FC = () => {
+  const store = useLocalStore(() => new MyStore());
   // store.destroy() is called automatically on unmount
 };
-```
-
-## Context Injection — createContextLocalStore
-
-For sharing page store with deeply nested children:
-
-```typescript
-// model/ServersPageStore/context.ts
-import { createContextLocalStore } from 'shared/utils/createContextLocalStore';
-import { ServersPageStore } from './ServersPageStore';
-
-export const {
-  Provider: ServersPageStoreProvider,
-  useStore: useServersPageStore,
-} = createContextLocalStore(ServersPageStore);
-```
-
-Usage in children:
-
-```typescript
-const Content: React.FC = () => {
-  const store = useServersPageStore();
-  return <div>{store.cards.items.length}</div>;
-};
-
-export default observer(Content);
 ```
 
 ## observer() — When and How
@@ -81,12 +57,11 @@ export default observer(Content);
 ```typescript
 import { observer } from 'mobx-react-lite';
 
-const ServerCard: React.FC<Props> = ({ card }) => {
-  const { data, isTransientState } = card;
-  return <div>{data.name}</div>;
+const ProjectCard: React.FC<Props> = ({ project }) => {
+  return <div>{project.title}</div>;
 };
 
-export default observer(ServerCard);
+export default observer(ProjectCard);
 ```
 
 ## Component Props Pattern
@@ -94,91 +69,100 @@ export default observer(ServerCard);
 Props are typed as interfaces/types. Stores are passed as props or accessed via context:
 
 ```typescript
-type ServerPreviewCardProps = {
-  card: ServerPreviewCardStore;
-  serviceOffering: FlavorSchema | null;
-  onAction: (action: ServerAction) => void;
+type ProjectCardProps = {
+  project: Project;
+  onAction?: () => void;
 };
 
-const ServerPreviewCard: React.FC<ServerPreviewCardProps> = ({ card, serviceOffering, onAction }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, onAction }) => {
   // ...
 };
 
-export default observer(ServerPreviewCard);
+export default observer(ProjectCard);
 ```
 
 ## Store Composition
 
-Page stores orchestrate child stores — they don't inherit, they compose:
+Stores orchestrate child stores — they don't inherit, they compose:
 
 ```typescript
-export class ServersPageStore implements ILocalStore {
-  readonly search: SearchWithConnectorStore;
-  readonly sort: FieldSelectWithConnectorStore;
-  readonly cards = new ServersListStore({ onDeleteItem: this._onDeleteItem });
-  readonly serverActionModal = new ServerActionModalStore();
+export class ProjectsPageStore implements ILocalStore {
+  readonly projectList = new ProjectListStore();
 
   destroy(): void {
-    this.cards.destroy();
-    this.serverActionModal.destroy();
+    this.projectList.destroy();
   }
 }
 ```
 
-## ListStore Pattern
-
-For paginated lists, extend `ListStore` from `shared/stores`:
+## BaseStore for Loading States
 
 ```typescript
-export class ServersListStore extends ListStore<
-  ListResponseServerSchema,  // API response type
-  ServerPreviewCardStore,     // Normalized item type
-  ServerSchema,               // Raw item from API
-  number                      // Key type
-> {
-  constructor({ onDeleteItem }: Params) {
-    super({
-      callApi: getServers,
-      normalize: (data) => new ServerPreviewCardStore({ initialValue: data }),
-      getEntityKey: ({ data }) => data.id,
-      setFromServer: (data) => ({ items: data.items, total: data.count }),
-    });
-  }
-}
-```
+import { BaseStore } from 'shared/stores/BaseStore';
 
-## Form Stores
-
-Forms use `FormStore` + field stores from `shared/stores/form/`:
-
-```typescript
-// Field stores: FieldTextStore, FieldSelectStore, FieldSliderStore, FieldDatetimeStore
-// Form components receive store prop, NOT value/onChange:
-
-<FieldText store={store.fieldsMap.name} label="Name" />
-<FieldSelect store={store.fieldsMap.datacenter} label="Datacenter" />
-<FieldSlider store={store.fieldsMap.cpu} label="CPU" />
-```
-
-## MetaStore for Loading States
-
-```typescript
-import { MetaStore } from 'shared/stores/MetaStore';
-
-export class MyStore {
-  readonly loadMeta = new MetaStore();
-
+export class MyStore extends BaseStore implements ILocalStore {
   async load(): Promise<void> {
-    this.loadMeta.setLoading();
-    const response = await fetchData();
-    if (response.isError) {
-      this.loadMeta.setError();
-      return;
+    this.setLoading();
+    try {
+      const data = await fetchData();
+      runInAction(() => {
+        this._data = data;
+      });
+      this.setSuccess();
+    } catch (e) {
+      this.setError(e);
     }
-    runInAction(() => { this.data = response.data; });
-    this.loadMeta.setSuccess();
+  }
+
+  destroy(): void {
+    // cleanup
   }
 }
+```
+
+## Next.js + MobX Integration
+
+### "use client" Directive
+
+MobX stores and `observer()` components require `"use client"`:
+
+```typescript
+'use client';
+
+import { observer } from 'mobx-react-lite';
+import { useLocalStore } from 'shared/hooks/useLocalStore';
+```
+
+### Root Store via Context
+
+Global stores (e.g., `UserStore`) are provided via React context in `layout.tsx`:
+
+```typescript
+// shared/stores/StoreContext.tsx
+"use client";
+
+import { createContext, useContext, useEffect, useRef } from 'react';
+import { RootStore, initRootStore } from './RootStore';
+
+const StoreContext = createContext<RootStore | null>(null);
+
+export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const storeRef = useRef<RootStore | null>(null);
+  storeRef.current ??= initRootStore();
+
+  useEffect(() => {
+    storeRef.current?.userStore.initAuthListener();
+    return () => storeRef.current?.userStore.destroy();
+  }, []);
+
+  return <StoreContext.Provider value={storeRef.current}>{children}</StoreContext.Provider>;
+};
+
+export const useRootStore = () => {
+  const store = useContext(StoreContext);
+  if (!store) throw new Error('useRootStore must be used within StoreProvider');
+  return store;
+};
 ```
 
 ## DON'T
@@ -187,3 +171,4 @@ export class MyStore {
 - Don't mutate observables outside `action` or `runInAction`
 - Don't forget `destroy()` — memory leaks from reactions/intervals
 - Don't access store fields without `observer()` wrapper — reactivity won't work
+- Don't use `useLocalObservable` from `mobx-react-lite` — use project's `useLocalStore`

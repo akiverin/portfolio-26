@@ -1,6 +1,6 @@
 @use "mixins" as *;
 @use "sizes" as *;
-@use "styles/colors" as *;
+@use "colors" as *;
 
 .notFound {
   @include wrapper;

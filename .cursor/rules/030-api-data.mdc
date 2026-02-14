@@ -1,149 +1,192 @@
 ---
-description: "API layer — Orval generation, withSchemeParsing, Zod validation, error handling"
-globs: ["src/entities/*/api/**/*.ts", "src/shared/utils/api/**/*.ts", "src/entities/generated/**/*.ts"]
+description: 'Firebase API layer — Firestore queries, Auth, error handling, helper utilities'
+globs: ['src/entities/*/api/**/*.ts', 'src/shared/api/**/*.ts']
 alwaysApply: false
 ---
 
-# API & Data Layer
+# API & Data Layer — Firebase
 
-## Auto-Generated API Client (Orval)
+## Firebase Configuration
 
-API functions and Zod schemas are auto-generated from OpenAPI spec:
-
-```bash
-yarn generate:api
-```
-
-Generated files — **NEVER edit manually**:
-- `src/entities/generated/api.ts` — API functions
-- `src/entities/generated/api.schemas.ts` — TypeScript types
-- `src/entities/generated/zod.ts` — Zod validation schemas
-
-## Creating API Methods
-
-Wrap generated functions with `withSchemeParsing` for runtime Zod validation:
+Firebase is initialized in `shared/api/firebase.ts`:
 
 ```typescript
-// entities/Volume/api/createVolume.ts
-import { apiV1VolumesCreateVolume } from 'entities/generated/api';
-import { apiV1VolumesCreateVolumeResponse } from 'entities/generated/zod';
-import { withSchemeParsing } from 'shared/utils/api/withSchemeParsing';
+// shared/api/firebase.ts
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
-export const createVolume = withSchemeParsing(
-  apiV1VolumesCreateVolume,
-  apiV1VolumesCreateVolumeResponse,
-);
+const firebaseConfig = {
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN!,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID!,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET!,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID!,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID!,
+};
+
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
+export const auth = getAuth(app);
 ```
 
-## Re-exporting Types
-
-Types from `api.schemas.ts` are re-exported in entity `model/` layer:
-
-```typescript
-// entities/Server/model/ServerSchema.ts
-export type { ServerSchema } from 'entities/generated/api.schemas';
-```
-
-**CRITICAL**: Components and stores import types from `model/`, not from `generated/`:
-
-```typescript
-// ✅ DO
-import { ServerSchema } from 'entities/Server/model/ServerSchema';
-
-// ❌ DON'T
-import { ServerSchema } from 'entities/generated/api.schemas';
-```
+**CRITICAL**: Always import `db` and `auth` from `shared/api/firebase`, never initialize Firebase elsewhere.
 
 ## API Response Shape
 
 All API calls return `BaseResponse<T>`:
 
 ```typescript
-type BaseResponse<T> =
+// shared/api/types.ts
+export type BaseResponse<T> =
   | { isError: false; data: T }
-  | { isError: true; data: null; error: AxiosError };
+  | { isError: true; data: null; error: unknown };
 ```
 
 **Always check `isError` before accessing data:**
 
 ```typescript
-const response = await getServers({ params });
+const response = await getAllProjects();
 
 if (response.isError) {
-  // Handle error — show notification, set error meta
-  notificationsStore.error('Failed to load servers');
+  this.setError(response.error);
   return;
 }
 
-// Safe to use response.data
 runInAction(() => {
-  this._servers = response.data.items;
+  this._projects = response.data;
 });
+```
+
+## Firestore Helper Utilities
+
+Use generic helpers from `shared/api/firestoreHelpers.ts` to avoid code duplication:
+
+```typescript
+// shared/api/firestoreHelpers.ts
+import { collection, getDocs, query, doc, getDoc, QueryConstraint } from 'firebase/firestore';
+import { db } from './firebase';
+import { BaseResponse } from './types';
+
+export async function fetchCollection<T>(
+  collectionName: string,
+  constraints: QueryConstraint[],
+  mapper: (doc: DocumentSnapshot) => T | Promise<T>,
+): Promise<BaseResponse<T[]>> {
+  try {
+    const q = query(collection(db, collectionName), ...constraints);
+    const snapshot = await getDocs(q);
+    const items = await Promise.all(snapshot.docs.map(mapper));
+    return { isError: false, data: items };
+  } catch (error) {
+    return { isError: true, data: null, error };
+  }
+}
+
+export async function fetchDocument<T>(
+  collectionName: string,
+  docId: string,
+  mapper: (doc: DocumentSnapshot) => T,
+): Promise<BaseResponse<T>> {
+  try {
+    const ref = doc(db, collectionName, docId);
+    const snapshot = await getDoc(ref);
+    if (!snapshot.exists()) {
+      return { isError: true, data: null, error: new Error('Document not found') };
+    }
+    return { isError: false, data: mapper(snapshot) };
+  } catch (error) {
+    return { isError: true, data: null, error };
+  }
+}
+```
+
+## Creating Entity API Methods
+
+Each entity has its own API files in `entities/EntityName/api/`:
+
+```typescript
+// entities/Project/api/getAllProjects.ts
+import { orderBy } from 'firebase/firestore';
+import { fetchCollection } from 'shared/api/firestoreHelpers';
+import { snapshotToProject } from './snapshotToProject';
+
+export const getAllProjects = () =>
+  fetchCollection('projects', [orderBy('date', 'desc')], snapshotToProject);
+```
+
+```typescript
+// entities/Project/api/snapshotToProject.ts
+import { DocumentSnapshot } from 'firebase/firestore';
+import { Project } from '../model/types';
+
+export const snapshotToProject = (snapshot: DocumentSnapshot): Project => ({
+  ...(snapshot.data() as Omit<Project, 'id'>),
+  id: snapshot.id,
+});
+```
+
+## Re-exporting Types
+
+Types are defined in `entities/EntityName/model/types.ts`:
+
+```typescript
+// entities/Project/model/types.ts
+import { Timestamp } from 'firebase/firestore';
+
+export interface Project {
+  id: string;
+  title: string;
+  desc: string;
+  date: Timestamp;
+  cover: string;
+  coverType: string;
+  link?: string;
+  github?: string;
+  behance?: string;
+}
+```
+
+## Firebase Auth
+
+Auth functions live in `entities/User/api/`:
+
+```typescript
+// entities/User/api/signInWithEmail.ts
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from 'shared/api/firebase';
+
+export async function signInWithEmail(email: string, password: string) {
+  const cred = await signInWithEmailAndPassword(auth, email, password);
+  return cred.user;
+}
 ```
 
 ## Error Handling in Stores
 
 ```typescript
 async load(): Promise<void> {
-  this.loadMeta.setLoading();
+  this.setLoading();
 
-  const response = await getServers({
-    config: { signal: this._abortController.signal },
-  });
+  const response = await getAllProjects();
 
   if (response.isError) {
-    this.loadMeta.setError();
+    this.setError(response.error);
     return;
   }
 
   runInAction(() => {
-    this._data = response.data;
+    this._projects = response.data;
   });
 
-  this.loadMeta.setSuccess();
-}
-```
-
-## Abort Controllers
-
-Long-running or repeatable requests must support cancellation:
-
-```typescript
-export class MyStore implements ILocalStore {
-  private _abortController = new AbortController();
-
-  async load(): Promise<void> {
-    this._abortController.abort();
-    this._abortController = new AbortController();
-
-    const response = await fetchData({
-      config: { signal: this._abortController.signal },
-    });
-    // ...
-  }
-
-  destroy(): void {
-    this._abortController.abort();
-  }
-}
-```
-
-## Notifications on Errors
-
-Use `NotificationsStore` from shared for user-facing error messages:
-
-```typescript
-import { notificationsStore } from 'shared/stores/NotificationsStore';
-
-if (response.isError) {
-  notificationsStore.error('Failed to create volume');
+  this.setSuccess();
 }
 ```
 
 ## DON'T
 
-- Don't use axios directly — only through the `call()` wrapper in `shared/utils/api`
-- Don't edit `entities/generated/*` files — they are auto-generated
+- Don't initialize Firebase anywhere except `shared/api/firebase.ts`
 - Don't skip `isError` check — always handle API errors
-- Don't hardcode API URLs — they come from the OpenAPI spec via Orval
-- Don't forget abort controllers for requests that can be cancelled
+- Don't duplicate Firestore query logic — use `firestoreHelpers.ts`
+- Don't import `db`/`auth` from anywhere except `shared/api/firebase`
+- Don't use raw `firebase/firestore` functions in components — only in entity `api/` layer

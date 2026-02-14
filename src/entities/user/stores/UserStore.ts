@@ -1,28 +1,31 @@
-import { auth } from "config/api";
-import { User } from "../types";
-import { computed, makeObservable, observable, runInAction } from "mobx";
+import { auth } from 'shared/api/firebase';
+import { User } from '../model/types';
+import { computed, makeObservable, observable, runInAction } from 'mobx';
 import {
-  ensureUserDoc,
-  getIdTokenFromFirebase,
-  getUserProfileFromFirestore,
-  resetPasswordEmail,
   signInWithEmail,
   signInWithGooglePopup,
   signOutFirebase,
   signUpWithEmail,
   updateProfileInFirebase,
+  resetPasswordEmail,
+  getIdTokenFromFirebase,
+} from '../api/authApi';
+import {
+  ensureUserDoc,
+  getUserProfileFromFirestore,
   updateUserProfileInFirestore,
-} from "entities/user/api";
-import { BaseStore } from "shared/store/BaseStore";
-import { RootStore } from "shared/store/RootStore";
-import { User as FirebaseUser } from "firebase/auth";
-import { FirebaseError } from "firebase/app";
+} from '../api/userProfileApi';
+import { BaseStore } from 'shared/stores/BaseStore';
+import { RootStore } from 'shared/stores/RootStore';
+import { User as FirebaseUser } from 'firebase/auth';
+import { FirebaseError } from 'firebase/app';
+import { ILocalStore } from 'shared/types/ILocalStore';
 
-export class UserStore extends BaseStore {
-  root: RootStore;
+export class UserStore extends BaseStore implements ILocalStore {
+  readonly root: RootStore;
   currentUser: User | null = null;
   isInitialized: boolean = false;
-  unsubscribeAuth: (() => void) | null = null;
+  private _unsubscribeAuth: (() => void) | null = null;
 
   constructor(root: RootStore) {
     super();
@@ -34,16 +37,16 @@ export class UserStore extends BaseStore {
         isInitialized: observable,
         isAuth: computed,
       },
-      { autoBind: true }
+      { autoBind: true },
     );
   }
 
-  get isAuth() {
+  get isAuth(): boolean {
     return Boolean(this.currentUser);
   }
 
-  initAuthListener() {
-    this.unsubscribeAuth = auth.onAuthStateChanged(async (firebaseUser) => {
+  initAuthListener(): void {
+    this._unsubscribeAuth = auth.onAuthStateChanged(async (firebaseUser) => {
       if (!firebaseUser) {
         runInAction(() => {
           this.currentUser = null;
@@ -54,9 +57,9 @@ export class UserStore extends BaseStore {
       }
 
       try {
-        await this.bootstrapUser(firebaseUser);
+        await this._bootstrapUser(firebaseUser);
       } catch (e) {
-        console.error("Error in bootstrapUser:", e);
+        console.error('Error in bootstrapUser:', e);
       } finally {
         runInAction(() => {
           this.isInitialized = true;
@@ -65,7 +68,7 @@ export class UserStore extends BaseStore {
     });
   }
 
-  private async bootstrapUser(firebaseUser: FirebaseUser) {
+  private async _bootstrapUser(firebaseUser: FirebaseUser): Promise<void> {
     try {
       await ensureUserDoc(firebaseUser.uid, {
         email: firebaseUser.email || undefined,
@@ -79,13 +82,13 @@ export class UserStore extends BaseStore {
         this.setSuccess();
       });
     } catch (e) {
-      console.error("Error in bootstrapUser:", e);
+      console.error('Error in bootstrapUser:', e);
       this.setError(e);
     }
   }
 
-  destroy() {
-    this.unsubscribeAuth?.();
+  destroy(): void {
+    this._unsubscribeAuth?.();
   }
 
   async signIn(email: string, password: string) {
@@ -129,10 +132,9 @@ export class UserStore extends BaseStore {
     this.setLoading();
     try {
       const user = await signInWithGooglePopup();
-      await this.bootstrapUser(user);
+      await this._bootstrapUser(user);
     } catch (e) {
-      // обработка отмены пользователем
-      if ((e as FirebaseError).code === "auth/cancelled-popup-request") {
+      if ((e as FirebaseError).code === 'auth/cancelled-popup-request') {
         this.reset();
         return;
       }
@@ -151,13 +153,11 @@ export class UserStore extends BaseStore {
   }
 
   async updateProfile(patch: Partial<User>) {
-    if (!this.currentUser) throw new Error("No user");
-
+    if (!this.currentUser) throw new Error('No user');
     this.setLoading();
     try {
       await updateProfileInFirebase(patch);
       await updateUserProfileInFirestore(this.currentUser.id, patch);
-
       const refreshed = await getUserProfileFromFirestore(this.currentUser.id);
       runInAction(() => (this.currentUser = refreshed));
     } finally {
@@ -170,7 +170,7 @@ export class UserStore extends BaseStore {
   }
 
   async refreshUser() {
-    if (!this.currentUser) throw new Error("No user");
+    if (!this.currentUser) throw new Error('No user');
     const profile = await getUserProfileFromFirestore(this.currentUser.id);
     runInAction(() => (this.currentUser = profile));
     return profile;

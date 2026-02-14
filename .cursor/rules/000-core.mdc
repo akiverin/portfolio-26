@@ -1,14 +1,15 @@
 ---
-description: "IaaS panel core principles — naming, quality gates, decision-making"
+description: 'Portfolio core principles — naming, quality gates, decision-making'
 alwaysApply: true
 ---
 
-# Core Principles — ActiveCloud IaaS Panel
+# Core Principles — Portfolio Website
 
 ## Context
 
-Cloud infrastructure management panel (datacenters, VMs, networks, volumes, IPs).
-Target users: DevOps, sysadmins, developers. Stack: React 19 + TypeScript + Vite + MobX + Mantine 8.
+Personal portfolio website showcasing projects, achievements, and grants.
+Target users: recruiters, potential clients, fellow developers.
+Stack: Next.js 15 (App Router) + React 19 + TypeScript + MobX + Mantine 8 + Firebase + SCSS Modules.
 
 ## Decision Making
 
@@ -18,16 +19,16 @@ Target users: DevOps, sysadmins, developers. Stack: React 19 + TypeScript + Vite
 
 ## Naming Conventions
 
-| What | Convention | Example |
-|------|-----------|---------|
-| Component/Store dirs | PascalCase | `ServerPreviewCard/`, `ServersPageStore/` |
-| Technical/group dirs | camelCase | `model/`, `ui/`, `api/`, `hooks/` |
-| Component files | PascalCase | `ServerPreviewCard.tsx` |
-| Store files | PascalCase | `ServersPageStore.ts` |
-| API/util/hook files | camelCase | `getServers.ts`, `useLocalStore.ts` |
-| SCSS module files | PascalCase | `ServerPreviewCard.module.scss` |
-| Constants (outside render) | UPPER_SNAKE_CASE | `const DEFAULT_PAGE_SIZE = 20` |
-| BEM class elements | kebab-case | `&__control-menu`, `&__status-label` |
+| What                       | Convention       | Example                                 |
+| -------------------------- | ---------------- | --------------------------------------- |
+| Component/Store dirs       | PascalCase       | `ProjectCard/`, `ProjectListStore/`     |
+| Technical/group dirs       | camelCase        | `model/`, `ui/`, `api/`, `hooks/`       |
+| Component files            | PascalCase       | `ProjectCard.tsx`                       |
+| Store files                | PascalCase       | `ProjectListStore.ts`                   |
+| API/util/hook files        | camelCase        | `getAllProjects.ts`, `useLocalStore.ts` |
+| SCSS module files          | PascalCase       | `ProjectCard.module.scss`               |
+| Constants (outside render) | UPPER_SNAKE_CASE | `const DEFAULT_PAGE_SIZE = 20`          |
+| BEM class elements         | kebab-case       | `&__control-menu`, `&__status-label`    |
 
 ## Mandatory Rules
 
@@ -36,29 +37,27 @@ Target users: DevOps, sysadmins, developers. Stack: React 19 + TypeScript + Vite
 - Use TypeScript strict mode — all types must be explicit
 - Wrap MobX-consuming components with `observer()`
 - Import `useLocalStore` from `shared/hooks/useLocalStore`, NOT from `mobx-react-lite`
-- Use `BaseClickable` from `shared/ui` for all clickable elements — never raw `<button>`
 - Use `ROUTES` from `shared/configs/routes` — no hardcoded URLs
-- Run `yarn check-quality` before committing (ts-check + eslint + stylelint)
+- Run `pnpm check-quality` before committing (ts-check + eslint + stylelint)
 
 ### DON'T
 
 - Don't use `any` without strong justification
 - Don't use inline styles — use SCSS Modules
 - Don't use `console.log` in production code
-- Don't use `enum` — use plain objects or `as const`
+- Don't use `enum` — use plain objects with `as const`
 - Don't use class components — only functional with `React.FC`
 - Don't commit secrets, tokens, or `.env` files
 - Don't use `@ts-ignore` or `@ts-expect-error` without a comment explaining why
-- Don't import from `entities/generated/` directly in components — re-export through entity `model/` or `api/` layer
 
 ## Quality Commands
 
 ```bash
-yarn ts-check        # Type checking
-yarn eslint          # JS/TS linting
-yarn stylelint       # SCSS linting
-yarn check-quality   # All checks combined
-yarn generate:api    # Regenerate API client from OpenAPI spec
+pnpm ts-check        # Type checking
+pnpm lint            # JS/TS linting
+pnpm stylelint       # SCSS linting
+pnpm check-quality   # All checks combined
+pnpm format          # Prettier formatting
 ```
 
 ## Import Aliases
@@ -67,11 +66,11 @@ Use path aliases, never relative paths crossing layer boundaries:
 
 ```typescript
 // ✅ DO
-import { MetaStore } from 'shared/stores/MetaStore';
-import { ServerSchema } from 'entities/Server/model/ServerSchema';
+import { BaseStore } from 'shared/stores/BaseStore';
+import { ProjectCard } from 'entities/Project/ui/ProjectCard';
 
 // ❌ DON'T
-import { MetaStore } from '../../../shared/stores/MetaStore';
+import { BaseStore } from '../../../shared/stores/BaseStore';
 ```
 
-Available aliases: `shared/*`, `entities/*`, `features/*`, `contexts/*`, `widgets/*`, `pages/*`, `assets/*`
+Available aliases: `shared/*`, `entities/*`, `features/*`, `widgets/*`, `assets/*`, `@/*`

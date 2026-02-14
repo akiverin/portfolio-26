@@ -4,19 +4,27 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "ts-check": "tsc --noEmit"
+    "lint": "eslint src/",
+    "ts-check": "tsc --noEmit",
+    "stylelint": "stylelint 'src/**/*.scss'",
+    "check-quality": "pnpm ts-check && pnpm lint && pnpm stylelint",
+    "format": "prettier --write 'src/**/*.{ts,tsx,scss,json}'"
   },
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.17.5",
+    "@mantine/core": "^8.3.14",
+    "@mantine/hooks": "^8.3.14",
+    "@tabler/icons-react": "^3.36.1",
     "classnames": "^2.5.1",
     "firebase": "^12.4.0",
     "framer-motion": "^12.23.24",
     "mobx": "^6.15.0",
     "mobx-react-lite": "^4.1.1",
     "next": "15.5.4",
+    "postcss": "^8.5.6",
+    "postcss-preset-mantine": "^1.18.0",
     "prettier": "^3.8.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -27,8 +35,14 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@typescript-eslint/eslint-plugin": "^8.55.0",
+    "@typescript-eslint/parser": "^8.55.0",
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
+    "eslint-plugin-boundaries": "^5.4.0",
+    "eslint-plugin-import": "^2.32.0",
+    "stylelint": "^17.3.0",
+    "stylelint-config-standard-scss": "^17.0.0",
     "typescript": "^5"
   }
 }

@@ -1,0 +1,52 @@
+@use "colors.scss" as *;
+@use "adaptive" as *;
+@use "sizes" as *;
+@use "mixins" as *;
+
+.input-container {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-xxs;
+  height: $height-ui;
+  background-color: var(--input-bg);
+  width: 100%;
+  padding: 0 $space-0;
+  color: var(--input-text);
+  border-radius: $border-radius;
+
+  & input {
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    line-height: 20px;
+    width: 100%;
+    background-color: transparent;
+    padding: 0;
+    color: inherit;
+
+    &::placeholder {
+      color: var(--input-placeholder);
+    }
+
+    &:autofill {
+      box-shadow: 0 0 0px 1000px var(--input-bg) inset;
+      -webkit-text-fill-color: var(--input-text);
+      border-left: 2px solid var(--text-accent);
+      padding-left: $space-xxs;
+    }
+  }
+
+  &:has(input[disabled]) {
+    background-color: var(--input-bg-disabled);
+    border-color: var(--input-border-disabled);
+    color: var(--input-text-disabled);
+  }
+
+  &:has(input:focus) {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+  }
+}

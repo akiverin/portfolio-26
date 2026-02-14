@@ -1,0 +1,26 @@
+@use "colors.scss" as *;
+@use "mixins.scss" as *;
+
+.icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  color: inherit;
+
+  &--primary {
+    color: $text-primary;
+  }
+
+  &--secondary {
+    color: $text-secondary;
+  }
+
+  &--accent {
+    color: $text-accent;
+  }
+
+  & svg {
+    @include square(100%);
+  }
+}

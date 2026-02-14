@@ -1,51 +1,26 @@
 ---
-description: "UI components — Mantine wrappers, SCSS Modules, BEM, shared UI library"
-globs: ["src/**/*.tsx", "src/**/*.module.scss"]
+description: 'UI components — Mantine 8 wrappers, SCSS Modules, BEM, shared UI library'
+globs: ['src/**/*.tsx', 'src/**/*.module.scss']
 alwaysApply: false
 ---
 
 # UI Components & Styling
 
+## Mantine 8 in Next.js
+
+Mantine is configured via `MantineProvider` in `app/layout.tsx`. Import `@mantine/core/styles.css` in the root layout.
+
 ## Shared UI Library
 
-Use wrappers from `shared/ui/` — not direct Mantine imports in business layers:
+Use wrappers from `shared/ui/` in business layers:
 
 ```typescript
 // ✅ DO — shared wrappers
-import { Button } from 'shared/ui/Button';
-import { Modal } from 'shared/ui/Modal';
-import { Card } from 'shared/ui/Card';
-import { TextInput } from 'shared/ui/TextInput';
-import { PageContent } from 'shared/ui/PageContent';
-
-// ❌ DON'T — direct Mantine in pages/widgets/features
-import { Button } from '@mantine/core';
-```
-
-Key shared UI components: `BaseClickable`, `Card`, `Modal`, `Button`, `Select`, `MultiSelect`,
-`Slider`, `TextInput`, `Textarea`, `Table`, `PageContent`, `PageError`, `PageError404`,
-`StatusLabel`, `ConfirmActionModal`, `TextCopy`, `TextWithTooltip`, `SegmentGroup`, `Menu`,
-`StubSection`, `CollapsibleList`, `BarChart`
-
-Form fields: `FieldText`, `FieldTextarea`, `FieldSelect`, `FieldMultiSelect`, `FieldSlider`,
-`FieldDatetime`, `FieldPassword`, `FieldRadioGroup`, `FieldTags`
-
-## BaseClickable — Clickable Elements
-
-**CRITICAL**: Use `BaseClickable` for any interactive element, never raw `<button>` or `<a>`:
-
-```typescript
-import { BaseClickable } from 'shared/ui/BaseClickable';
-
-// Button behavior
-<BaseClickable onClick={handleClick} className={s.root__action}>
-  Delete
-</BaseClickable>
-
-// Link behavior
-<BaseClickable element="link" to={ROUTES.profile.serverDetail.create(String(id))}>
-  View Details
-</BaseClickable>
+import Button from 'shared/ui/Button';
+import Text from 'shared/ui/Text';
+import Input from 'shared/ui/Input';
+import Loader from 'shared/ui/Loader';
+import Badge from 'shared/ui/Badge';
 ```
 
 ## Component File Structure
@@ -55,11 +30,6 @@ ComponentName/
 ├── ComponentName.tsx          # ONE component per file
 ├── ComponentName.module.scss  # Styles
 ├── index.ts                   # export { default } from './ComponentName'
-├── config.ts                  # Constants, options
-├── SubComponent/              # Sub-components in separate dirs
-│   ├── SubComponent.tsx
-│   ├── SubComponent.module.scss
-│   └── index.ts
 ```
 
 ## SCSS Modules — BEM with $self Pattern
@@ -72,16 +42,12 @@ ComponentName/
 
   display: flex;
   flex-direction: column;
-  gap: var(--mantine-spacing-md);
+  gap: 1rem;
 
   &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
-
-  &__status-label {
-    font-size: var(--mantine-font-size-sm);
   }
 
   &__card {
@@ -103,12 +69,12 @@ ComponentName/
 
 ```scss
 // ❌ DON'T — camelCase
-&__controlMenu { }
-&__statusLabel { }
+&__controlMenu {
+}
 
 // ✅ DO — kebab-case
-&__control-menu { }
-&__status-label { }
+&__control-menu {
+}
 ```
 
 ## Accessing Classes in TSX
@@ -129,42 +95,30 @@ import s from './Component.module.scss';
 
 ## SCSS Variables
 
-Use shared SCSS variables (auto-imported via Vite config):
-
-- `$spacing-*` from `shared/styles/spacing.scss`
-- `$color-*` from `shared/styles/colors.scss`
-- `@mixin` from `shared/styles/mixins.scss`
-- `$radius-*` from `shared/styles/radius.scss`
+Use shared SCSS variables (imported via `sassOptions.includePaths`):
 
 ```scss
-// ❌ DON'T — hardcoded
-padding: 16px;
-color: #333;
-border-radius: 8px;
-
-// ✅ DO — variables or Mantine tokens
-padding: var(--mantine-spacing-md);
-color: var(--mantine-color-text);
-border-radius: var(--mantine-radius-sm);
+@use 'colors';
+@use 'mixins';
+@use 'sizes';
+@use 'adaptive';
 ```
-
-## CSS Modules Convention
-
-Vite config uses `localsConvention: 'dashes'` — kebab-case class names are accessed as-is.
 
 ## Icons
 
-Use `@tabler/icons-react` for icons:
+Use `@tabler/icons-react` for standard icons:
 
 ```typescript
-import { IconServer, IconTrash } from '@tabler/icons-react';
+import { IconArrowDown, IconSearch, IconStar, IconCheck } from '@tabler/icons-react';
 ```
+
+Keep custom SVG icon components in `shared/ui/icons/` for brand-specific icons
+(Github, Behance, Google, Polytech, Moscow, GovScience, etc.).
 
 ## DON'T
 
 - Don't use inline styles — use SCSS Modules
-- Don't write flat selectors (`.root__title { }`) — nest inside `.root { }`
-- Don't hardcode colors or spacing
+- Don't write flat selectors — nest inside `.root { }`
+- Don't hardcode colors or spacing — use SCSS variables or Mantine tokens
 - Don't put multiple components in one `.tsx` file
-- Don't use `px` for spacing — use `rem` or Mantine spacing tokens
-- `px` is acceptable only for borders (`border: 1px solid ...`)
+- Don't use `px` for spacing — use `rem` or variables (`px` only for borders)

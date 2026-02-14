@@ -1,11 +1,18 @@
 {
-  "bracketSameLine": false,
-  "bracketSpacing": true,
-  "endOfLine": "auto",
+  "printWidth": 100,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
   "singleQuote": true,
+  "trailingComma": "all",
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "arrowParens": "always",
+  "jsxSingleQuote": false,
+  "endOfLine": "auto",
   "overrides": [
     {
-      "files": ["**.*.scss", "*.scss"],
+      "files": ["**/*.scss", "*.scss"],
       "options": {
         "singleQuote": false
       }

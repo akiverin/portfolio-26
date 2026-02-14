@@ -1,115 +1,82 @@
 ---
-description: "Performance — lazy loading, tree-shaking, MobX optimization, bundle size"
-globs: ["src/**/*.ts", "src/**/*.tsx"]
+description: 'Performance — Next.js optimizations, tree-shaking, MobX optimization'
+globs: ['src/**/*.ts', 'src/**/*.tsx']
 alwaysApply: false
 ---
 
 # Performance & Optimization
 
-## Lazy Loading Pages
+## Next.js Code Splitting
 
-All pages MUST be lazy-loaded in `RouterProvider`:
+Next.js App Router automatically code-splits by route. No manual `React.lazy()` needed.
+
+Use `next/dynamic` for heavy client components:
 
 ```typescript
-const ServersPage = React.lazy(() => import('pages/ServersPage/ui/ServersPage'));
-const VolumesPage = React.lazy(() => import('pages/VolumesPage/ui/VolumesPage'));
+import dynamic from 'next/dynamic';
+
+const HeavyChart = dynamic(() => import('widgets/Chart/ui/Chart'), {
+  ssr: false,
+  loading: () => <Loader />,
+});
 ```
+
+## Server vs Client Components
+
+Prefer Server Components (default in App Router) when possible:
+
+- No interactivity needed
+- No MobX stores
+- No browser APIs
+- Data fetching at build/request time
+
+Use `"use client"` only for:
+
+- Components with `observer()`, hooks, or event handlers
+- Components using browser APIs
 
 ## No Barrel Files at Segment Level
 
-**CRITICAL**: Barrel files (`index.ts`) that aggregate multiple modules break tree-shaking.
+**CRITICAL**: Barrel files that aggregate multiple modules break tree-shaking.
 
 ```typescript
-// ❌ DON'T — kills tree-shaking, pulls in everything
-// features/volume/index.ts
-export * from './ui/VolumeCreateModal';
-export * from './ui/VolumeEditModal';
-export * from './model/VolumeCreateModalStore';
+// ❌ DON'T
+// widgets/index.ts
+export * from './Header';
+export * from './Footer';
 
-// ✅ DO — import directly from module
-import VolumeCreateModal from 'features/volume/ui/VolumeCreateModal';
-```
-
-## Tabler Icons — ESM Import
-
-The project aliases `@tabler/icons-react` to its ESM build for tree-shaking:
-
-```typescript
-// ✅ DO — named imports (tree-shaken via ESM alias)
-import { IconServer, IconTrash } from '@tabler/icons-react';
-
-// ❌ DON'T — deep imports are unnecessary due to alias
-import { IconServer } from '@tabler/icons-react/dist/esm/icons/IconServer';
+// ✅ DO — import directly
+import Header from 'widgets/Header/ui/Header';
+import Footer from 'widgets/Footer/ui/Footer';
 ```
 
 ## MobX Computed Values
 
-Use `computed` for derived data — MobX caches results and only recalculates when dependencies change:
+Use `computed` for derived data — MobX caches results:
 
 ```typescript
 makeObservable(this, {
-  filteredServers: computed,
-  totalCount: computed,
+  filteredProjects: computed,
 });
 
-get filteredServers(): ServerSchema[] {
-  return this._servers.filter(s => s.state === this._filter);
+get filteredProjects(): Project[] {
+  return this._projects.filter(p => p.title.includes(this._filter));
 }
 ```
 
-## Abort Controllers
+## Image Optimization
 
-Cancel in-flight requests when:
-- Component unmounts (via `destroy()`)
-- User triggers a new request (search, filter change)
-- Navigation away from page
+Use `next/image` for all images:
 
-```typescript
-async load(): Promise<void> {
-  this._abortController.abort();
-  this._abortController = new AbortController();
-  // ...
-}
+```tsx
+import Image from 'next/image';
 
-destroy(): void {
-  this._abortController.abort();
-}
+<Image src={heroBg} alt="hero" width={3000} height={1930} quality={100} />;
 ```
-
-## Debounced Search/Filter
-
-Use debounce for user-triggered filtering to avoid excessive API calls:
-
-```typescript
-import { debounce } from 'shared/utils/debounce';
-
-constructor() {
-  this._debouncedLoad = debounce(this.load, 300);
-  this._disposers.push(
-    reaction(() => this.search.value, () => this._debouncedLoad()),
-  );
-}
-```
-
-## Polling
-
-For real-time data (server status, VM state transitions), use `PollingStore` or `CallbackIntervalStore` from shared:
-
-```typescript
-import { PollingStore } from 'shared/stores/PollingStore';
-
-readonly polling = new PollingStore({
-  callback: () => this.load(),
-  interval: 5000,
-});
-```
-
-Always stop polling in `destroy()`.
 
 ## DON'T
 
-- Don't eagerly import pages — always `React.lazy()`
 - Don't create segment-level barrels — they prevent tree-shaking
-- Don't forget to abort/cancel in `destroy()`
 - Don't run expensive computations in render — move to MobX `computed`
-- Don't poll without cleanup — stop intervals in `destroy()`
+- Don't use `"use client"` unnecessarily — prefer Server Components
+- Don't import heavy libraries in Server Components

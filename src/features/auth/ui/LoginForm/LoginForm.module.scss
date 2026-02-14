@@ -1,0 +1,71 @@
+@use "sizes" as *;
+@use "mixins" as *;
+@use "colors" as *;
+
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 64px);
+  @include wrapper;
+
+  &__wrapper {
+    background-color: rgb(13 13 13 / 0.2);
+    position: relative;
+    justify-content: center;
+    color: $text-primary;
+    border-radius: 20px;
+    padding: 40px;
+    border: 1px solid $border-color;
+    backdrop-filter: blur(30px) opacity(0.8);
+    -webkit-backdrop-filter: blur(30px) opacity(0.8);
+    width: 100%;
+    max-width: 440px;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: $space-l;
+  }
+
+  &__titles {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: $space-xxs;
+    margin-bottom: $space-m;
+  }
+
+  &__form-group {
+    display: flex;
+    flex-direction: column;
+    gap: $space-xxs;
+  }
+
+  &__link {
+    color: $text-accent;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  &__back {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: none;
+    border: none;
+  }
+
+  &__actions {
+    margin-top: $space-l;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: $space-0;
+  }
+}

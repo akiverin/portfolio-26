@@ -1,5 +1,5 @@
 ---
-description: "Troubleshooting — common pitfalls, debugging, PR checklist"
+description: 'Troubleshooting — common pitfalls, debugging, PR checklist'
 alwaysApply: true
 ---
 
@@ -13,23 +13,23 @@ alwaysApply: true
 
 ```typescript
 // ❌ BUG — no observer
-const ServerCard: React.FC<Props> = ({ store }) => {
-  return <div>{store.name}</div>;  // Won't update!
+const ProjectCard: React.FC<Props> = ({ store }) => {
+  return <div>{store.name}</div>; // Won't update!
 };
-export default ServerCard;
+export default ProjectCard;
 
 // ✅ FIX
 import { observer } from 'mobx-react-lite';
-export default observer(ServerCard);
+export default observer(ProjectCard);
 ```
 
 ### 2. Wrong `useLocalStore` import
 
-**Symptom**: Lint error or store doesn't get destroyed on unmount.
+**Symptom**: Store doesn't get destroyed on unmount.
 
 ```typescript
 // ❌ BUG — wrong import, store won't be destroyed
-import { useLocalStore } from 'mobx-react-lite';
+import { useLocalObservable } from 'mobx-react-lite';
 
 // ✅ FIX — project's custom hook with destroy()
 import { useLocalStore } from 'shared/hooks/useLocalStore';
@@ -37,29 +37,29 @@ import { useLocalStore } from 'shared/hooks/useLocalStore';
 
 ### 3. Mutating observables outside action
 
-**Symptom**: MobX strict mode error: "Since strict-mode is enabled, changing observed observable values outside actions is not allowed."
+**Symptom**: MobX strict mode warning.
 
 ```typescript
 // ❌ BUG
 async load() {
-  const response = await fetchData();
-  this._data = response.data;  // Error in strict mode!
+  const data = await fetchData();
+  this._data = data; // Error in strict mode!
 }
 
 // ✅ FIX — wrap in runInAction
 import { runInAction } from 'mobx';
 
 async load() {
-  const response = await fetchData();
+  const data = await fetchData();
   runInAction(() => {
-    this._data = response.data;
+    this._data = data;
   });
 }
 ```
 
 ### 4. Forgetting `destroy()` cleanup
 
-**Symptom**: Memory leaks, reactions running after unmount, stale API calls.
+**Symptom**: Memory leaks, reactions running after unmount.
 
 ```typescript
 // ❌ BUG — no cleanup
@@ -68,91 +68,86 @@ destroy(): void { }
 // ✅ FIX — clean everything
 destroy(): void {
   this._disposers.forEach((d) => d());
-  this._abortController.abort();
-  this.polling?.stop();
-  this.childStore.destroy();
 }
 ```
 
-### 5. Importing from `entities/generated/` directly
+### 5. Not checking `isError` on API response
 
-**Symptom**: Tight coupling to generated code, breaks on API regeneration.
-
-```typescript
-// ❌ BUG — direct import from generated
-import { ServerSchema } from 'entities/generated/api.schemas';
-
-// ✅ FIX — import from entity model layer
-import { ServerSchema } from 'entities/Server/model/ServerSchema';
-```
-
-### 6. Not checking `isError` on API response
-
-**Symptom**: Runtime error "Cannot read property 'items' of null".
+**Symptom**: Runtime error accessing null data.
 
 ```typescript
 // ❌ BUG
-const response = await getServers();
-this._servers = response.data.items;  // Crash if error!
+const response = await getAllProjects();
+this._projects = response.data; // Crash if error!
 
 // ✅ FIX
-const response = await getServers();
+const response = await getAllProjects();
 if (response.isError) {
-  this.loadMeta.setError();
+  this.setError(response.error);
   return;
 }
-this._servers = response.data.items;
+this._projects = response.data;
 ```
 
-### 7. Hardcoded routes
+### 6. Hardcoded routes
 
 **Symptom**: Route changes break navigation silently.
 
 ```typescript
 // ❌ BUG
-navigate('/profile/servers/123');
+<Link href="/auth">Login</Link>
 
 // ✅ FIX
 import { ROUTES } from 'shared/configs/routes';
-navigate(ROUTES.profile.serverDetail.create('123'));
+<Link href={ROUTES.AUTH}>Login</Link>
+```
+
+### 7. Missing "use client" directive
+
+**Symptom**: Error "useState/useEffect only works in Client Components".
+
+```typescript
+// ❌ BUG — no "use client" but uses hooks
+import { observer } from 'mobx-react-lite';
+
+// ✅ FIX — add directive at top of file
+('use client');
+import { observer } from 'mobx-react-lite';
 ```
 
 ## Debugging Tips
 
 ### MobX DevTools
 
-Check observable state and reactions:
 - Use `mobx-react-lite`'s `trace()` inside `observer` to see which observables trigger re-render
-- Check `console` for MobX strict mode violations
+- Check console for MobX strict mode violations
 
-### API Issues
+### Firebase Issues
 
-- Check browser Network tab for failed requests
-- Verify Zod validation isn't rejecting valid responses (check `withSchemeParsing` errors)
-- After backend API changes: run `yarn generate:api` to regenerate client
+- Check browser Network tab for failed Firestore requests
+- Verify Firebase config env vars are set in `.env.local`
+- Check Firestore Security Rules if reads/writes are denied
 
 ### Build/Lint Issues
 
 ```bash
-yarn ts-check      # Shows TypeScript errors with file locations
-yarn eslint        # Checks import order, FSD layer violations, etc.
-yarn stylelint     # Checks SCSS for BEM violations
+pnpm ts-check      # Shows TypeScript errors with file locations
+pnpm lint          # Checks import order, FSD layer violations, etc.
+pnpm stylelint     # Checks SCSS for BEM violations
 ```
 
 ## PR Checklist
 
 Before submitting a merge request:
 
-- [ ] `yarn check-quality` passes (ts-check + eslint + stylelint)
+- [ ] `pnpm check-quality` passes (ts-check + eslint + stylelint)
 - [ ] No `console.log` in committed code
 - [ ] No `any` types without justification comment
 - [ ] No secrets or tokens in code
 - [ ] All new stores implement `ILocalStore` with proper `destroy()`
 - [ ] All MobX-consuming components wrapped with `observer()`
-- [ ] API errors are handled — `isError` checked, notifications shown
+- [ ] API errors are handled — `isError` checked
 - [ ] New routes use `ROUTES` config, not hardcoded strings
-- [ ] New components use `BaseClickable` for interactive elements
 - [ ] SCSS uses BEM with `.root` + `$self` pattern
 - [ ] Import order follows ESLint config (externals → internals → siblings → styles)
 - [ ] FSD layer boundaries respected — no upward imports
-- [ ] Self-review completed, dev-testing artifacts attached

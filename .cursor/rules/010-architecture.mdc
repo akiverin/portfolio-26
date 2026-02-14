@@ -1,55 +1,54 @@
 ---
-description: "FSD architecture — layers, dependencies, file structure, public API"
-globs: ["src/**/*.ts", "src/**/*.tsx"]
+description: 'FSD architecture adapted for Next.js App Router — layers, dependencies, file structure'
+globs: ['src/**/*.ts', 'src/**/*.tsx']
 alwaysApply: false
 ---
 
-# Architecture — Feature-Sliced Design (FSD)
+# Architecture — Feature-Sliced Design (FSD) for Next.js
 
 ## Layer Hierarchy (top → bottom)
 
 ```
-app/        → Initialization, routing, providers
-pages/      → Page components, page-specific logic
-widgets/    → Composite blocks reused across pages
-features/   → User actions (modals, forms, buttons)
-contexts/   → Global MobX stores, shared React contexts
-entities/   → Business entities (Server, Volume, Datacenter, User, Billing...)
+app/        → Next.js App Router: routing, layouts, providers (replaces FSD app + pages)
+widgets/    → Composite blocks reused across pages (Header, Footer, sections)
+features/   → User actions (auth forms, theme toggle)
+entities/   → Business entities (Project, Achievement, Grant, User)
 shared/     → Reusable code without business logic
 ```
+
+**Note**: In Next.js App Router, the `app/` directory handles both initialization and routing.
+There is no separate `pages/` layer — Next.js file-based routing replaces it.
 
 ## Import Rules
 
 **Each layer may only import from layers BELOW it.**
 
-| Layer | Can import from |
-|-------|----------------|
-| `app` | pages, widgets, features, contexts, entities, shared |
-| `pages` | widgets, features, contexts, entities, shared |
-| `widgets` | features, contexts, entities, shared |
-| `features` | contexts, entities, shared |
-| `contexts` | entities, shared |
-| `entities` | shared, other entities (cross-import allowed) |
-| `shared` | nothing above — only external packages |
+| Layer      | Can import from                         |
+| ---------- | --------------------------------------- |
+| `app`      | widgets, features, entities, shared     |
+| `widgets`  | features, entities, shared              |
+| `features` | entities, shared                        |
+| `entities` | entities (cross-import allowed), shared |
+| `shared`   | nothing above — only external packages  |
 
 ```typescript
-// ❌ DON'T — widget importing from pages
-import { ServersPage } from 'pages/ServersPage/ui/ServersPage';
+// ❌ DON'T — widget importing from app
+import { HomePage } from '@/app/page';
 
 // ❌ DON'T — feature importing from widget
-import { VolumeCard } from 'widgets/volume/ui/VolumeCard';
+import { Header } from 'widgets/Header/ui/Header';
 
-// ✅ DO — feature importing from entity
-import { ServerSchema } from 'entities/Server/model/ServerSchema';
+// ✅ DO — widget importing from entity
+import { ProjectCard } from 'entities/Project/ui/ProjectCard';
 ```
 
 ## Placement Decision
 
 **Key question**: Will this code be used on multiple pages?
 
-- **No** → Put it in `pages/` (exception: entity schemas always go to `entities/`)
-- **Yes, it's a composite block** → `widgets/`
-- **Yes, it's a user action** → `features/`
+- **No, it's page-specific** → Keep it in `app/` route directory
+- **Yes, it's a composite visual block** → `widgets/`
+- **Yes, it's a user action/interaction** → `features/`
 - **Yes, it's an entity representation** → `entities/`
 - **Yes, it's generic utility** → `shared/`
 
@@ -61,66 +60,87 @@ SliceName/
 │   └── ComponentName/
 │       ├── ComponentName.tsx
 │       ├── ComponentName.module.scss
-│       ├── index.ts          # Public API for this component
-│       ├── config.ts          # Constants
-│       └── SubComponent/     # Sub-components in separate dirs
+│       └── index.ts
 ├── model/                    # MobX stores, types
-│   └── SliceStore/
-│       ├── SliceStore.ts
-│       ├── index.ts
-│       └── types.ts
+│   ├── types.ts
+│   └── EntityModel.ts
 ├── api/                      # API calls (entities only)
 │   └── getEntity.ts
+├── stores/                   # MobX stores
+│   └── EntityListStore.ts
 └── hooks/                    # Slice-specific hooks
 ```
 
-## Public API — NO Barrel Files at Segment Level
+## Public API — Module-Level Exports
 
-**CRITICAL**: Export via `index.ts` at the module level, NOT at segment level.
+Export via `index.ts` at the module level, NOT at segment level:
 
 ```typescript
 // ✅ DO — module-level index.ts
-// features/volume/ui/VolumeCreateModal/index.ts
-export { default } from './VolumeCreateModal';
+// entities/Project/ui/ProjectCard/index.ts
+export { default } from './ProjectCard';
 
 // ❌ DON'T — segment-level barrel aggregating multiple modules
-// features/volume/ui/index.ts
-export * from './VolumeCreateModal';
-export * from './VolumeEditModal';
+// entities/Project/ui/index.ts
+export * from './ProjectCard';
+export * from './ProjectDetails';
 ```
 
-This is enforced for build optimization and tree-shaking.
+## Next.js App Router Patterns
 
-## Page Structure Pattern
+### Server vs Client Components
 
-Pages own their store, provide it via context, and compose widgets/features:
+By default, components in `app/` are Server Components. Add `"use client"` only when needed:
 
 ```typescript
-// pages/ServersPage/ui/ServersPage/ServersPage.tsx
-const ServersPage: React.FC = () => {
-  const store = useLocalStore(() => new ServersPageStore());
+// Needs "use client" when:
+// - Using hooks (useState, useEffect, useContext)
+// - Using MobX observer()
+// - Using browser APIs
+// - Handling events (onClick, onChange, etc.)
 
-  React.useEffect(() => {
-    store.load();
-  }, [store]);
+'use client';
+import { observer } from 'mobx-react-lite';
+```
 
+### Page Structure
+
+Pages in `app/` compose widgets and features:
+
+```typescript
+// app/page.tsx — Server Component, no "use client" needed
+import HeroSection from 'widgets/HeroSection/ui/HeroSection';
+import ProjectsSection from 'widgets/ProjectsSection/ui/ProjectsSection';
+
+export default function HomePage() {
   return (
-    <ServersPageStoreProvider store={store}>
-      <PageContent headerSlot={<Header />}>
-        <Content />
-      </PageContent>
-      <ServerActionModal store={store.serverActionModal} />
-    </ServersPageStoreProvider>
+    <main>
+      <HeroSection />
+      <ProjectsSection />
+    </main>
   );
-};
-
-export default ServersPage;
+}
 ```
 
-## Lazy Loading
+### Layouts
 
-Pages are loaded lazily via `React.lazy()` in `RouterProvider`:
+Global providers go in `app/layout.tsx`:
 
 ```typescript
-const ServersPage = React.lazy(() => import('pages/ServersPage/ui/ServersPage'));
+import { MantineProvider } from '@mantine/core';
+import { StoreProvider } from 'shared/stores/StoreContext';
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        <MantineProvider>
+          <StoreProvider>
+            {children}
+          </StoreProvider>
+        </MantineProvider>
+      </body>
+    </html>
+  );
+}
 ```
