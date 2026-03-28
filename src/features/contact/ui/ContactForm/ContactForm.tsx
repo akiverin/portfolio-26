@@ -1,7 +1,6 @@
-'use client';
-
 import React from 'react';
 import { observer } from 'mobx-react-lite';
+import { motion } from 'framer-motion';
 import styles from './ContactForm.module.scss';
 import Text from 'shared/ui/Text';
 import Input from 'shared/ui/Input';
@@ -10,6 +9,7 @@ import Button from 'shared/ui/Button';
 import { ContactFormStore } from 'features/contact/model/ContactFormStore';
 import { useLocalStore } from 'shared/hooks/useLocalStore';
 import { Meta } from 'shared/lib/meta';
+import { IconCheck } from '@tabler/icons-react';
 
 const ContactForm: React.FC = observer(() => {
   const form = useLocalStore(() => new ContactFormStore());
@@ -21,7 +21,15 @@ const ContactForm: React.FC = observer(() => {
 
   if (form.meta === Meta.success) {
     return (
-      <div className={styles.contact__success}>
+      <motion.div
+        className={styles.contact__success}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ type: 'spring', damping: 20, stiffness: 150 }}
+      >
+        <div className={styles.contact__checkmark}>
+          <IconCheck size={32} stroke={2} />
+        </div>
         <Text tag="p" view="p-24" weight="bold">
           Спасибо!
         </Text>
@@ -33,7 +41,7 @@ const ContactForm: React.FC = observer(() => {
             Отправить ещё
           </Text>
         </Button>
-      </div>
+      </motion.div>
     );
   }
 

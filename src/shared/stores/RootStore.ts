@@ -11,7 +11,6 @@ export class RootStore {
 let store: RootStore | null = null;
 
 export function initRootStore(): RootStore {
-  if (typeof window === 'undefined') return new RootStore();
   if (!store) store = new RootStore();
   return store;
 }

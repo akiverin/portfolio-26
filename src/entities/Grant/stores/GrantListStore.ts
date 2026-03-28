@@ -19,6 +19,8 @@ export class GrantListStore implements ILocalStore {
   }
 
   async fetchAllGrants(): Promise<void> {
+    if (this.meta === Meta.loading) return;
+
     this.meta = Meta.loading;
     this.error = '';
 

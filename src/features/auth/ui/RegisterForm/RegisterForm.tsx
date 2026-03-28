@@ -1,13 +1,10 @@
-'use client';
-
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import Text from 'shared/ui/Text';
 import Button from 'shared/ui/Button';
 import styles from './RegisterForm.module.scss';
 import Input from 'shared/ui/Input';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { Link, useNavigate } from 'react-router-dom';
 import { RegisterFormStore } from 'features/auth/model/RegisterFormStore';
 import Google from 'shared/ui/icons/Google';
 import { useUserStore } from 'shared/stores/StoreContext';
@@ -17,7 +14,7 @@ import { Meta } from 'shared/lib/meta';
 
 const RegisterForm: React.FC = observer(() => {
   const form = useLocalStore(() => new RegisterFormStore());
-  const router = useRouter();
+  const navigate = useNavigate();
   const userStore = useUserStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -25,7 +22,7 @@ const RegisterForm: React.FC = observer(() => {
     if (!form.validateAll()) return;
     try {
       await userStore.signUp(form.email, form.password, form.displayName);
-      router.replace(ROUTES.HOME);
+      navigate(ROUTES.HOME, { replace: true });
     } catch {
       // Error handled by store
     }
@@ -36,12 +33,12 @@ const RegisterForm: React.FC = observer(() => {
       <div className={styles.register__card}>
         <form onSubmit={handleSubmit} className={styles.register__form}>
           <div className={styles.register__header}>
-            <Text view="p-24" tag="h1" weight="bold" color="primary">
+            <Text view="title" tag="h1" weight="black" uppercase>
               Регистрация
             </Text>
-            <Text view="p-14" color="secondary">
+            <Text view="p-16" color="secondary">
               Уже есть аккаунт?{' '}
-              <Link href={ROUTES.AUTH} className={styles.register__link}>
+              <Link to={ROUTES.AUTH} className={styles.register__link}>
                 Войдите
               </Link>
             </Text>
@@ -49,7 +46,7 @@ const RegisterForm: React.FC = observer(() => {
 
           <div className={styles.register__fields}>
             <div className={styles.register__field}>
-              <Text color="primary" tag="label" view="p-14" htmlFor="displayName">
+              <Text tag="label" view="p-14" weight="medium" htmlFor="displayName">
                 Имя
               </Text>
               <Input
@@ -67,7 +64,7 @@ const RegisterForm: React.FC = observer(() => {
             </div>
 
             <div className={styles.register__field}>
-              <Text color="primary" tag="label" view="p-14" htmlFor="email">
+              <Text tag="label" view="p-14" weight="medium" htmlFor="email">
                 Email
               </Text>
               <Input
@@ -85,7 +82,7 @@ const RegisterForm: React.FC = observer(() => {
             </div>
 
             <div className={styles.register__field}>
-              <Text color="primary" tag="label" view="p-14" htmlFor="password">
+              <Text tag="label" view="p-14" weight="medium" htmlFor="password">
                 Пароль
               </Text>
               <Input
@@ -112,12 +109,12 @@ const RegisterForm: React.FC = observer(() => {
             />
             <Text view="p-12" color="secondary">
               Я принимаю{' '}
-              <Link href={ROUTES.TERMS} className={styles.register__link} target="_blank">
+              <Link to={ROUTES.TERMS} className={styles.register__link} target="_blank">
                 пользовательское соглашение
               </Link>{' '}
-              и{' '}
-              <Link href={ROUTES.PRIVACY} className={styles.register__link} target="_blank">
-                политику конфиденциальности
+              и даю согласие на{' '}
+              <Link to={ROUTES.PRIVACY} className={styles.register__link} target="_blank">
+                обработку персональных данных
               </Link>
             </Text>
           </label>
@@ -155,9 +152,7 @@ const RegisterForm: React.FC = observer(() => {
             loading={userStore.meta === Meta.loading}
           >
             <Google width={16} height={16} />
-            <Text color="primary" view="p-16">
-              Войти через Google
-            </Text>
+            <Text view="p-16">Войти через Google</Text>
           </Button>
         </form>
       </div>

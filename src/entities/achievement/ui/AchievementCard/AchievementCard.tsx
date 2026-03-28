@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './AchievementCard.module.scss';
 import classNames from 'classnames';
-import Image from 'next/image';
 import { Achievement } from 'entities/Achievement/model/types';
 import Text from 'shared/ui/Text';
 import Button from 'shared/ui/Button';
@@ -16,12 +15,11 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, classNam
   return (
     <div className={classNames(styles.achievementCard, className)}>
       <div className={styles.achievementCard__cover}>
-        <Image
+        <img
           src={achievement.cover}
           className={styles.achievementCard__image}
-          alt={`Achievement Cover for ${achievement.title}`}
-          width={1600}
-          height={900}
+          alt={achievement.title}
+          loading="lazy"
         />
       </div>
       {achievement.badges && (

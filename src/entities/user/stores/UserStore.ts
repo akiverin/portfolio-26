@@ -35,6 +35,8 @@ export class UserStore extends BaseStore implements ILocalStore {
       {
         currentUser: observable,
         isInitialized: observable,
+        meta: observable,
+        error: observable,
         isAuth: computed,
       },
       { autoBind: true },
@@ -70,13 +72,13 @@ export class UserStore extends BaseStore implements ILocalStore {
 
   private async _bootstrapUser(firebaseUser: FirebaseUser): Promise<void> {
     try {
-      await ensureUserDoc(firebaseUser.uid, {
+      // ensureUserDoc now returns the profile directly — no extra getDoc needed
+      const profile = await ensureUserDoc(firebaseUser.uid, {
         email: firebaseUser.email || undefined,
         displayName: firebaseUser.displayName || undefined,
         photoURL: firebaseUser.photoURL || null,
       });
 
-      const profile = await getUserProfileFromFirestore(firebaseUser.uid);
       runInAction(() => {
         this.currentUser = profile;
         this.setSuccess();
@@ -94,24 +96,24 @@ export class UserStore extends BaseStore implements ILocalStore {
   async signIn(email: string, password: string) {
     this.setLoading();
     try {
-      return await signInWithEmail(email, password);
+      const user = await signInWithEmail(email, password);
+      this.setSuccess();
+      return user;
     } catch (e) {
       this.setError(e);
       throw e;
-    } finally {
-      this.setSuccess();
     }
   }
 
   async signUp(email: string, password: string, displayName?: string) {
     this.setLoading();
     try {
-      return await signUpWithEmail(email, password, displayName);
+      const user = await signUpWithEmail(email, password, displayName);
+      this.setSuccess();
+      return user;
     } catch (e) {
       this.setError(e);
       throw e;
-    } finally {
-      this.setSuccess();
     }
   }
 
@@ -120,11 +122,10 @@ export class UserStore extends BaseStore implements ILocalStore {
     try {
       await signOutFirebase();
       runInAction(() => (this.currentUser = null));
+      this.reset();
     } catch (e) {
       this.setError(e);
       throw e;
-    } finally {
-      this.reset();
     }
   }
 
@@ -147,8 +148,10 @@ export class UserStore extends BaseStore implements ILocalStore {
     this.setLoading();
     try {
       await resetPasswordEmail(email);
-    } finally {
       this.setSuccess();
+    } catch (e) {
+      this.setError(e);
+      throw e;
     }
   }
 
@@ -158,10 +161,13 @@ export class UserStore extends BaseStore implements ILocalStore {
     try {
       await updateProfileInFirebase(patch);
       await updateUserProfileInFirestore(this.currentUser.id, patch);
-      const refreshed = await getUserProfileFromFirestore(this.currentUser.id);
-      runInAction(() => (this.currentUser = refreshed));
-    } finally {
+      runInAction(() => {
+        this.currentUser = { ...this.currentUser!, ...patch };
+      });
       this.setSuccess();
+    } catch (e) {
+      this.setError(e);
+      throw e;
     }
   }
 

@@ -6,9 +6,9 @@ alwaysApply: false
 
 # UI Components & Styling
 
-## Mantine 8 in Next.js
+## Mantine 8 in SPA
 
-Mantine is configured via `MantineProvider` in `app/layout.tsx`. Import `@mantine/core/styles.css` in the root layout.
+Mantine is configured via `MantineProvider` in `src/main.tsx`. Import `@mantine/core/styles.css` in the entry point.
 
 ## Shared UI Library
 
@@ -95,7 +95,7 @@ import s from './Component.module.scss';
 
 ## SCSS Variables
 
-Use shared SCSS variables (imported via `sassOptions.includePaths`):
+Use shared SCSS variables (imported via Vite `css.preprocessorOptions.scss.includePaths`):
 
 ```scss
 @use 'colors';

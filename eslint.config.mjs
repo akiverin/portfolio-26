@@ -12,7 +12,7 @@ const compat = new FlatCompat({
 
 /** @type {import("eslint").Linter.Config[]} */
 const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  ...compat.extends('eslint:recommended'),
 
   {
     plugins: {
@@ -22,6 +22,7 @@ const eslintConfig = [
     settings: {
       'boundaries/elements': [
         { type: 'app', pattern: 'src/app/*' },
+        { type: 'pages', pattern: 'src/pages/*' },
         { type: 'widgets', pattern: 'src/widgets/*' },
         { type: 'features', pattern: 'src/features/*' },
         { type: 'entities', pattern: 'src/entities/*' },
@@ -37,7 +38,8 @@ const eslintConfig = [
         {
           default: 'disallow',
           rules: [
-            { from: 'app', allow: ['widgets', 'features', 'entities', 'shared'] },
+            { from: 'app', allow: ['pages', 'widgets', 'features', 'entities', 'shared'] },
+            { from: 'pages', allow: ['widgets', 'features', 'entities', 'shared'] },
             { from: 'widgets', allow: ['features', 'entities', 'shared'] },
             { from: 'features', allow: ['entities', 'shared'] },
             { from: 'entities', allow: ['entities', 'shared'] },
@@ -68,7 +70,7 @@ const eslintConfig = [
   },
 
   {
-    ignores: ['node_modules/**', '.next/**', 'out/**', 'build/**', 'next-env.d.ts', '*.config.*'],
+    ignores: ['node_modules/**', 'dist/**', 'build/**', '*.config.*'],
   },
 ];
 

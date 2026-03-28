@@ -3,123 +3,172 @@
 @use "sizes" as *;
 @use "mixins" as *;
 
-html[data-theme="light"] .header {
-  background-color: rgba(255, 255, 255, 0.4);
-}
-
 .header {
-  position: relative;
   position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  z-index: 10;
+  z-index: 100;
+  padding: 16px 0;
+  @include transition(padding, background-color);
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background: transparent;
+    @include transition(background);
+    pointer-events: none;
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  }
+
+  &--scrolled {
+    padding: 8px 0;
+
+    &::before {
+      background: rgba(14, 14, 14, 0.6);
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+  }
 
   &__wrapper {
     @include wrapper;
     position: relative;
-    margin: 12px auto;
+    z-index: 2;
     display: flex;
     justify-content: center;
   }
 
-  &__content {
-    flex-flow: row;
-    flex: none;
-    place-content: center;
+  &__nav {
+    display: flex;
     align-items: center;
-    width: fit-content;
-    height: 44px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 100px;
     padding: 4px;
-    display: flex;
-    position: relative;
-    overflow: hidden;
-    background-color: rgba(0, 0, 0, 0.75);
-    opacity: 1;
-    border-radius: 80px;
-    z-index: 9;
-  }
-
-  &__navigate {
-    display: flex;
-    width: fit-content;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   &__navList {
-    place-content: center;
-    align-items: center;
-    width: fit-content;
-    height: 36px;
-    padding: 0;
     display: flex;
-    position: relative;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    gap: 2px;
+
+    @include smallerThanTablet {
+      display: none;
+    }
   }
 
   &__navItem {
-    z-index: 1;
     position: relative;
-    width: fit-content;
-    padding: 4px 10px;
   }
 
   &__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 18px;
+    border-radius: 100px;
     text-decoration: none;
-    width: fit-content;
-    padding: 4px;
+    color: $text-secondary;
+    @include transition(color, background);
+
+    &:hover {
+      color: $white;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    &--active {
+      color: $white;
+      background: rgba(255, 255, 255, 0.1);
+    }
   }
 
-  &__bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100px;
-    border-radius: 0;
-    pointer-events: none;
-  }
+  &__burger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: none;
+    padding: 8px;
+    border-radius: 50%;
+    @include transition(background);
 
-  &__blurLayer {
-    position: absolute;
-    inset: 0;
-    border-radius: 0;
-    pointer-events: none;
+    @include smallerThanTablet {
+      display: flex;
+    }
 
-    @for $i from 1 through 8 {
-      &:nth-child(#{$i}) {
-        $mask: "";
-        $z: $i;
-        $blur: 0.140625px * pow(2, $i - 1);
-        $start: ($i - 1) * 12.5%;
-        $mid1: $start + 12.5%;
-        $mid2: $mid1 + 12.5%;
-        $end: $mid2 + 12.5%;
-        $mid2-clamped: min($mid2, 100%);
-        $end-clamped: min($end, 100%);
+    &:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
 
-        z-index: $z;
-        -webkit-backdrop-filter: blur($blur);
-        backdrop-filter: blur($blur);
+    span {
+      display: block;
+      width: 18px;
+      height: 1.5px;
+      background: $white;
+      border-radius: 2px;
+      @include transition(transform, opacity);
+    }
 
-        @if $i <= 6 {
-          $mask: linear-gradient(
-            to top,
-            rgba(0, 0, 0, 0) $start,
-            rgba(0, 0, 0, 1) $mid1,
-            rgba(0, 0, 0, 1) $mid2-clamped,
-            rgba(0, 0, 0, 0) $end-clamped
-          );
-        } @else if $i == 7 {
-          $mask: linear-gradient(
-            to top,
-            rgba(0, 0, 0, 0) 75%,
-            rgba(0, 0, 0, 1) 87.5%,
-            rgba(0, 0, 0, 1) 100%
-          );
-        } @else {
-          $mask: linear-gradient(to top, rgba(0, 0, 0, 0) 87.5%, rgba(0, 0, 0, 1) 100%);
-        }
-
-        -webkit-mask-image: $mask;
-        mask-image: $mask;
+    &--open {
+      span:first-child {
+        transform: rotate(45deg) translateY(3.25px);
       }
+
+      span:last-child {
+        transform: rotate(-45deg) translateY(-3.25px);
+      }
+    }
+  }
+
+  &__mobileMenu {
+    position: fixed;
+    inset: 0;
+    top: 70px;
+    z-index: 99;
+    background: rgba(14, 14, 14, 0.95);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 40px 20px;
+  }
+
+  &__mobileLink {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 32px;
+    border-radius: 16px;
+    text-decoration: none;
+    color: $text-secondary;
+    width: 100%;
+    max-width: 320px;
+    @include transition(color, background);
+
+    &:hover {
+      color: $white;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    &--active {
+      color: $white;
+      background: rgba(255, 255, 255, 0.08);
     }
   }
 }

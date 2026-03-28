@@ -9,7 +9,7 @@ alwaysApply: true
 
 Personal portfolio website showcasing projects, achievements, and grants.
 Target users: recruiters, potential clients, fellow developers.
-Stack: Next.js 15 (App Router) + React 19 + TypeScript + MobX + Mantine 8 + Firebase + SCSS Modules.
+Stack: Vite + React 19 + TypeScript + React Router + MobX + Mantine 8 + Firebase + SCSS Modules.
 
 ## Decision Making
 
@@ -73,4 +73,4 @@ import { ProjectCard } from 'entities/Project/ui/ProjectCard';
 import { BaseStore } from '../../../shared/stores/BaseStore';
 ```
 
-Available aliases: `shared/*`, `entities/*`, `features/*`, `widgets/*`, `assets/*`, `@/*`
+Available aliases: `shared/*`, `entities/*`, `features/*`, `widgets/*`, `pages/*`, `assets/*`, `@/*`

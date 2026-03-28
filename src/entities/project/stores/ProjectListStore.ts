@@ -19,6 +19,8 @@ export class ProjectListStore implements ILocalStore {
   }
 
   async fetchAllProjects(): Promise<void> {
+    if (this.meta === Meta.loading) return;
+
     this.meta = Meta.loading;
     this.error = '';
 

@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './Button.module.scss';
 import classNames from 'classnames';
 import Loader from 'shared/ui/Loader';
-import Link, { LinkProps } from 'next/link';
+import { Link } from 'react-router-dom';
 
 export type ButtonProps = {
   children: React.ReactNode;
@@ -15,7 +15,10 @@ export type ButtonProps = {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
-  linkProps?: Omit<LinkProps, 'href' | 'children'>;
+};
+
+const isExternalLink = (href: string): boolean => {
+  return href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:');
 };
 
 const Button: React.FC<ButtonProps> = ({
@@ -28,7 +31,6 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   type = 'button',
   disabled,
-  linkProps = {},
   noPadding,
 }) => {
   const buttonClasses = classNames(
@@ -41,14 +43,22 @@ const Button: React.FC<ButtonProps> = ({
   );
 
   if (href) {
+    if (isExternalLink(href)) {
+      return (
+        <a
+          href={href}
+          target={target}
+          rel={target === '_blank' ? 'noopener noreferrer' : undefined}
+          className={buttonClasses}
+        >
+          {loading && <Loader className={styles.button__loader} size="s" />}
+          {children}
+        </a>
+      );
+    }
+
     return (
-      <Link
-        href={href}
-        target={target}
-        rel={target === '_blank' ? 'noopener noreferrer' : undefined}
-        className={buttonClasses}
-        {...linkProps}
-      >
+      <Link to={href} target={target} className={buttonClasses}>
         {loading && <Loader className={styles.button__loader} size="s" />}
         {children}
       </Link>

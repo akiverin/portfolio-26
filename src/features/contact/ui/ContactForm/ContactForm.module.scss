@@ -8,17 +8,13 @@
     display: flex;
     flex-direction: column;
     gap: $space-l;
-    max-width: 680px;
-    margin: 0 auto;
     width: 100%;
-    color: $black;
 
-    // Override CSS vars for Input/Textarea on light bg
-    --input-bg: #{$white};
-    --input-text: #{$black};
-    --input-placeholder: #999;
-    --input-bg-disabled: #f0f0f0;
-    --input-text-disabled: #aaa;
+    --input-bg: rgba(255, 255, 255, 0.05);
+    --input-text: #{$white};
+    --input-placeholder: #666;
+    --input-bg-disabled: rgba(255, 255, 255, 0.02);
+    --input-text-disabled: #555;
   }
 
   &__fields {
@@ -55,6 +51,17 @@
     gap: $space-m;
     padding: 60px 20px;
     text-align: center;
-    color: $black;
+  }
+
+  &__checkmark {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(66, 189, 218, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    color: $brand;
   }
 }

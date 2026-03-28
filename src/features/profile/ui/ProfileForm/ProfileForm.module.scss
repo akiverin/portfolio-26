@@ -1,0 +1,207 @@
+@use "sizes" as *;
+@use "mixins" as *;
+@use "colors" as *;
+@use "adaptive" as *;
+
+.profile {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: calc(100vh - 64px);
+  padding-top: 80px;
+  padding-bottom: 80px;
+  position: relative;
+  overflow: hidden;
+
+  @include wrapper;
+
+  background-image:
+    linear-gradient(rgb(66 189 218 / 5%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(66 189 218 / 5%) 1px, transparent 1px);
+  background-size: 60px 60px;
+
+  &::before {
+    content: "";
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    top: -150px;
+    right: -100px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgb(66 189 218 / 12%), transparent 70%);
+    animation: profile-float-1 10s ease-in-out infinite;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  &::after {
+    content: "";
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    bottom: -100px;
+    left: -100px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgb(120 80 220 / 8%), transparent 70%);
+    animation: profile-float-2 12s ease-in-out infinite;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  @include smallerThanTablet {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  &__card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 520px;
+    padding: 48px;
+    border-radius: 24px;
+    background-color: $project-bg;
+    color: $black;
+
+    --input-bg: #{$white};
+    --input-text: #{$black};
+    --input-placeholder: #999;
+    --input-bg-disabled: #f0f0f0;
+    --input-text-disabled: #aaa;
+
+    @include smallerThanTablet {
+      padding: 32px 20px;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: $space-l;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: $space-xxs;
+  }
+
+  &__avatarSection {
+    display: flex;
+    align-items: center;
+    gap: $space-m;
+  }
+
+  &__avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: linear-gradient(135deg, $brand 0%, #7850dc 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  &__avatarPlaceholder {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, $brand 0%, #7850dc 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: $white;
+    font-size: 28px;
+    font-weight: 700;
+    text-transform: uppercase;
+    user-select: none;
+  }
+
+  &__avatarInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: $space-m;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $space-xs;
+
+    @include smallerThanTablet {
+      flex-direction: column;
+    }
+  }
+
+  &__divider {
+    height: 1px;
+    background: rgb(0 0 0 / 8%);
+  }
+
+  &__dangerZone {
+    display: flex;
+    flex-direction: column;
+    gap: $space-xs;
+  }
+
+  &__success {
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: #e6f9ee;
+    color: #1a8a4a;
+  }
+
+  &__link {
+    color: $text-accent;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: rgb(0 0 0 / 4%);
+  }
+}
+
+@keyframes profile-float-1 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(-30px, 20px) scale(1.08);
+  }
+}
+
+@keyframes profile-float-2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(20px, -30px) scale(1.12);
+  }
+}

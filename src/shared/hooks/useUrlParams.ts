@@ -1,21 +1,18 @@
-'use client';
-
 import { useCallback, useMemo } from 'react';
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useSearchParams, useLocation } from 'react-router-dom';
 
 type UrlParamValue = string | number | boolean | null | undefined;
 type UrlParams = Record<string, UrlParamValue>;
 
 /**
- * Hook for convenient URL search params management in Next.js App Router.
+ * Hook for convenient URL search params management with React Router.
  */
 export function useUrlParams() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
 
   const currentParams = useMemo(
-    () => new URLSearchParams(searchParams?.toString() || ''),
+    () => new URLSearchParams(searchParams.toString()),
     [searchParams],
   );
 
@@ -41,11 +38,9 @@ export function useUrlParams() {
         }
       });
 
-      const queryString = newParams.toString();
-      const url = queryString ? `${pathname}?${queryString}` : pathname;
-      router.replace(url || '', { scroll: false });
+      setSearchParams(newParams, { replace: true });
     },
-    [pathname, router, currentParams],
+    [currentParams, setSearchParams],
   );
 
   const setSingle = useCallback(
@@ -57,18 +52,16 @@ export function useUrlParams() {
     (keys: string | string[]) => {
       const newParams = new URLSearchParams(currentParams);
       (Array.isArray(keys) ? keys : [keys]).forEach((key) => newParams.delete(key));
-      const queryString = newParams.toString();
-      const url = queryString ? `${pathname}?${queryString}` : pathname;
-      router.replace(url || '', { scroll: false });
+      setSearchParams(newParams, { replace: true });
     },
-    [pathname, router, currentParams],
+    [currentParams, setSearchParams],
   );
 
   const clear = useCallback(() => {
-    router.replace(pathname || '', { scroll: false });
-  }, [pathname, router]);
+    setSearchParams({}, { replace: true });
+  }, [setSearchParams]);
 
   const has = useCallback((key: string) => currentParams.has(key), [currentParams]);
 
-  return { params: searchParams, get, getAll, set, setSingle, remove, clear, has };
+  return { params: searchParams, get, getAll, set, setSingle, remove, clear, has, pathname: location.pathname };
 }

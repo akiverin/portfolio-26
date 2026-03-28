@@ -1,0 +1,96 @@
+@use "colors" as *;
+@use "sizes" as *;
+@use "mixins" as *;
+
+.select {
+  position: relative;
+
+  &__trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 $space-0;
+    height: $height-ui;
+    background: var(--input-bg, #{$input-bg});
+    border: none;
+    border-radius: $border-radius;
+    color: var(--input-text, #{$input-text});
+    white-space: nowrap;
+
+    @include transition(border-radius);
+
+    &--open {
+      border-radius: $border-radius $border-radius 0 0;
+    }
+  }
+
+  &__arrow {
+    flex-shrink: 0;
+
+    @include transition(transform);
+
+    &--open {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--input-bg, #{$input-bg});
+    border-radius: 0 0 $border-radius $border-radius;
+    z-index: 10;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgb(0 0 0 / 12%);
+  }
+
+  &__search {
+    width: 100%;
+    padding: 8px $space-0;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: inherit;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    border-bottom: 1px solid rgb(0 0 0 / 10%);
+
+    &::placeholder {
+      color: var(--input-placeholder, #{$input-placeholder});
+    }
+  }
+
+  &__options {
+    list-style: none;
+    padding: 4px 0;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  &__option {
+    width: 100%;
+    padding: 8px $space-0;
+    border: none;
+    background: transparent;
+    text-align: left;
+    color: inherit;
+    font-family: inherit;
+
+    @include transition(background);
+
+    &:hover {
+      background: rgb(0 0 0 / 5%);
+    }
+
+    &--active {
+      font-weight: 600;
+    }
+  }
+
+  &__empty {
+    padding: 8px $space-0;
+  }
+}

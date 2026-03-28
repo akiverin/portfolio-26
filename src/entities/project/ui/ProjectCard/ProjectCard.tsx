@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './ProjectCard.module.scss';
 import classNames from 'classnames';
-import Image from 'next/image';
 import { Project } from 'entities/Project/model/types';
 import Text from 'shared/ui/Text';
 import Button from 'shared/ui/Button';
@@ -18,15 +17,21 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
     <div className={classNames(styles.projectCard, className)}>
       <div className={styles.projectCard__cover}>
         {project.coverType === 'image' ? (
-          <Image
-            src={project.cover}
+          <img
+            src={`https://andkiv.com/assets/projects/${project.cover}`}
             className={styles.projectCard__media}
-            alt={`Project Cover for ${project.title}`}
-            width={1600}
-            height={900}
+            alt={project.title}
+            loading="lazy"
           />
         ) : (
-          <video src={project.cover} className={styles.projectCard__media} autoPlay loop />
+          <video
+            src={`https://andkiv.com/assets/projects/${project.cover}`}
+            className={styles.projectCard__media}
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
         )}
       </div>
       <div className={styles.projectCard__info}>

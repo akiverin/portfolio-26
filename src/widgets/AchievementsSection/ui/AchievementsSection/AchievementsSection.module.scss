@@ -47,41 +47,67 @@
     }
   }
 
-  // ─── Search + Sort controls ──────────────────────
+  // ─── Controls (badges + sort) ──────────────────────
   &__controls {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: space-between;
     gap: 16px;
 
-    // Override CSS vars for Input on light bg
+    // Override CSS vars for light bg
     --input-bg: #{$white};
     --input-text: #{$black};
     --input-placeholder: #999;
 
     @include smallerThanTablet {
       flex-direction: column;
-      align-items: stretch;
       gap: 12px;
     }
   }
 
-  &__search {
+  &__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
     flex: 1;
     min-width: 0;
   }
 
-  &__sort {
-    display: flex;
-    gap: 8px;
-    flex-shrink: 0;
+  &__badgeBtn {
+    border: none;
+    background: none;
+    padding: 0;
+    opacity: 0.5;
+
+    @include transition(opacity);
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    &--active {
+      opacity: 1;
+    }
   }
 
-  &__sortIcon {
-    @include transition(transform);
+  &__clearFilter {
+    border: none;
+    background: rgb(0 0 0 / 5%);
+    border-radius: 6px;
+    padding: 2px 10px;
+    height: 24px;
 
-    &--asc {
-      transform: rotate(180deg);
+    @include transition(background);
+
+    &:hover {
+      background: rgb(0 0 0 / 10%);
     }
+  }
+
+  &__sort {
+    flex-shrink: 0;
+    min-width: 180px;
   }
 
   // ─── Card grid ───────────────────────────────────

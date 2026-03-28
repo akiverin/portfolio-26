@@ -120,27 +120,12 @@ export class MyStore extends BaseStore implements ILocalStore {
 }
 ```
 
-## Next.js + MobX Integration
+## Root Store via Context
 
-### "use client" Directive
-
-MobX stores and `observer()` components require `"use client"`:
-
-```typescript
-'use client';
-
-import { observer } from 'mobx-react-lite';
-import { useLocalStore } from 'shared/hooks/useLocalStore';
-```
-
-### Root Store via Context
-
-Global stores (e.g., `UserStore`) are provided via React context in `layout.tsx`:
+Global stores (e.g., `UserStore`) are provided via React context in `main.tsx`:
 
 ```typescript
 // shared/stores/StoreContext.tsx
-"use client";
-
 import { createContext, useContext, useEffect, useRef } from 'react';
 import { RootStore, initRootStore } from './RootStore';
 

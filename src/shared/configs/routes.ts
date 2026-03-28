@@ -2,6 +2,7 @@ export const ROUTES = {
   HOME: '/',
   AUTH: '/auth',
   REGISTER: '/register',
+  PROFILE: '/profile',
   TERMS: '/terms',
   PRIVACY: '/privacy',
 } as const;

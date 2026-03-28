@@ -1,6 +1,5 @@
 import styles from './HeroSection.module.scss';
 import Text from 'shared/ui/Text';
-import Image from 'next/image';
 import heroBg from 'assets/heroBg.webp';
 import AnimatedText from './AnimatedText';
 
@@ -14,13 +13,11 @@ const HeroSection: React.FC = () => {
         <AnimatedText text="Андрей Киверин" />
       </div>
       <div className={styles.hero__background}>
-        <Image
+        <img
           src={heroBg}
           className={styles.hero__image}
-          alt="hero background"
-          width={3000}
-          height={1930}
-          quality={100}
+          alt="Фоновое изображение портфолио"
+          fetchPriority="high"
         />
       </div>
     </section>

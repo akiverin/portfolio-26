@@ -1,39 +1,27 @@
 ---
-description: 'Performance — Next.js optimizations, tree-shaking, MobX optimization'
+description: 'Performance — code-splitting, tree-shaking, MobX optimization'
 globs: ['src/**/*.ts', 'src/**/*.tsx']
 alwaysApply: false
 ---
 
 # Performance & Optimization
 
-## Next.js Code Splitting
+## Code Splitting
 
-Next.js App Router automatically code-splits by route. No manual `React.lazy()` needed.
-
-Use `next/dynamic` for heavy client components:
+Use `React.lazy()` + `Suspense` for heavy components or route-level splitting:
 
 ```typescript
-import dynamic from 'next/dynamic';
+import React, { Suspense, lazy } from 'react';
+import Loader from 'shared/ui/Loader';
 
-const HeavyChart = dynamic(() => import('widgets/Chart/ui/Chart'), {
-  ssr: false,
-  loading: () => <Loader />,
-});
+const HeavyChart = lazy(() => import('widgets/Chart/ui/Chart'));
+
+const MyPage: React.FC = () => (
+  <Suspense fallback={<Loader />}>
+    <HeavyChart />
+  </Suspense>
+);
 ```
-
-## Server vs Client Components
-
-Prefer Server Components (default in App Router) when possible:
-
-- No interactivity needed
-- No MobX stores
-- No browser APIs
-- Data fetching at build/request time
-
-Use `"use client"` only for:
-
-- Components with `observer()`, hooks, or event handlers
-- Components using browser APIs
 
 ## No Barrel Files at Segment Level
 
@@ -66,17 +54,16 @@ get filteredProjects(): Project[] {
 
 ## Image Optimization
 
-Use `next/image` for all images:
+Use native `<img>` with `loading="lazy"` for off-screen images:
 
 ```tsx
-import Image from 'next/image';
-
-<Image src={heroBg} alt="hero" width={3000} height={1930} quality={100} />;
+<img src={heroBg} alt="hero" loading="lazy" />
 ```
+
+For critical above-the-fold images, omit `loading="lazy"`.
 
 ## DON'T
 
 - Don't create segment-level barrels — they prevent tree-shaking
 - Don't run expensive computations in render — move to MobX `computed`
-- Don't use `"use client"` unnecessarily — prefer Server Components
-- Don't import heavy libraries in Server Components
+- Don't import heavy libraries at the top level — use lazy imports

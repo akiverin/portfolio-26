@@ -1,6 +1,6 @@
 html,
 body {
-  font-family: "Pretendard", Arial, Helvetica, sans-serif;
+  font-family: var(--font-pretendard, "Pretendard", Arial, Helvetica, sans-serif);
   height: 100%;
   margin: 0;
   padding: 0;
@@ -30,4 +30,6 @@ a {
 
 ul {
   list-style: none;
+  padding: 0;
+  margin: 0;
 }

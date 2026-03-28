@@ -35,7 +35,7 @@ type LabelTextProps = BaseTextProps & {
 } & LabelHTMLAttributes<HTMLLabelElement>;
 
 type OtherTextProps = BaseTextProps & {
-  tag?: Exclude<'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'div' | 'p' | 'span', 'label'>;
+  tag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'div' | 'p' | 'span';
 } & HTMLAttributes<HTMLElement>;
 
 export type TextProps = LabelTextProps | OtherTextProps;
@@ -67,7 +67,11 @@ const Text: React.FC<TextProps> = ({
         [styles[`text--f-${font}`]]: font,
         [styles['text--no-wrap']]: noWrap,
       })}
-      style={{ WebkitLineClamp: maxLines ? maxLines : undefined }}
+      style={
+        maxLines
+          ? { WebkitLineClamp: maxLines, display: '-webkit-box' }
+          : undefined
+      }
       htmlFor={htmlFor}
     >
       {children}

@@ -1,12 +1,11 @@
-'use client';
-
+import { motion } from 'framer-motion';
 import styles from './AboutSection.module.scss';
 import Text from 'shared/ui/Text';
 import photo from 'assets/photo.jpg';
-import Image from 'next/image';
 import Student from 'shared/ui/icons/Student';
 import Code from 'shared/ui/icons/Code';
 import Briefcase from 'shared/ui/icons/Briefcase';
+import FadeIn from 'shared/ui/FadeIn';
 
 type TimelineEntry = {
   icon: React.ReactNode;
@@ -50,11 +49,32 @@ const WORK: TimelineEntry[] = [
   },
 ];
 
-const TimelineItem: React.FC<{ entry: TimelineEntry; isLast?: boolean }> = ({
+const timelineItemVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.4,
+      delay: i * 0.1,
+      ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
+    },
+  }),
+};
+
+const TimelineItem: React.FC<{ entry: TimelineEntry; isLast?: boolean; index: number }> = ({
   entry,
   isLast = false,
+  index,
 }) => (
-  <div className={styles.timeline__item}>
+  <motion.div
+    className={styles.timeline__item}
+    variants={timelineItemVariants}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, margin: '-40px' }}
+    custom={index}
+  >
     <div className={styles.timeline__marker}>
       <div className={styles.timeline__icon}>{entry.icon}</div>
       {!isLast && <div className={styles.timeline__line} />}
@@ -72,88 +92,103 @@ const TimelineItem: React.FC<{ entry: TimelineEntry; isLast?: boolean }> = ({
         </Text>
       )}
     </div>
-  </div>
+  </motion.div>
 );
 
 const AboutSection: React.FC = () => {
   return (
     <section className={styles.about} id="about">
-      <div className={styles.about__header}>
-        <Text
-          font="caveat"
-          view="p-24"
-          weight="medium"
-          color="secondary"
-          className={styles.about__subtitle}
-        >
-          немного о себе
-        </Text>
-        <Text tag="h2" view="title" weight="black" uppercase>
-          Обо мне
-        </Text>
-      </div>
+      <FadeIn>
+        <div className={styles.about__header}>
+          <Text
+            font="caveat"
+            view="p-24"
+            weight="medium"
+            color="secondary"
+            className={styles.about__subtitle}
+          >
+            немного о себе
+          </Text>
+          <Text tag="h2" view="title" weight="black" uppercase>
+            Обо мне
+          </Text>
+        </div>
+      </FadeIn>
 
       <div className={styles.about__container}>
         <div className={styles.about__top}>
-          <div className={styles.about__photoWrap}>
-            <Image
-              width={280}
-              height={360}
-              src={photo}
-              alt="Фотография Андрея Киверина"
-              className={styles.about__photo}
-            />
-          </div>
+          <FadeIn direction="left" delay={0.1}>
+            <div className={styles.about__photoWrap}>
+              <img
+                src={photo}
+                alt="Фотография Андрея Киверина"
+                className={styles.about__photo}
+                loading="lazy"
+              />
+            </div>
+          </FadeIn>
 
-          <div className={styles.about__bio}>
-            <Text tag="p" view="p-20" weight="medium">
-              Привет, я Андрей Киверин.
-            </Text>
-            <Text tag="p" view="p-16">
-              Мне 22 года, я веб-разработчик, увлечённый
-              веб-дизайном. С школьных лет я был редактором и верстальщиком школьной газеты — более
-              шести лет я создавал её визуальный облик, и именно тогда зародилась моя любовь к
-              верстке.
-            </Text>
-            <Text tag="p" view="p-16">
-              Сегодня я разрабатываю корпоративные проекты, создаю дизайнерские макеты, сайты и
-              мобильные приложения. Недавно получил квалификацию разработчика нейросетей и окончил
-              университет с отличием по специальности «Веб-разработка».
-            </Text>
-            <Text tag="p" view="p-16">
-              Параллельно увлекаюсь научными исследованиями: участвую в конференциях и форумах, пишу
-              и публикую научные статьи. Моя страсть к созданию цифровых пространств проявляется в
-              каждом проекте.
-            </Text>
-          </div>
+          <FadeIn direction="right" delay={0.2}>
+            <div className={styles.about__bio}>
+              <Text tag="p" view="p-20" weight="medium">
+                Привет, я Андрей Киверин.
+              </Text>
+              <Text tag="p" view="p-16">
+                Мне 22 года, я веб-разработчик, увлечённый
+                веб-дизайном. С школьных лет я был редактором и верстальщиком школьной газеты — более
+                шести лет я создавал её визуальный облик, и именно тогда зародилась моя любовь к
+                верстке.
+              </Text>
+              <Text tag="p" view="p-16">
+                Сегодня я разрабатываю корпоративные проекты, создаю дизайнерские макеты, сайты и
+                мобильные приложения. Недавно получил квалификацию разработчика нейросетей и окончил
+                университет с отличием по специальности «Веб-разработка».
+              </Text>
+              <Text tag="p" view="p-16">
+                Параллельно увлекаюсь научными исследованиями: участвую в конференциях и форумах, пишу
+                и публикую научные статьи. Моя страсть к созданию цифровых пространств проявляется в
+                каждом проекте.
+              </Text>
+            </div>
+          </FadeIn>
         </div>
 
         <div className={styles.about__bottom}>
-          <div className={styles.about__block}>
-            <Text tag="h3" view="p-24" weight="bold">
-              Образование
-            </Text>
-            <div className={styles.timeline}>
-              {EDUCATION.map((entry, i) => (
-                <TimelineItem
-                  key={entry.period}
-                  entry={entry}
-                  isLast={i === EDUCATION.length - 1}
-                />
-              ))}
+          <FadeIn delay={0.1}>
+            <div className={styles.about__block}>
+              <Text tag="h3" view="p-24" weight="bold">
+                Образование
+              </Text>
+              <div className={styles.timeline}>
+                {EDUCATION.map((entry, i) => (
+                  <TimelineItem
+                    key={entry.period}
+                    entry={entry}
+                    isLast={i === EDUCATION.length - 1}
+                    index={i}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
+          </FadeIn>
 
-          <div className={styles.about__block}>
-            <Text tag="h3" view="p-24" weight="bold">
-              Работа
-            </Text>
-            <div className={styles.timeline}>
-              {WORK.map((entry, i) => (
-                <TimelineItem key={entry.period} entry={entry} isLast={i === WORK.length - 1} />
-              ))}
+          <FadeIn delay={0.2}>
+            <div className={styles.about__block}>
+              <Text tag="h3" view="p-24" weight="bold">
+                Работа
+              </Text>
+              <div className={styles.timeline}>
+                {WORK.map((entry, i) => (
+                  <TimelineItem
+                    key={entry.period}
+                    entry={entry}
+                    isLast={i === WORK.length - 1}
+                    index={i}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
+          </FadeIn>
         </div>
       </div>
     </section>

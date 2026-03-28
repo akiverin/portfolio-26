@@ -1,6 +1,6 @@
-'use client';
-
+import { useMemo } from 'react';
 import { motion, Variants } from 'framer-motion';
+import classNames from 'classnames';
 import styles from './AnimatedText.module.scss';
 import Text from 'shared/ui/Text';
 
@@ -38,11 +38,11 @@ const letterVariants: Variants = {
 };
 
 const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
-  const letters = Array.from(text);
+  const letters = useMemo(() => Array.from(text), [text]);
 
   return (
     <motion.div
-      className={`${styles.animatedText} ${className || ''}`}
+      className={classNames(styles.animatedText, className)}
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"

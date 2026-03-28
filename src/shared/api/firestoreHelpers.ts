@@ -1,6 +1,7 @@
 import {
   collection,
   getDocs,
+  getCountFromServer,
   query,
   doc,
   getDoc,
@@ -9,7 +10,6 @@ import {
   QueryConstraint,
   DocumentSnapshot,
   DocumentData,
-  CollectionReference,
   Query,
 } from 'firebase/firestore';
 import { db } from './firebase';
@@ -74,7 +74,7 @@ export async function fetchPaginatedCollection<T>(
       page,
       pageSize,
       baseQuery,
-      ref as CollectionReference<DocumentData>,
+      ref,
     );
 
     let paginatedQuery: Query<DocumentData>;
@@ -90,11 +90,12 @@ export async function fetchPaginatedCollection<T>(
       cursorsManager.setCursor(page, snapshot.docs[snapshot.docs.length - 1]);
     }
 
-    const items = await Promise.all(snapshot.docs.map((d) => mapper(d)));
+    const [items, countSnapshot] = await Promise.all([
+      Promise.all(snapshot.docs.map((d) => mapper(d))),
+      getCountFromServer(query(ref, ...baseConstraints)),
+    ]);
 
-    // Get total count
-    const totalSnapshot = await getDocs(query(ref));
-    const total = totalSnapshot.size;
+    const total = countSnapshot.data().count;
     const pageCount = Math.ceil(total / pageSize);
 
     const pagination: PaginationT = { page, pageSize, pageCount, total };

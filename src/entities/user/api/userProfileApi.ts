@@ -5,16 +5,23 @@ import { User } from '../model/types';
 export const usersCollection = () => collection(db, 'users');
 export const userDocRef = (uid: string) => doc(db, 'users', uid);
 
-export async function ensureUserDoc(uid: string, initialData: Partial<User> = {}) {
+/**
+ * Ensures user doc exists. Returns the user profile data to avoid a second read.
+ */
+export async function ensureUserDoc(
+  uid: string,
+  initialData: Partial<User> = {},
+): Promise<User | null> {
   const ref = userDocRef(uid);
   const snapshot = await getDoc(ref);
+
   if (!snapshot.exists()) {
-    await setDoc(ref, {
-      ...initialData,
-      createdAt: serverTimestamp(),
-    });
+    const newData = { ...initialData, createdAt: serverTimestamp() };
+    await setDoc(ref, newData);
+    return { id: uid, ...initialData } as User;
   }
-  return ref;
+
+  return { id: snapshot.id, ...snapshot.data() } as User;
 }
 
 export async function getUserProfileFromFirestore(uid: string): Promise<User | null> {
