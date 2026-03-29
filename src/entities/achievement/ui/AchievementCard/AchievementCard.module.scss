@@ -12,7 +12,7 @@
     background-color: $white;
     width: 100%;
     height: auto;
-    inset: 0px;
+    inset: 0;
   }
 
   &__image {
@@ -28,7 +28,12 @@
     padding: 8px 12px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
+  }
+
+  &__date {
+    margin-top: 2px;
+    opacity: 0.7;
   }
 
   &__actions {

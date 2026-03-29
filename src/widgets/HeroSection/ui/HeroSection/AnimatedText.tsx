@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { motion, Variants } from 'framer-motion';
 import classNames from 'classnames';
 import styles from './AnimatedText.module.scss';
-import Text from 'shared/ui/Text';
 
 type AnimatedTextProps = {
   text: string;
@@ -13,26 +12,26 @@ const containerVariants: Variants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.06,
-      delayChildren: 0.3,
+      staggerChildren: 0.04,
+      delayChildren: 0.2,
     },
   },
 };
 
 const letterVariants: Variants = {
   hidden: {
-    y: 80,
+    y: '100%',
     opacity: 0,
-    filter: 'blur(12px)',
+    filter: 'blur(8px)',
   },
   visible: {
-    y: 0,
+    y: '0%',
     opacity: 1,
     filter: 'blur(0px)',
     transition: {
       type: 'spring',
-      damping: 20,
-      stiffness: 150,
+      damping: 25,
+      stiffness: 200,
     },
   },
 };
@@ -41,21 +40,23 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
   const letters = useMemo(() => Array.from(text), [text]);
 
   return (
-    <motion.div
+    <motion.h1
       className={classNames(styles.animatedText, className)}
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: '-100px' }}
+      viewport={{ once: true, margin: '-50px' }}
     >
-      <Text view="p-18" weight="bold" tag="h1">
-        {letters.map((char, index) => (
-          <motion.span key={`${char}-${index}`} className={styles.letter} variants={letterVariants}>
-            {char === ' ' ? '\u00A0' : char}
-          </motion.span>
-        ))}
-      </Text>
-    </motion.div>
+      {letters.map((char, index) => (
+        <motion.span
+          key={`${char}-${index}`}
+          className={styles.letter}
+          variants={letterVariants}
+        >
+          {char === ' ' ? '\u00A0' : char}
+        </motion.span>
+      ))}
+    </motion.h1>
   );
 };
 

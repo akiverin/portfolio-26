@@ -12,11 +12,17 @@ const RegisterPage = lazy(() =>
 const ProfilePage = lazy(() =>
   import('pages/Profile').then((m) => ({ default: m.ProfilePage })),
 );
+const AdminPage = lazy(() =>
+  import('pages/Admin').then((m) => ({ default: m.AdminPage })),
+);
 const TermsPage = lazy(() =>
   import('pages/Terms').then((m) => ({ default: m.TermsPage })),
 );
 const PrivacyPage = lazy(() =>
   import('pages/Privacy').then((m) => ({ default: m.PrivacyPage })),
+);
+const AchievementsPage = lazy(() =>
+  import('pages/Achievements').then((m) => ({ default: m.AchievementsPage })),
 );
 const NotFoundPage = lazy(() =>
   import('pages/NotFound').then((m) => ({ default: m.NotFoundPage })),
@@ -30,6 +36,8 @@ export const AppRouter: React.FC = () => {
         <Route path={ROUTES.AUTH} element={<AuthPage />} />
         <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
         <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
+        <Route path={ROUTES.ADMIN} element={<AdminPage />} />
+        <Route path={ROUTES.ACHIEVEMENTS} element={<AchievementsPage />} />
         <Route path={ROUTES.TERMS} element={<TermsPage />} />
         <Route path={ROUTES.PRIVACY} element={<PrivacyPage />} />
         <Route path="*" element={<NotFoundPage />} />

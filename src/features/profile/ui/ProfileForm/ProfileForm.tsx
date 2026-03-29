@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
+import { IconTrash } from '@tabler/icons-react';
 import Text from 'shared/ui/Text';
 import Button from 'shared/ui/Button';
 import Input from 'shared/ui/Input';
@@ -9,12 +10,15 @@ import { useLocalStore } from 'shared/hooks/useLocalStore';
 import { ROUTES } from 'shared/configs/routes';
 import { Meta } from 'shared/lib/meta';
 import { ProfileFormStore } from 'features/profile/model/ProfileFormStore';
+import ConfirmModal from 'features/admin/ui/ConfirmModal';
 import styles from './ProfileForm.module.scss';
 
 const ProfileForm: React.FC = observer(() => {
   const userStore = useUserStore();
   const navigate = useNavigate();
   const form = useLocalStore(() => new ProfileFormStore());
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (userStore.isInitialized && !userStore.isAuth) {
@@ -48,6 +52,17 @@ const ProfileForm: React.FC = observer(() => {
   const handleSignOut = async () => {
     await userStore.signOut();
     navigate(ROUTES.HOME, { replace: true });
+  };
+
+  const handleDeleteAccount = async () => {
+    setDeleting(true);
+    try {
+      await userStore.deleteAccount();
+      navigate(ROUTES.HOME, { replace: true });
+    } catch {
+      setDeleting(false);
+      setDeleteModalOpen(false);
+    }
   };
 
   if (!userStore.isInitialized) {
@@ -84,7 +99,7 @@ const ProfileForm: React.FC = observer(() => {
       <div className={styles.profile__card}>
         <form onSubmit={handleSubmit} className={styles.profile__form}>
           <div className={styles.profile__header}>
-            <Text view="title" tag="h1" weight="black" uppercase>
+            <Text view="p-32" tag="h1" weight="bold">
               Профиль
             </Text>
             <Text view="p-16" color="secondary">
@@ -212,9 +227,27 @@ const ProfileForm: React.FC = observer(() => {
                 Выйти из аккаунта
               </Text>
             </Button>
+            <button
+              type="button"
+              className={styles.profile__deleteBtn}
+              onClick={() => setDeleteModalOpen(true)}
+            >
+              <IconTrash size={16} stroke={1.5} />
+              Удалить аккаунт
+            </button>
           </div>
         </form>
       </div>
+
+      <ConfirmModal
+        isOpen={deleteModalOpen}
+        title="Удаление аккаунта"
+        message="Вы уверены, что хотите удалить свой аккаунт? Это действие необратимо — все данные будут безвозвратно утеряны."
+        confirmLabel="Удалить аккаунт"
+        loading={deleting}
+        onConfirm={handleDeleteAccount}
+        onCancel={() => setDeleteModalOpen(false)}
+      />
     </div>
   );
 });

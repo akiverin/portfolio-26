@@ -1,5 +1,6 @@
 @use "colors" as *;
 @use "mixins" as *;
+@use "adaptive" as *;
 
 .projectCard {
   position: relative;
@@ -12,8 +13,13 @@
     background-color: $white;
     width: 100%;
     height: auto;
-    inset: 0px;
-    max-width: max(800px, 46vw);
+    inset: 0;
+    max-width: 100%;
+
+    @include smallerThanTablet {
+      border-width: 3px;
+      border-radius: 10px;
+    }
   }
 
   &__media {
@@ -30,6 +36,11 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+
+    @include smallerThanTablet {
+      padding: 10px 8px;
+      gap: 4px;
+    }
   }
 
   &__actions {
@@ -38,6 +49,12 @@
     justify-content: center;
     gap: 16px;
     margin-top: 8px;
+    flex-wrap: wrap;
+
+    @include smallerThanTablet {
+      gap: 8px;
+      margin-top: 4px;
+    }
   }
 
   &__github svg {

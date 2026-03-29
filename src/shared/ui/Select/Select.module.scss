@@ -11,27 +11,31 @@
     gap: 8px;
     padding: 0 $space-0;
     height: $height-ui;
+    width: 100%;
     background: var(--input-bg, #{$input-bg});
-    border: none;
+    border: 1.5px solid transparent;
     border-radius: $border-radius;
     color: var(--input-text, #{$input-text});
     white-space: nowrap;
 
-    @include transition(border-radius);
+    @include transition(border-color, box-shadow);
+
+    &:hover {
+      border-color: rgb(66 189 218 / 25%);
+    }
 
     &--open {
       border-radius: $border-radius $border-radius 0 0;
+      border-color: rgb(66 189 218 / 40%);
+      box-shadow: 0 0 0 3px rgb(66 189 218 / 8%);
     }
   }
 
   &__arrow {
     flex-shrink: 0;
-
-    @include transition(transform);
-
-    &--open {
-      transform: rotate(180deg);
-    }
+    display: flex;
+    align-items: center;
+    margin-left: auto;
   }
 
   &__dropdown {
@@ -43,19 +47,21 @@
     border-radius: 0 0 $border-radius $border-radius;
     z-index: 10;
     overflow: hidden;
-    box-shadow: 0 4px 16px rgb(0 0 0 / 12%);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 15%);
+    border: 1.5px solid rgb(66 189 218 / 20%);
+    border-top: none;
   }
 
   &__search {
     width: 100%;
-    padding: 8px $space-0;
+    padding: 10px $space-0;
     border: none;
     outline: none;
     background: transparent;
     color: inherit;
     font-family: Pretendard, sans-serif;
     font-size: 14px;
-    border-bottom: 1px solid rgb(0 0 0 / 10%);
+    border-bottom: 1px solid rgb(0 0 0 / 8%);
 
     &::placeholder {
       color: var(--input-placeholder, #{$input-placeholder});
@@ -66,31 +72,44 @@
     list-style: none;
     padding: 4px 0;
     margin: 0;
-    max-height: 200px;
+    max-height: 220px;
     overflow-y: auto;
   }
 
   &__option {
     width: 100%;
-    padding: 8px $space-0;
+    padding: 10px $space-0;
     border: none;
     background: transparent;
     text-align: left;
     color: inherit;
     font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border-radius: 4px;
+    margin: 0 4px;
 
     @include transition(background);
 
     &:hover {
-      background: rgb(0 0 0 / 5%);
+      background: rgb(66 189 218 / 8%);
     }
 
     &--active {
       font-weight: 600;
+      color: $brand;
     }
   }
 
+  &__check {
+    font-size: 12px;
+    color: $brand;
+    font-weight: 700;
+  }
+
   &__empty {
-    padding: 8px $space-0;
+    padding: 10px $space-0;
   }
 }

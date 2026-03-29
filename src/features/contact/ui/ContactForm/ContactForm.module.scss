@@ -9,12 +9,29 @@
     flex-direction: column;
     gap: $space-l;
     width: 100%;
+    padding: 32px;
+    background: rgb(255 255 255 / 92%);
+    border: 1px solid rgb(0 0 0 / 8%);
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgb(0 0 0 / 6%);
 
-    --input-bg: rgba(255, 255, 255, 0.05);
-    --input-text: #{$white};
-    --input-placeholder: #666;
-    --input-bg-disabled: rgba(255, 255, 255, 0.02);
-    --input-text-disabled: #555;
+    --input-bg: #fff;
+    --input-text: #1a1a1a;
+    --input-placeholder: #999;
+    --input-bg-disabled: #f5f5f5;
+    --input-text-disabled: #aaa;
+
+    @include smallerThanTablet {
+      padding: 24px 16px;
+      border-radius: 16px;
+    }
+  }
+
+  &__formTitle {
+    color: #1a1a1a;
+    margin-bottom: 4px;
   }
 
   &__fields {
@@ -41,7 +58,7 @@
 
   &__actions {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
   }
 
   &__success {
@@ -57,7 +74,7 @@
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    background: rgba(66, 189, 218, 0.15);
+    background: rgb(66 189 218 / 15%);
     display: flex;
     align-items: center;
     justify-content: center;

@@ -24,9 +24,9 @@ const LoginForm: React.FC = observer(() => {
     if (!form.validateAll()) return;
     try {
       await userStore.signIn(form.identifier, form.password);
-      navigate(ROUTES.HOME, { replace: true });
+      navigate(ROUTES.PROFILE, { replace: true });
     } catch {
-      // Error handled by store
+      /* handled by store */
     }
   };
 
@@ -34,9 +34,9 @@ const LoginForm: React.FC = observer(() => {
     e.preventDefault();
     try {
       await userStore.signInWithGoogle();
-      navigate(ROUTES.HOME, { replace: true });
+      navigate(ROUTES.PROFILE, { replace: true });
     } catch {
-      // Error handled by store
+      /* handled by store */
     }
   };
 
@@ -46,7 +46,7 @@ const LoginForm: React.FC = observer(() => {
       await userStore.resetPassword(form.identifier);
       setMode('login');
     } catch {
-      // Error handled by store
+      /* handled by store */
     }
   };
 
@@ -60,7 +60,7 @@ const LoginForm: React.FC = observer(() => {
             onClick={() => setMode('login')}
             aria-label="Назад"
           >
-            <ArrowLeft height={24} width={24} />
+            <ArrowLeft height={20} width={20} />
           </button>
         )}
 
@@ -69,18 +69,18 @@ const LoginForm: React.FC = observer(() => {
           className={styles.auth__form}
         >
           <div className={styles.auth__header}>
-            <Text view="title" tag="h1" weight="black" uppercase>
-              {mode === 'login' ? 'Вход' : 'Сброс пароля'}
+            <Text view="p-28" tag="h1" weight="bold">
+              {mode === 'login' ? 'Добро пожаловать' : 'Сброс пароля'}
             </Text>
             {mode === 'login' ? (
-              <Text view="p-16" color="secondary">
+              <Text view="p-14" color="secondary">
                 Нет аккаунта?{' '}
                 <Link to={ROUTES.REGISTER} className={styles.auth__link}>
                   Зарегистрируйтесь
                 </Link>
               </Text>
             ) : (
-              <Text view="p-16" color="secondary">
+              <Text view="p-14" color="secondary">
                 Введите email для получения ссылки на сброс пароля.
               </Text>
             )}
@@ -88,7 +88,7 @@ const LoginForm: React.FC = observer(() => {
 
           <div className={styles.auth__fields}>
             <div className={styles.auth__field}>
-              <Text tag="label" view="p-14" weight="medium" htmlFor="identifier">
+              <Text tag="label" view="p-12" weight="medium" color="secondary" htmlFor="identifier">
                 Email
               </Text>
               <Input
@@ -99,7 +99,7 @@ const LoginForm: React.FC = observer(() => {
                 placeholder="Введите email"
               />
               {form.errors.identifier && (
-                <Text view="p-14" color="accent">
+                <Text view="p-12" color="accent">
                   {form.errors.identifier}
                 </Text>
               )}
@@ -107,7 +107,7 @@ const LoginForm: React.FC = observer(() => {
 
             {mode === 'login' && (
               <div className={styles.auth__field}>
-                <Text tag="label" view="p-14" weight="medium" htmlFor="password">
+                <Text tag="label" view="p-12" weight="medium" color="secondary" htmlFor="password">
                   Пароль
                 </Text>
                 <Input
@@ -123,7 +123,7 @@ const LoginForm: React.FC = observer(() => {
           </div>
 
           {userStore.meta === Meta.error && userStore.error && (
-            <Text view="p-14" color="accent">
+            <Text view="p-12" color="accent">
               {userStore.error}
             </Text>
           )}
@@ -142,7 +142,7 @@ const LoginForm: React.FC = observer(() => {
                 onClick={() => setMode('reset')}
                 disabled={userStore.meta === Meta.loading}
               >
-                <Text view="p-14" color="secondary">
+                <Text view="p-12" color="secondary">
                   Забыли пароль?
                 </Text>
               </button>
@@ -160,14 +160,14 @@ const LoginForm: React.FC = observer(() => {
               </div>
               <Button type="button" onClick={handleGoogle}>
                 <Google width={16} height={16} />
-                <Text view="p-16">Войти через Google</Text>
+                <Text view="p-14">Войти через Google</Text>
               </Button>
             </>
           )}
 
           <div className={styles.auth__legal}>
             <Link to={ROUTES.PRIVACY} className={styles.auth__link}>
-              <Text view="p-12" color="secondary">
+              <Text view="p-10" color="secondary">
                 Политика конфиденциальности
               </Text>
             </Link>

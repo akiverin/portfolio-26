@@ -1,0 +1,190 @@
+.admin {
+  --admin-bg: #fafafa;
+  --admin-sidebar-bg: #fff;
+  --admin-sidebar-border: #e8e8e8;
+  --admin-sidebar-item-hover: rgb(0, 0, 0, 4%);
+  --admin-sidebar-item-active-bg: rgb(66, 189, 218, 8%);
+  --admin-sidebar-item-active-color: #42bdda;
+  --admin-sidebar-text: #666;
+  --admin-sidebar-logo: #1a1a1a;
+  --admin-text: #1a1a1a;
+  --admin-text-secondary: #888;
+  --admin-card-bg: #fff;
+  --admin-card-border: #e8e8e8;
+  --admin-input-bg: #f5f5f5;
+  --admin-input-border: #e0e0e0;
+  --admin-input-text: #1a1a1a;
+  --admin-row-hover: rgb(0, 0, 0, 2%);
+  --admin-row-selected: rgb(66, 189, 218, 6%);
+  --admin-checkbox-accent: #42bdda;
+  --admin-spinner-track: rgb(0, 0, 0, 8%);
+  --admin-danger-bg: rgb(229, 72, 75, 10%);
+  --admin-danger-border: rgb(229, 72, 75, 20%);
+  --admin-danger-text: #e5484b;
+  --admin-danger-hover-bg: rgb(229, 72, 75, 15%);
+  --admin-theme-btn-bg: rgb(0, 0, 0, 6%);
+  --admin-theme-btn-hover-bg: rgb(0, 0, 0, 10%);
+  --admin-theme-btn-color: var(--admin-text);
+  --admin-add-btn-text: #000;
+  --admin-date-icon-filter: none;
+
+  display: flex;
+  min-height: 100vh;
+  background: var(--admin-bg);
+  color: var(--admin-text);
+  font-family: Pretendard, sans-serif;
+
+  &--dark {
+    --admin-bg: #0e0e0e;
+    --admin-sidebar-bg: #141414;
+    --admin-sidebar-border: rgb(255, 255, 255, 6%);
+    --admin-sidebar-item-hover: rgb(255, 255, 255, 4%);
+    --admin-sidebar-item-active-bg: rgb(66, 189, 218, 8%);
+    --admin-sidebar-item-active-color: #42bdda;
+    --admin-sidebar-text: #888;
+    --admin-sidebar-logo: #fff;
+    --admin-text: #fff;
+    --admin-text-secondary: #666;
+    --admin-card-bg: #111;
+    --admin-card-border: rgb(255, 255, 255, 6%);
+    --admin-input-bg: rgb(255, 255, 255, 5%);
+    --admin-input-border: rgb(255, 255, 255, 8%);
+    --admin-input-text: #fff;
+    --admin-row-hover: rgb(255, 255, 255, 2%);
+    --admin-row-selected: rgb(66, 189, 218, 5%);
+    --admin-checkbox-accent: #42bdda;
+    --admin-spinner-track: rgb(255, 255, 255, 10%);
+    --admin-danger-bg: rgb(229, 72, 75, 10%);
+    --admin-danger-border: rgb(229, 72, 75, 20%);
+    --admin-danger-text: #e5484b;
+    --admin-danger-hover-bg: rgb(229, 72, 75, 15%);
+    --admin-theme-btn-bg: rgb(255, 255, 255, 6%);
+    --admin-theme-btn-hover-bg: rgb(255, 255, 255, 10%);
+    --admin-theme-btn-color: var(--admin-text);
+    --admin-add-btn-text: #000;
+    --admin-date-icon-filter: invert(1);
+  }
+
+  &__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: var(--admin-bg);
+  }
+
+  &__spinner {
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--admin-spinner-track);
+    border-top-color: var(--admin-checkbox-accent);
+    border-radius: 50%;
+    animation: admin-page-spin 0.6s linear infinite;
+  }
+
+  &__main {
+    flex: 1;
+    min-width: 0;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    @media (width <= 768px) {
+      padding: 20px 16px;
+      gap: 16px;
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  &__title {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+    color: var(--admin-text);
+  }
+
+  &__subtitle {
+    font-size: 14px;
+    color: var(--admin-text-secondary);
+    margin: 4px 0 0;
+  }
+
+  &__headerActions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  &__themeBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid var(--admin-card-border);
+    border-radius: 10px;
+    background: var(--admin-theme-btn-bg);
+    color: var(--admin-theme-btn-color);
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+
+    &:hover {
+      background: var(--admin-theme-btn-hover-bg);
+    }
+  }
+
+  &__addBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    background: var(--admin-checkbox-accent);
+    color: var(--admin-add-btn-text);
+    border: none;
+    border-radius: 10px;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    transition: opacity 0.15s ease;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  &__bulkDeleteBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    background: var(--admin-danger-bg);
+    color: var(--admin-danger-text);
+    border: 1px solid var(--admin-danger-border);
+    border-radius: 10px;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: var(--admin-danger-hover-bg);
+    }
+  }
+}
+
+@keyframes admin-page-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

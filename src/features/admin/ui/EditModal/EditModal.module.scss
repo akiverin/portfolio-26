@@ -1,0 +1,233 @@
+@use "colors" as *;
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgb(0, 0, 0, 60%);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal {
+  width: 100%;
+  max-width: 520px;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: var(--admin-card-bg, #1a1a1a);
+  border: 1px solid var(--admin-card-border, rgb(255, 255, 255, 8%));
+  border-radius: 16px;
+  color: var(--admin-text, #fff);
+  font-family: Pretendard, sans-serif;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgb(255, 255, 255, 10%);
+    border-radius: 2px;
+  }
+
+  &[data-dark='true'] &__input[type='date'] {
+    color-scheme: dark;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 24px 0;
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  &__closeBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    color: var(--admin-text-secondary, #666);
+    border-radius: 8px;
+    transition: all 0.15s ease;
+
+    &:hover {
+      background: var(--admin-card-border, rgb(255, 255, 255, 6%));
+      color: var(--admin-text, #fff);
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px;
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--admin-text-secondary, #999);
+  }
+
+  &__required {
+    color: #e5484b;
+    margin-left: 2px;
+  }
+
+  &__input,
+  &__textarea,
+  &__select {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--admin-input-bg, rgb(255, 255, 255, 5%));
+    border: 1px solid var(--admin-input-border, rgb(255, 255, 255, 8%));
+    border-radius: 10px;
+    color: var(--admin-input-text, var(--admin-text, #fff));
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s ease;
+
+    &::placeholder {
+      color: #555;
+    }
+
+    &:focus {
+      border-color: $brand;
+    }
+
+    &[type='date'] {
+      color-scheme: light;
+
+      &::-webkit-calendar-picker-indicator {
+        filter: var(--admin-date-icon-filter, none);
+      }
+    }
+  }
+
+  &__textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  &__select {
+    appearance: none;
+    cursor: pointer;
+
+    option {
+      background: var(--admin-card-bg, #1a1a1a);
+      color: var(--admin-text, #fff);
+    }
+  }
+
+  &__multiselect {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 14px;
+    background: var(--admin-input-bg, rgb(255, 255, 255, 5%));
+    border: 1px solid var(--admin-input-border, rgb(255, 255, 255, 8%));
+    border-radius: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  &__multiselectItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--admin-row-hover, rgb(255, 255, 255, 4%));
+    cursor: pointer;
+    transition: background 0.15s ease;
+    font-size: 13px;
+
+    &:hover {
+      background: var(--admin-sidebar-item-hover, rgb(255, 255, 255, 8%));
+    }
+  }
+
+  &__multiselectCheckbox {
+    width: 14px;
+    height: 14px;
+    accent-color: var(--admin-checkbox-accent, #42bdda);
+    cursor: pointer;
+  }
+
+  &__multiselectLabel {
+    color: var(--admin-text, #fff);
+    user-select: none;
+  }
+
+  &__multiselectEmpty {
+    color: var(--admin-text-secondary, #666);
+    font-size: 13px;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--admin-card-border, rgb(255, 255, 255, 6%));
+  }
+
+  &__cancelBtn,
+  &__saveBtn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    transition: all 0.15s ease;
+  }
+
+  &__cancelBtn {
+    background: var(--admin-card-border, rgb(255, 255, 255, 6%));
+    color: var(--admin-text-secondary, #999);
+
+    &:hover {
+      background: rgb(255, 255, 255, 10%);
+      color: var(--admin-text, #fff);
+    }
+  }
+
+  &__saveBtn {
+    background: $brand;
+    color: #000;
+
+    &:hover {
+      opacity: 0.9;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+  }
+}

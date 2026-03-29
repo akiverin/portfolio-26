@@ -15,6 +15,9 @@
   padding: 0 $space-0;
   color: var(--input-text);
   border-radius: $border-radius;
+  border: 1.5px solid transparent;
+
+  @include transition(border-color, box-shadow);
 
   & input {
     box-sizing: border-box;
@@ -32,21 +35,23 @@
     }
 
     &:autofill {
-      box-shadow: 0 0 0px 1000px var(--input-bg) inset;
+      box-shadow: 0 0 0 1000px var(--input-bg) inset;
       -webkit-text-fill-color: var(--input-text);
       border-left: 2px solid var(--text-accent);
       padding-left: $space-xxs;
     }
   }
 
+  &:has(input:focus) {
+    border-color: rgb(66 189 218 / 40%);
+    box-shadow: 0 0 0 3px rgb(66 189 218 / 8%);
+    background-color: var(--input-bg);
+    color: var(--input-text);
+  }
+
   &:has(input[disabled]) {
     background-color: var(--input-bg-disabled);
     border-color: var(--input-border-disabled);
     color: var(--input-text-disabled);
-  }
-
-  &:has(input:focus) {
-    background-color: var(--input-bg);
-    color: var(--input-text);
   }
 }

@@ -1,5 +1,6 @@
 import {
   createUserWithEmailAndPassword,
+  deleteUser,
   getIdToken,
   GoogleAuthProvider,
   sendPasswordResetEmail,
@@ -46,4 +47,9 @@ export async function updateProfileInFirebase(patch: Partial<User>) {
 export async function getIdTokenFromFirebase(force = false) {
   if (!auth.currentUser) return null;
   return await getIdToken(auth.currentUser, force);
+}
+
+export async function deleteAccountFromFirebase() {
+  if (!auth.currentUser) throw new Error('No authenticated user');
+  await deleteUser(auth.currentUser);
 }

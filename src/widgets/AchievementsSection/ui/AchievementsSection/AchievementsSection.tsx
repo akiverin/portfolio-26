@@ -2,23 +2,21 @@ import { observer } from 'mobx-react-lite';
 import { motion } from 'framer-motion';
 import styles from './AchievementsSection.module.scss';
 import Text from 'shared/ui/Text';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   AchievementListStore,
-  SORT_OPTIONS,
 } from 'entities/Achievement/stores/AchievementListStore';
 import AchievementCard from 'entities/Achievement/ui/AchievementCard';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useLocalStore } from 'shared/hooks/useLocalStore';
-import Select from 'shared/ui/Select';
-import Badge from 'shared/ui/Badge';
-import Pagination from 'shared/ui/Pagination';
 import Skeleton from 'shared/ui/Skeleton';
-import classNames from 'classnames';
 import { Meta } from 'shared/lib/meta';
-import { ColorsBadgeT, IconsBadgeT } from 'shared/ui/Badge/Badge';
 import FadeIn from 'shared/ui/FadeIn';
+import Button from 'shared/ui/Button';
+import { AnimatedCheckbox } from 'shared/ui/AnimatedCheckbox';
+import { ROUTES } from 'shared/configs/routes';
 
+const DISPLAY_COUNT = 6;
 const SKELETON_COUNT = 6;
 
 const AchievementCardSkeleton: React.FC = () => (
@@ -46,7 +44,8 @@ const cardVariants = {
 };
 
 const AchievementsSection: React.FC = observer(() => {
-  const store = useLocalStore(() => new AchievementListStore());
+  const store = useLocalStore(() => new AchievementListStore({ pageSize: DISPLAY_COUNT }));
+  const [showDates, setShowDates] = useState(false);
 
   useEffect(() => {
     store.fetchAchievements();
@@ -85,45 +84,14 @@ const AchievementsSection: React.FC = observer(() => {
       <FadeIn delay={0.15}>
         <div className={styles.achievements__content}>
           <div className={styles.achievements__controls}>
-            {store.availableBadges.length > 0 && (
-              <div className={styles.achievements__badges}>
-                {store.selectedBadgeIds.length > 0 && (
-                  <button
-                    type="button"
-                    className={styles.achievements__clearFilter}
-                    onClick={() => store.clearBadgeFilter()}
-                  >
-                    <Text view="p-12" color="secondary">
-                      Сбросить
-                    </Text>
-                  </button>
-                )}
-                {store.availableBadges.map((badge) => (
-                  <button
-                    key={badge.id}
-                    type="button"
-                    className={classNames(styles.achievements__badgeBtn, {
-                      [styles['achievements__badgeBtn--active']]:
-                        store.selectedBadgeIds.includes(badge.id),
-                    })}
-                    onClick={() => store.toggleBadge(badge.id)}
-                  >
-                    <Badge
-                      title={badge.title}
-                      color={badge.color as ColorsBadgeT}
-                      icon={badge.icon as IconsBadgeT}
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
-
-            <Select
-              value={store.sortValue}
-              options={SORT_OPTIONS}
-              onChange={(v) => store.setSortValue(v)}
-              searchable
-              className={styles.achievements__sort}
+            <AnimatedCheckbox
+              checked={showDates}
+              onChange={setShowDates}
+              label={
+                <Text view="p-14" weight="medium">
+                  Показывать дату
+                </Text>
+              }
             />
           </div>
 
@@ -144,7 +112,7 @@ const AchievementsSection: React.FC = observer(() => {
                   viewport={{ once: true, margin: '-40px' }}
                   custom={i % 3}
                 >
-                  <AchievementCard achievement={achievement} />
+                  <AchievementCard achievement={achievement} showDate={showDates} />
                 </motion.div>
               ))}
 
@@ -157,15 +125,13 @@ const AchievementsSection: React.FC = observer(() => {
             )}
           </div>
 
-          {store.totalPages > 1 && (
-            <div className={styles.achievements__pagination}>
-              <Pagination
-                page={store.pagination.page}
-                pageCount={store.totalPages}
-                onPageChange={(p) => store.setPage(p)}
-              />
-            </div>
-          )}
+          <div className={styles.achievements__allBtn}>
+            <Button href={ROUTES.ACHIEVEMENTS} theme="dark">
+              <Text view="p-16" weight="medium">
+                Все достижения
+              </Text>
+            </Button>
+          </div>
         </div>
       </FadeIn>
     </section>

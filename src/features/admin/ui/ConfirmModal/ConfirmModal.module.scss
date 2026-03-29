@@ -1,0 +1,91 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgb(0, 0, 0, 60%);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal {
+  width: 100%;
+  max-width: 400px;
+  background: var(--admin-card-bg, #fff);
+  border: 1px solid var(--admin-card-border, #e8e8e8);
+  border-radius: 16px;
+  padding: 32px;
+  color: var(--admin-text);
+  font-family: Pretendard, sans-serif;
+  text-align: center;
+
+  &__icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--admin-danger-bg);
+    color: var(--admin-danger-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 8px;
+    color: var(--admin-text);
+  }
+
+  &__message {
+    font-size: 14px;
+    color: var(--admin-text-secondary);
+    margin: 0 0 28px;
+    line-height: 1.5;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  &__cancelBtn,
+  &__confirmBtn {
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    transition: background 0.15s ease, color 0.15s ease;
+    flex: 1;
+  }
+
+  &__cancelBtn {
+    background: var(--admin-sidebar-item-hover);
+    color: var(--admin-text-secondary);
+
+    &:hover {
+      background: var(--admin-theme-btn-hover-bg);
+      color: var(--admin-text);
+    }
+  }
+
+  &__confirmBtn {
+    background: var(--admin-danger-text);
+    color: var(--admin-text-on-danger, #fff);
+
+    &:hover {
+      opacity: 0.9;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+  }
+}

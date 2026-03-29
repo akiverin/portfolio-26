@@ -22,9 +22,19 @@ const RegisterForm: React.FC = observer(() => {
     if (!form.validateAll()) return;
     try {
       await userStore.signUp(form.email, form.password, form.displayName);
-      navigate(ROUTES.HOME, { replace: true });
+      navigate(ROUTES.PROFILE, { replace: true });
     } catch {
-      // Error handled by store
+      /* handled by store */
+    }
+  };
+
+  const handleGoogle = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await userStore.signInWithGoogle();
+      navigate(ROUTES.PROFILE, { replace: true });
+    } catch {
+      /* handled by store */
     }
   };
 
@@ -33,10 +43,10 @@ const RegisterForm: React.FC = observer(() => {
       <div className={styles.register__card}>
         <form onSubmit={handleSubmit} className={styles.register__form}>
           <div className={styles.register__header}>
-            <Text view="title" tag="h1" weight="black" uppercase>
-              Регистрация
+            <Text view="p-28" tag="h1" weight="bold">
+              Создать аккаунт
             </Text>
-            <Text view="p-16" color="secondary">
+            <Text view="p-14" color="secondary">
               Уже есть аккаунт?{' '}
               <Link to={ROUTES.AUTH} className={styles.register__link}>
                 Войдите
@@ -46,7 +56,7 @@ const RegisterForm: React.FC = observer(() => {
 
           <div className={styles.register__fields}>
             <div className={styles.register__field}>
-              <Text tag="label" view="p-14" weight="medium" htmlFor="displayName">
+              <Text tag="label" view="p-12" weight="medium" color="secondary" htmlFor="displayName">
                 Имя
               </Text>
               <Input
@@ -57,14 +67,14 @@ const RegisterForm: React.FC = observer(() => {
                 placeholder="Введите имя"
               />
               {form.errors.displayName && (
-                <Text view="p-14" color="accent">
+                <Text view="p-12" color="accent">
                   {form.errors.displayName}
                 </Text>
               )}
             </div>
 
             <div className={styles.register__field}>
-              <Text tag="label" view="p-14" weight="medium" htmlFor="email">
+              <Text tag="label" view="p-12" weight="medium" color="secondary" htmlFor="email">
                 Email
               </Text>
               <Input
@@ -75,14 +85,14 @@ const RegisterForm: React.FC = observer(() => {
                 placeholder="Введите email"
               />
               {form.errors.email && (
-                <Text view="p-14" color="accent">
+                <Text view="p-12" color="accent">
                   {form.errors.email}
                 </Text>
               )}
             </div>
 
             <div className={styles.register__field}>
-              <Text tag="label" view="p-14" weight="medium" htmlFor="password">
+              <Text tag="label" view="p-12" weight="medium" color="secondary" htmlFor="password">
                 Пароль
               </Text>
               <Input
@@ -90,10 +100,10 @@ const RegisterForm: React.FC = observer(() => {
                 type="password"
                 value={form.password}
                 onChange={(v) => form.setField('password', v)}
-                placeholder="Введите пароль"
+                placeholder="Минимум 6 символов"
               />
               {form.errors.password && (
-                <Text view="p-14" color="accent">
+                <Text view="p-12" color="accent">
                   {form.errors.password}
                 </Text>
               )}
@@ -119,13 +129,13 @@ const RegisterForm: React.FC = observer(() => {
             </Text>
           </label>
           {form.errors.terms && (
-            <Text view="p-14" color="accent">
+            <Text view="p-12" color="accent">
               {form.errors.terms}
             </Text>
           )}
 
           {userStore.meta === Meta.error && (
-            <Text view="p-14" color="accent">
+            <Text view="p-12" color="accent">
               {userStore.error}
             </Text>
           )}
@@ -144,15 +154,9 @@ const RegisterForm: React.FC = observer(() => {
             <span />
           </div>
 
-          <Button
-            onClick={(e) => {
-              e.preventDefault();
-              userStore.signInWithGoogle();
-            }}
-            loading={userStore.meta === Meta.loading}
-          >
+          <Button onClick={handleGoogle} loading={userStore.meta === Meta.loading}>
             <Google width={16} height={16} />
-            <Text view="p-16">Войти через Google</Text>
+            <Text view="p-14">Войти через Google</Text>
           </Button>
         </form>
       </div>

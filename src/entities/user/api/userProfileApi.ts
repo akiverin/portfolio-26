@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from 'shared/api/firebase';
 import { User } from '../model/types';
 
@@ -37,4 +37,9 @@ export async function updateUserProfileInFirestore(uid: string, patch: Partial<U
     ...patch,
     updatedAt: serverTimestamp(),
   });
+}
+
+export async function deleteUserProfileFromFirestore(uid: string) {
+  const ref = userDocRef(uid);
+  await deleteDoc(ref);
 }

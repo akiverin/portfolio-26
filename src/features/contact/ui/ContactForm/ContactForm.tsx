@@ -47,10 +47,14 @@ const ContactForm: React.FC = observer(() => {
 
   return (
     <form onSubmit={handleSubmit} className={styles.contact__form}>
+      <Text tag="p" view="p-18" weight="bold" className={styles.contact__formTitle}>
+        Напишите мне
+      </Text>
+
       <div className={styles.contact__fields}>
         <div className={styles.contact__row}>
           <div className={styles.contact__field}>
-            <Text tag="label" view="p-14" weight="medium" htmlFor="contact-name">
+            <Text tag="label" view="p-12" weight="medium" color="secondary" htmlFor="contact-name">
               Имя
             </Text>
             <Input
@@ -66,7 +70,7 @@ const ContactForm: React.FC = observer(() => {
             )}
           </div>
           <div className={styles.contact__field}>
-            <Text tag="label" view="p-14" weight="medium" htmlFor="contact-email">
+            <Text tag="label" view="p-12" weight="medium" color="secondary" htmlFor="contact-email">
               Email
             </Text>
             <Input
@@ -85,14 +89,14 @@ const ContactForm: React.FC = observer(() => {
         </div>
 
         <div className={styles.contact__field}>
-          <Text tag="label" view="p-14" weight="medium" htmlFor="contact-message">
+          <Text tag="label" view="p-12" weight="medium" color="secondary" htmlFor="contact-message">
             Сообщение
           </Text>
           <Textarea
             id="contact-message"
             value={form.message}
             onChange={(v) => form.setField('message', v)}
-            placeholder="Напишите ваше сообщение..."
+            placeholder="Расскажите о вашем проекте или задайте вопрос..."
             rows={5}
           />
           {form.errors.message && (
@@ -112,7 +116,7 @@ const ContactForm: React.FC = observer(() => {
       <div className={styles.contact__actions}>
         <Button type="submit" theme="accent" loading={form.meta === Meta.loading}>
           <Text view="p-16" weight="medium">
-            Отправить
+            Отправить сообщение
           </Text>
         </Button>
       </div>

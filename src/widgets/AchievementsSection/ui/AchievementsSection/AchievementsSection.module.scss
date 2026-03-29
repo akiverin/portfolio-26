@@ -5,11 +5,19 @@
 .achievements {
   margin-top: 180px;
 
+  @include smallerThanTablet {
+    margin-top: 100px;
+  }
+
   &__info {
     text-align: center;
     position: relative;
     width: fit-content;
     margin: 0 auto 80px;
+
+    @include smallerThanTablet {
+      margin-bottom: 40px;
+    }
   }
 
   &__titleSpan {
@@ -30,6 +38,10 @@
     top: 60%;
     left: calc(100% - 0.7em);
     width: 120px;
+
+    @include smallerThanTablet {
+      width: 70px;
+    }
   }
 
   // ─── Light content area ──────────────────────────
@@ -110,6 +122,21 @@
     min-width: 180px;
   }
 
+  &__dateToggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  &__dateCheckbox {
+    width: 16px;
+    height: 16px;
+    accent-color: $brand;
+    cursor: pointer;
+  }
+
   // ─── Card grid ───────────────────────────────────
   &__list {
     display: grid;
@@ -141,6 +168,12 @@
   &__pagination {
     display: flex;
     justify-content: flex-end;
+  }
+
+  &__allBtn {
+    display: flex;
+    justify-content: center;
+    padding-top: 8px;
   }
 
   // ─── Skeleton card ─────────────────────────────────

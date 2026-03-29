@@ -9,11 +9,13 @@ import {
   updateProfileInFirebase,
   resetPasswordEmail,
   getIdTokenFromFirebase,
+  deleteAccountFromFirebase,
 } from '../api/authApi';
 import {
   ensureUserDoc,
   getUserProfileFromFirestore,
   updateUserProfileInFirestore,
+  deleteUserProfileFromFirestore,
 } from '../api/userProfileApi';
 import { BaseStore } from 'shared/stores/BaseStore';
 import { RootStore } from 'shared/stores/RootStore';
@@ -38,6 +40,7 @@ export class UserStore extends BaseStore implements ILocalStore {
         meta: observable,
         error: observable,
         isAuth: computed,
+        isAdmin: computed,
       },
       { autoBind: true },
     );
@@ -45,6 +48,10 @@ export class UserStore extends BaseStore implements ILocalStore {
 
   get isAuth(): boolean {
     return Boolean(this.currentUser);
+  }
+
+  get isAdmin(): boolean {
+    return this.currentUser?.role === 'admin';
   }
 
   initAuthListener(): void {

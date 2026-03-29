@@ -8,7 +8,7 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import GovScience from 'shared/ui/icons/GovScience';
 import Polytech from 'shared/ui/icons/Polytech';
 import Moscow from 'shared/ui/icons/Moscow';
-import Button from 'shared/ui/Button';
+import { IconChevronDown } from '@tabler/icons-react';
 import Skeleton from 'shared/ui/Skeleton';
 import classNames from 'classnames';
 import { useLocalStore } from 'shared/hooks/useLocalStore';
@@ -161,11 +161,24 @@ const GrantsSection: React.FC = observer(() => {
               </motion.li>
             ))}
       </ul>
-      <FadeIn delay={0.2}>
-        <Button className={styles.grants__button} onClick={() => setIsActive(!isActive)}>
-          {isActive ? 'Скрыть' : 'Показать все'}
-        </Button>
-      </FadeIn>
+      <div className={styles.grants__buttonWrapper}>
+        <button
+          type="button"
+          className={styles.grants__expandBtn}
+          onClick={() => setIsActive(!isActive)}
+        >
+          <span className={styles.grants__expandLabel}>
+            {isActive ? 'Скрыть' : 'Показать все'}
+          </span>
+          <motion.span
+            className={styles.grants__expandIcon}
+            animate={{ rotate: isActive ? 180 : 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+          >
+            <IconChevronDown size={18} stroke={2} />
+          </motion.span>
+        </button>
+      </div>
     </section>
   );
 });

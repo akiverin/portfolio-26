@@ -8,17 +8,14 @@
   justify-content: center;
   align-items: flex-start;
   min-height: calc(100vh - 64px);
-  padding-top: 80px;
   padding-bottom: 80px;
   position: relative;
   overflow: hidden;
+  background: linear-gradient(180deg, #f8fafc 0%, #e8f4f8 100%);
 
   @include wrapper;
 
-  background-image:
-    linear-gradient(rgb(66 189 218 / 5%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(66 189 218 / 5%) 1px, transparent 1px);
-  background-size: 60px 60px;
+  padding-block: 100px;
 
   &::before {
     content: "";
@@ -49,8 +46,7 @@
   }
 
   @include smallerThanTablet {
-    padding-top: 40px;
-    padding-bottom: 40px;
+    padding-block: 100px;
   }
 
   &__card {
@@ -60,11 +56,14 @@
     max-width: 520px;
     padding: 48px;
     border-radius: 24px;
-    background-color: $project-bg;
-    color: $black;
+    background: rgb(255, 255, 255, 85%);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgb(255, 255, 255, 60%);
+    box-shadow: 0 20px 60px rgb(0, 0, 0, 8%);
+    color: #1a1a1a;
 
-    --input-bg: #{$white};
-    --input-text: #{$black};
+    --input-bg: rgb(0, 0, 0, 4%);
+    --input-text: #1a1a1a;
     --input-placeholder: #999;
     --input-bg-disabled: #f0f0f0;
     --input-text-disabled: #aaa;
@@ -98,9 +97,6 @@
     border-radius: 50%;
     object-fit: cover;
     background: linear-gradient(135deg, $brand 0%, #7850dc 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     flex-shrink: 0;
     overflow: hidden;
   }
@@ -150,13 +146,40 @@
 
   &__divider {
     height: 1px;
-    background: rgb(0 0 0 / 8%);
+    background: rgb(0, 0, 0, 6%);
   }
 
   &__dangerZone {
     display: flex;
     flex-direction: column;
     gap: $space-xs;
+  }
+
+  &__deleteBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: 1px solid rgb(229 72 75 / 30%);
+    border-radius: 12px;
+    background: rgb(229 72 75 / 6%);
+    color: #e5484b;
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+
+    @include transition(background, border-color);
+
+    &:hover {
+      background: rgb(229 72 75 / 12%);
+      border-color: rgb(229 72 75 / 50%);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
   }
 
   &__success {
@@ -180,7 +203,7 @@
     gap: 4px;
     padding: 12px 16px;
     border-radius: 12px;
-    background: rgb(0 0 0 / 4%);
+    background: rgb(0, 0, 0, 3%);
   }
 }
 

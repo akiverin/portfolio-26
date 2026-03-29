@@ -4,7 +4,7 @@
 
 .footer {
   margin-top: auto;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgb(255 255 255 / 6%);
 
   &__wrapper {
     @include wrapper;
@@ -17,7 +17,15 @@
     padding-bottom: 40px;
 
     @include smallerThanTablet {
-      gap: 32px;
+      gap: 24px;
+      padding-top: 32px;
+      padding-bottom: 32px;
+    }
+  }
+
+  &__copyright {
+    @include smallerThanTablet {
+      order: 10;
     }
   }
 
@@ -30,6 +38,7 @@
 
   &__link {
     text-decoration: none;
+
     @include transition(opacity);
 
     &:hover {

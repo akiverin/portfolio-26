@@ -3,6 +3,7 @@
 
 .loader {
   @include square(60px);
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,8 +13,10 @@
     box-sizing: border-box;
     display: inline-block;
     border-radius: 50%;
-    border: 2px solid currentColor;
+    border: 2px solid currentcolor;
+
     @include square(40px);
+
     border-bottom-color: transparent;
     transform: rotate(-58deg);
     animation: rotate 1s linear infinite;
@@ -48,6 +51,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }

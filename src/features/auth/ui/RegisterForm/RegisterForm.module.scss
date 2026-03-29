@@ -10,24 +10,22 @@
   min-height: calc(100vh - 64px);
   position: relative;
   overflow: hidden;
+  padding: 80px 40px 40px;
+  background: linear-gradient(135deg, #f0f0ff 0%, #e8f4f8 50%, #f8fafc 100%);
 
-  @include wrapper;
-
-  // Animated grid pattern
-  background-image:
-    linear-gradient(rgb(66 189 218 / 5%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(66 189 218 / 5%) 1px, transparent 1px);
-  background-size: 60px 60px;
+  @include smallerThanTablet {
+    padding: 24px 16px;
+  }
 
   &::before {
     content: "";
     position: fixed;
-    width: 500px;
-    height: 500px;
-    top: -150px;
-    right: -100px;
+    width: 600px;
+    height: 600px;
+    top: -200px;
+    right: -150px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgb(66 189 218 / 15%), transparent 70%);
+    background: radial-gradient(circle, rgb(66, 189, 218, 15%), transparent 70%);
     animation: reg-float-1 9s ease-in-out infinite;
     z-index: 0;
     pointer-events: none;
@@ -36,12 +34,12 @@
   &::after {
     content: "";
     position: fixed;
-    width: 400px;
-    height: 400px;
-    bottom: -100px;
-    left: -100px;
+    width: 500px;
+    height: 500px;
+    bottom: -150px;
+    left: -150px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgb(120 80 220 / 10%), transparent 70%);
+    background: radial-gradient(circle, rgb(120, 80, 220, 12%), transparent 70%);
     animation: reg-float-2 11s ease-in-out infinite;
     z-index: 0;
     pointer-events: none;
@@ -51,34 +49,37 @@
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 440px;
-    padding: 48px;
+    max-width: 420px;
+    padding: 44px 36px;
     border-radius: 24px;
-    background-color: $project-bg;
-    color: $black;
+    background: rgb(255, 255, 255, 85%);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgb(255, 255, 255, 60%);
+    box-shadow: 0 20px 60px rgb(0, 0, 0, 8%), 0 1px 3px rgb(0, 0, 0, 4%);
+    color: #1a1a1a;
 
-    // Override CSS vars for inputs on light bg
-    --input-bg: #{$white};
-    --input-text: #{$black};
+    --input-bg: rgb(0, 0, 0, 4%);
+    --input-text: #1a1a1a;
     --input-placeholder: #999;
-    --input-bg-disabled: #f0f0f0;
+    --input-bg-disabled: rgb(0, 0, 0, 2%);
     --input-text-disabled: #aaa;
 
     @include smallerThanTablet {
-      padding: 32px 20px;
+      padding: 32px 24px;
     }
   }
 
   &__form {
     display: flex;
     flex-direction: column;
-    gap: $space-m;
+    gap: 20px;
   }
 
   &__header {
     display: flex;
     flex-direction: column;
-    gap: $space-xxs;
+    gap: 8px;
+    text-align: center;
   }
 
   &__fields {
@@ -94,11 +95,9 @@
   }
 
   &__link {
-    color: $text-accent;
-
-    &:hover {
-      opacity: 0.8;
-    }
+    color: $brand;
+    transition: opacity 0.15s ease;
+    &:hover { opacity: 0.8; }
   }
 
   &__terms {
@@ -111,6 +110,8 @@
     margin-top: 2px;
     flex-shrink: 0;
     accent-color: $brand;
+    width: 16px;
+    height: 16px;
   }
 
   &__divider {
@@ -121,29 +122,17 @@
     & span {
       flex: 1;
       height: 1px;
-      background: rgb(0 0 0 / 10%);
+      background: rgb(0, 0, 0, 8%);
     }
   }
 }
 
 @keyframes reg-float-1 {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-
-  50% {
-    transform: translate(-35px, 25px) scale(1.12);
-  }
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-35px, 25px) scale(1.12); }
 }
 
 @keyframes reg-float-2 {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-
-  50% {
-    transform: translate(25px, -35px) scale(1.1);
-  }
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(25px, -35px) scale(1.1); }
 }

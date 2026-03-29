@@ -5,6 +5,7 @@
 
 .button {
   @include transition(background-image, color);
+
   display: flex;
   align-items: center;
   gap: 8px;
@@ -43,7 +44,8 @@
     background-image: $button-accent-bg;
     color: $white;
     border: 1px solid $button-accent-border;
-    text-shadow: 0px 0.2px 0.05px #00000040;
+    text-shadow: 0 0.2px 0.05px #00000040;
+
     @include transition(background-image);
 
     &:not(.button--loading):hover {
@@ -66,7 +68,7 @@
     background-image: $button-dark-bg;
     color: $black;
     border: 1px solid $button-dark-border;
-    text-shadow: 0px 0.2px 0.05px #00000040;
+    text-shadow: 0 0.2px 0.05px #00000040;
 
     &:not(.button--loading):hover {
       background-image: $button-dark-bg-hover;

@@ -6,6 +6,8 @@ import Text from 'shared/ui/Text';
 import Button from 'shared/ui/Button';
 import Github from 'shared/ui/icons/Github';
 import Behance from 'shared/ui/icons/Behance';
+import { ImageWithFallback } from 'shared/ui/ImageWithFallback';
+import { VideoWithFallback } from 'shared/ui/VideoWithFallback';
 
 export type ProjectCardProps = {
   project: Project;
@@ -17,14 +19,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
     <div className={classNames(styles.projectCard, className)}>
       <div className={styles.projectCard__cover}>
         {project.coverType === 'image' ? (
-          <img
+          <ImageWithFallback
             src={`https://andkiv.com/assets/projects/${project.cover}`}
             className={styles.projectCard__media}
             alt={project.title}
             loading="lazy"
           />
         ) : (
-          <video
+          <VideoWithFallback
             src={`https://andkiv.com/assets/projects/${project.cover}`}
             className={styles.projectCard__media}
             autoPlay
@@ -66,7 +68,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
           </Button>
         )}
         {project.link && (
-          <Button theme="accent" href={project.link} target="_blank">
+          <Button
+            theme="accent"
+            href={project.disabled ? undefined : project.link}
+            target="_blank"
+            disabled={project.disabled}
+          >
             <Text view="p-16" weight="medium">
               Перейти
             </Text>

@@ -10,6 +10,7 @@
   width: 100%;
   z-index: 100;
   padding: 16px 0;
+
   @include transition(padding, background-color);
 
   &::before {
@@ -17,41 +18,44 @@
     position: absolute;
     inset: 0;
     backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
     background: transparent;
+
     @include transition(background);
+
     pointer-events: none;
     mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
   }
 
   &--scrolled {
     padding: 8px 0;
 
     &::before {
-      background: rgba(14, 14, 14, 0.6);
+      background: rgb(14, 14, 14, 60%);
       mask-image: none;
-      -webkit-mask-image: none;
     }
   }
 
   &__wrapper {
     @include wrapper;
+
     position: relative;
-    z-index: 2;
+    z-index: 100;
     display: flex;
     justify-content: center;
+
+    @include smallerThanTablet {
+      justify-content: flex-end;
+    }
   }
 
   &__nav {
     display: flex;
     align-items: center;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgb(14, 14, 14, 65%);
+    border: 1px solid rgb(255, 255, 255, 12%);
     border-radius: 100px;
     padding: 4px;
     backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
   }
 
   &__navList {
@@ -78,16 +82,55 @@
     border-radius: 100px;
     text-decoration: none;
     color: $text-secondary;
+
     @include transition(color, background);
 
     &:hover {
       color: $white;
-      background: rgba(255, 255, 255, 0.06);
+      background: rgb(255, 255, 255, 6%);
     }
 
     &--active {
       color: $white;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgb(255, 255, 255, 10%);
+    }
+  }
+
+  &__avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__userIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgb(255, 255, 255, 10%);
+    color: #ccc;
+  }
+
+  &__profileLink {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 100px;
+    text-decoration: none;
+
+    @include transition(background);
+
+    &:hover {
+      background: rgb(255, 255, 255, 8%);
+    }
+
+    &--active {
+      background: rgb(255, 255, 255, 10%);
     }
   }
 
@@ -103,6 +146,7 @@
     background: none;
     padding: 8px;
     border-radius: 50%;
+
     @include transition(background);
 
     @include smallerThanTablet {
@@ -110,7 +154,7 @@
     }
 
     &:hover {
-      background: rgba(255, 255, 255, 0.06);
+      background: rgb(255, 255, 255, 6%);
     }
 
     span {
@@ -119,16 +163,19 @@
       height: 1.5px;
       background: $white;
       border-radius: 2px;
-      @include transition(transform, opacity);
+      transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+      transform-origin: center;
     }
 
     &--open {
       span:first-child {
-        transform: rotate(45deg) translateY(3.25px);
+        transform: translateY(3.25px) rotate(45deg);
       }
 
       span:last-child {
-        transform: rotate(-45deg) translateY(-3.25px);
+        transform: translateY(-3.25px) rotate(-45deg);
       }
     }
   }
@@ -136,11 +183,10 @@
   &__mobileMenu {
     position: fixed;
     inset: 0;
-    top: 70px;
+    top: 0;
     z-index: 99;
-    background: rgba(14, 14, 14, 0.95);
+    background: rgb(14, 14, 14, 75%);
     backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -159,16 +205,25 @@
     color: $text-secondary;
     width: 100%;
     max-width: 320px;
+
     @include transition(color, background);
 
     &:hover {
       color: $white;
-      background: rgba(255, 255, 255, 0.06);
+      background: rgb(255, 255, 255, 6%);
     }
 
     &--active {
       color: $white;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgb(255, 255, 255, 8%);
     }
+  }
+
+  &__mobileProfileLink {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
   }
 }

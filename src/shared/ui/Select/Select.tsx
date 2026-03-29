@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import styles from './Select.module.scss';
 import classNames from 'classnames';
 import Text from 'shared/ui/Text';
@@ -16,6 +17,22 @@ export type SelectProps = {
   placeholder?: string;
   searchable?: boolean;
   className?: string;
+};
+
+const dropdownVariants = {
+  hidden: { opacity: 0, y: -4, scaleY: 0.95 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scaleY: 1,
+    transition: { duration: 0.18, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] },
+  },
+  exit: {
+    opacity: 0,
+    y: -4,
+    scaleY: 0.95,
+    transition: { duration: 0.12, ease: 'easeIn' as const },
+  },
 };
 
 const Select: React.FC<SelectProps> = ({
@@ -74,51 +91,70 @@ const Select: React.FC<SelectProps> = ({
         <Text view="p-14" weight="medium">
           {selectedOption ? selectedOption.label : placeholder}
         </Text>
-        <ArrowDownIcon
-          width={16}
-          height={16}
-          className={classNames(styles.select__arrow, {
-            [styles['select__arrow--open']]: isOpen,
-          })}
-        />
+        <motion.span
+          className={styles.select__arrow}
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.2, ease: 'easeInOut' }}
+        >
+          <ArrowDownIcon width={16} height={16} />
+        </motion.span>
       </button>
 
-      {isOpen && (
-        <div className={styles.select__dropdown}>
-          {searchable && (
-            <input
-              ref={searchRef}
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Поиск..."
-              className={styles.select__search}
-            />
-          )}
-          <ul className={styles.select__options}>
-            {filteredOptions.map((option) => (
-              <li key={option.value}>
-                <button
-                  type="button"
-                  className={classNames(styles.select__option, {
-                    [styles['select__option--active']]: option.value === value,
-                  })}
-                  onClick={() => handleSelect(option.value)}
-                >
-                  <Text view="p-14">{option.label}</Text>
-                </button>
-              </li>
-            ))}
-            {filteredOptions.length === 0 && (
-              <li className={styles.select__empty}>
-                <Text view="p-14" color="secondary">
-                  Ничего не найдено
-                </Text>
-              </li>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className={styles.select__dropdown}
+            variants={dropdownVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            style={{ transformOrigin: 'top center' }}
+          >
+            {searchable && (
+              <input
+                ref={searchRef}
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Поиск..."
+                className={styles.select__search}
+              />
             )}
-          </ul>
-        </div>
-      )}
+            <ul className={styles.select__options}>
+              {filteredOptions.map((option) => (
+                <li key={option.value}>
+                  <button
+                    type="button"
+                    className={classNames(styles.select__option, {
+                      [styles['select__option--active']]: option.value === value,
+                    })}
+                    onClick={() => handleSelect(option.value)}
+                  >
+                    <Text view="p-14">{option.label}</Text>
+                    {option.value === value && (
+                      <motion.span
+                        className={styles.select__check}
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+                      >
+                        ✓
+                      </motion.span>
+                    )}
+                  </button>
+                </li>
+              ))}
+              {filteredOptions.length === 0 && (
+                <li className={styles.select__empty}>
+                  <Text view="p-14" color="secondary">
+                    Ничего не найдено
+                  </Text>
+                </li>
+              )}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

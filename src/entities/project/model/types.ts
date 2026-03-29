@@ -10,4 +10,5 @@ export interface Project {
   link?: string;
   github?: string;
   behance?: string;
+  disabled?: boolean;
 }

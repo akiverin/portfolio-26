@@ -20,17 +20,17 @@
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse 60% 50% at 50% 40%, rgba(66, 189, 218, 0.08) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 40% at 30% 60%, rgba(66, 189, 218, 0.04) 0%, transparent 60%),
-      radial-gradient(ellipse 40% 40% at 70% 70%, rgba(66, 189, 218, 0.04) 0%, transparent 60%);
+      radial-gradient(ellipse 60% 50% at 50% 40%, rgb(66, 189, 218, 8%) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 30% 60%, rgb(66, 189, 218, 4%) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 70% 70%, rgb(66, 189, 218, 4%) 0%, transparent 60%);
   }
 
   &__grid {
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      linear-gradient(rgb(255, 255, 255, 2%) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255, 255, 255, 2%) 1px, transparent 1px);
     background-size: 60px 60px;
     mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 80%);
   }
@@ -38,7 +38,7 @@
   &__particle {
     position: absolute;
     border-radius: 50%;
-    background: rgba(66, 189, 218, 0.5);
+    background: rgb(66, 189, 218, 50%);
   }
 
   &__content {
@@ -58,13 +58,12 @@
   }
 
   &__digit {
-    font-family: "Pretendard", sans-serif;
+    font-family: Pretendard, sans-serif;
     font-weight: 900;
     font-size: clamp(100px, 20vw, 200px);
     line-height: 1;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.3) 100%);
+    background: linear-gradient(180deg, rgb(255, 255, 255, 90%) 0%, rgb(255, 255, 255, 30%) 100%);
     background-clip: text;
-    -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: none;
   }
@@ -92,15 +91,16 @@
     gap: 8px;
     padding: 12px 24px;
     border-radius: 50px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgb(255, 255, 255, 6%);
+    border: 1px solid rgb(255, 255, 255, 10%);
     color: $white;
     text-decoration: none;
+
     @include transition(background, border-color, transform);
 
     &:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(66, 189, 218, 0.4);
+      background: rgb(255, 255, 255, 10%);
+      border-color: rgb(66, 189, 218, 40%);
       transform: translateY(-2px);
     }
 

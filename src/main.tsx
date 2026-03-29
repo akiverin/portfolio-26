@@ -9,13 +9,16 @@ import './app/styles/globals.scss';
 
 import { App } from './app/App';
 import { StoreProvider } from 'shared/stores/StoreContext';
+import { NotificationProvider } from 'shared/ui/Notifications';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
       <MantineProvider>
         <StoreProvider>
-          <App />
+          <NotificationProvider>
+            <App />
+          </NotificationProvider>
         </StoreProvider>
       </MantineProvider>
     </BrowserRouter>

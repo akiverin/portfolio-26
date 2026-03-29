@@ -4,7 +4,11 @@ import path from 'node:path';
 
 export default defineConfig({
   plugins: [react()],
+  server: {
+    open: true,
+  },
   resolve: {
+    dedupe: ['react', 'react-dom'],
     alias: {
       '@': path.resolve(__dirname, 'src'),
       shared: path.resolve(__dirname, 'src/shared'),
@@ -28,8 +32,15 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            if (id.includes('react-dom') || id.includes('react-router'))
+            // Keep `react` in the same chunk as react-dom — splitting only react-dom
+            // leaves a second React copy elsewhere and breaks Mantine (useLayoutEffect on undefined).
+            if (
+              id.includes('node_modules/react/') ||
+              id.includes('node_modules/react-dom/') ||
+              id.includes('node_modules/react-router')
+            ) {
               return 'vendor-react';
+            }
             if (id.includes('firebase')) return 'vendor-firebase';
             if (id.includes('framer-motion')) return 'vendor-motion';
             if (id.includes('@mantine')) return 'vendor-mantine';

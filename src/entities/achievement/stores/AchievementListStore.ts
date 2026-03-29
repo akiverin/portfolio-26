@@ -1,11 +1,14 @@
-import { makeAutoObservable, runInAction, IReactionDisposer, reaction } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
+import { orderBy, OrderByDirection } from 'firebase/firestore';
 import { Meta } from 'shared/lib/meta';
 import { ILocalStore } from 'shared/types/ILocalStore';
-import { Achievement, Badge } from '../model/types';
-import { getAllAchievements } from '../api/getAllAchievements';
+import { Achievement } from '../model/types';
+import { fetchPaginatedCollection } from 'shared/api/firestoreHelpers';
+import { snapshotToAchievement } from '../api/snapshotToAchievement';
 import { PaginationStore } from 'shared/stores/PaginationStore';
+import { Cursors } from 'shared/lib/cursors';
 
-const PAGE_SIZE = 6;
+const DEFAULT_PAGE_SIZE = 6;
 
 export type SortField = 'date' | 'title';
 export type SortDirection = 'asc' | 'desc';
@@ -21,83 +24,66 @@ const SORT_OPTIONS: { value: SortValue; label: string }[] = [
 
 export { SORT_OPTIONS };
 
+export type AchievementListStoreOptions = {
+  pageSize?: number;
+};
+
 export class AchievementListStore implements ILocalStore {
-  private _allAchievements: Achievement[] = [];
-  private _disposers: IReactionDisposer[] = [];
+  private readonly _pageSize: number;
+  private _cursors: Cursors;
+  private _achievements: Achievement[] = [];
 
   sortField: SortField = 'date';
   sortDirection: SortDirection = 'desc';
-  selectedBadgeIds: string[] = [];
 
   readonly pagination: PaginationStore;
   meta: Meta = Meta.initial;
   error: string = '';
 
-  constructor() {
+  constructor(options?: AchievementListStoreOptions) {
+    this._pageSize = options?.pageSize ?? DEFAULT_PAGE_SIZE;
+    this._cursors = new Cursors(
+      `achievements-${this.sortField}-${this.sortDirection}-${this._pageSize}`,
+    );
     this.pagination = new PaginationStore();
-    this.pagination.setPagination({ page: 1, pageSize: PAGE_SIZE, pageCount: 1, total: 0 });
+    this.pagination.setPagination({
+      page: 1,
+      pageSize: this._pageSize,
+      pageCount: 1,
+      total: 0,
+    });
 
     makeAutoObservable(this);
-
-    this._disposers.push(
-      reaction(
-        () => this.filteredAchievements.length,
-        (total) => {
-          this.pagination.setPagination({
-            page: Math.min(this.pagination.page, Math.max(1, Math.ceil(total / PAGE_SIZE))),
-            pageSize: PAGE_SIZE,
-            pageCount: Math.ceil(total / PAGE_SIZE),
-            total,
-          });
-        },
-      ),
-    );
   }
 
-  /** Unique badges extracted from all loaded achievements */
-  get availableBadges(): Badge[] {
-    const map = new Map<string, Badge>();
-    for (const a of this._allAchievements) {
-      if (a.badges) {
-        for (const b of a.badges) {
-          if (!map.has(b.id)) map.set(b.id, b);
-        }
-      }
-    }
-    return Array.from(map.values());
-  }
-
-  /** Achievements filtered by selected badges */
-  get filteredAchievements(): Achievement[] {
-    if (this.selectedBadgeIds.length === 0) return this._allAchievements;
-    return this._allAchievements.filter((a) =>
-      a.badges?.some((b) => this.selectedBadgeIds.includes(b.id)),
-    );
-  }
-
-  /** Current page slice */
   get achievements(): Achievement[] {
-    const start = (this.pagination.page - 1) * PAGE_SIZE;
-    return this.filteredAchievements.slice(start, start + PAGE_SIZE);
+    return this._achievements;
   }
 
   get totalPages(): number {
-    return Math.max(1, Math.ceil(this.filteredAchievements.length / PAGE_SIZE));
+    return this.pagination.pageCount;
   }
 
-  /** Combined sort value for the Select component */
   get sortValue(): SortValue {
     return `${this.sortField}-${this.sortDirection}`;
   }
 
-  /** Fetch achievements from Firebase */
   async fetchAchievements(): Promise<void> {
     if (this.meta === Meta.loading) return;
 
-    this.meta = Meta.loading;
-    this.error = '';
+    runInAction(() => {
+      this.meta = Meta.loading;
+      this.error = '';
+    });
 
-    const response = await getAllAchievements(this.sortField, this.sortDirection);
+    const response = await fetchPaginatedCollection(
+      'achievements',
+      this.pagination.page,
+      this._pageSize,
+      this._cursors,
+      snapshotToAchievement,
+      [orderBy(this.sortField, this.sortDirection as OrderByDirection)],
+    );
 
     if (response.isError) {
       runInAction(() => {
@@ -108,7 +94,8 @@ export class AchievementListStore implements ILocalStore {
     }
 
     runInAction(() => {
-      this._allAchievements = response.data;
+      this._achievements = response.data.data;
+      this.pagination.setPagination(response.data.pagination);
       this.meta = Meta.success;
     });
   }
@@ -118,30 +105,26 @@ export class AchievementListStore implements ILocalStore {
     if (this.sortField === field && this.sortDirection === direction) return;
     this.sortField = field;
     this.sortDirection = direction;
+    this._cursors = new Cursors(`achievements-${field}-${direction}-${this._pageSize}`);
+    this.pagination.setPagination({
+      page: 1,
+      pageSize: this._pageSize,
+      pageCount: 1,
+      total: 0,
+    });
     this.meta = Meta.initial;
-    this.fetchAchievements();
-  }
-
-  toggleBadge(badgeId: string): void {
-    const idx = this.selectedBadgeIds.indexOf(badgeId);
-    if (idx >= 0) {
-      this.selectedBadgeIds.splice(idx, 1);
-    } else {
-      this.selectedBadgeIds.push(badgeId);
-    }
-    this.pagination.setPage(1);
-  }
-
-  clearBadgeFilter(): void {
-    this.selectedBadgeIds.length = 0;
-    this.pagination.setPage(1);
+    void this.fetchAchievements();
   }
 
   setPage(page: number): void {
-    this.pagination.setPage(Math.min(page, this.totalPages));
+    const prev = this.pagination.page;
+    this.pagination.setPage(page);
+    if (this.pagination.page !== prev) {
+      void this.fetchAchievements();
+    }
   }
 
   destroy(): void {
-    this._disposers.forEach((d) => d());
+    // Cursor state is kept in sessionStorage; no subscriptions to clear.
   }
 }

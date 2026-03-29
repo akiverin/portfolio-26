@@ -77,7 +77,7 @@ const ContactSection: React.FC = () => {
           <Text tag="h3" view="p-28" weight="bold" className={styles.contact__introTitle}>
             Давайте работать вместе
           </Text>
-          <Text tag="p" view="p-16" color="primary" className={styles.contact__introText}>
+          <Text tag="p" view="p-16" className={styles.contact__introText}>
             Если у вас есть вопрос, предложение о сотрудничестве или просто хотите
             пообщаться — напишите мне. Буду рад ответить!
           </Text>
