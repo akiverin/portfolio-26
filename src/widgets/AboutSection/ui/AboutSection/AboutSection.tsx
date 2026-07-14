@@ -42,12 +42,26 @@ const EDUCATION: TimelineEntry[] = [
 
 const WORK: TimelineEntry[] = [
   {
+    icon: <Code width={18} height={18} />,
+    period: 'с 2021 года',
+    title: 'Проектная практика',
+    subtitle: 'Веб-продукты, дизайн интерфейсов и мобильные приложения',
+  },
+  {
     icon: <Briefcase width={18} height={18} />,
     period: 'ноябрь 2025 – сейчас',
     title: 'ООО «Студия КТС»',
     subtitle: 'Младший фронтенд разработчик',
   },
 ];
+
+const FOCUS_AREAS = ['Frontend', 'UI/UX', 'AI-инструменты', 'Исследования'] as const;
+
+const FACTS = [
+  { value: '4+', label: 'года в цифровых проектах' },
+  { value: '2', label: 'профильные квалификации' },
+  { value: '360°', label: 'от идеи до интерфейса' },
+] as const;
 
 const timelineItemVariants = {
   hidden: { opacity: 0, x: -20 },
@@ -74,6 +88,8 @@ const TimelineItem: React.FC<{ entry: TimelineEntry; isLast?: boolean; index: nu
     whileInView="visible"
     viewport={{ once: true, margin: '-40px' }}
     custom={index}
+    whileHover={{ x: 4 }}
+    transition={{ duration: 0.2, ease: 'easeOut' }}
   >
     <div className={styles.timeline__marker}>
       <div className={styles.timeline__icon}>{entry.icon}</div>
@@ -117,46 +133,99 @@ const AboutSection: React.FC = () => {
 
       <div className={styles.about__container}>
         <div className={styles.about__top}>
-          <FadeIn direction="left" delay={0.1}>
-            <div className={styles.about__photoWrap}>
-              <img
-                src={photo}
-                alt="Фотография Андрея Киверина"
-                className={styles.about__photo}
-                loading="lazy"
-              />
-            </div>
+          <FadeIn direction="left" delay={0.1} className={styles.about__profileColumn}>
+            <motion.div
+              className={styles.about__profileCard}
+              whileHover={{ y: -6, rotate: -0.4 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+            >
+              <div className={styles.about__photoWrap}>
+                <img
+                  src={photo}
+                  alt="Фотография Андрея Киверина"
+                  className={styles.about__photo}
+                  loading="lazy"
+                />
+                <div className={styles.about__photoShade} />
+                <div className={styles.about__photoCaption}>
+                  <span className={styles.about__statusDot} />
+                  <Text tag="span" view="p-12" weight="medium">
+                    Frontend developer · UI designer
+                  </Text>
+                </div>
+              </div>
+              <div className={styles.about__profileFooter}>
+                <Text tag="span" view="p-12" color="secondary">
+                  Moscow, RU
+                </Text>
+                <Text tag="span" view="p-12" weight="medium">
+                  Создаю понятные продукты
+                </Text>
+              </div>
+              <span className={styles.about__profileGlow} aria-hidden="true" />
+            </motion.div>
           </FadeIn>
 
-          <FadeIn direction="right" delay={0.2}>
-            <div className={styles.about__bio}>
-              <Text tag="p" view="p-20" weight="medium">
-                Привет, я Андрей Киверин!
-              </Text>
-              <Text tag="p" view="p-16">
-                Мне 22 года, и я занимаюсь веб-разработкой с акцентом на дизайн и
-                пользовательский опыт. Ещё в школе увлёкся вёрсткой — более шести лет создавал
-                школьную газету и с тех пор полюбил превращать идеи в красивые интерфейсы.
-              </Text>
-              <Text tag="p" view="p-16">
-                Сейчас разрабатываю корпоративные продукты, создаю дизайн-макеты, сайты и мобильные
-                приложения. Окончил бакалавриат с красным дипломом и получил дополнительную
-                квалификацию в области нейросетей.
-              </Text>
-              <Text tag="p" view="p-16">
-                Помимо разработки, увлекаюсь наукой — участвую в конференциях, публикую статьи и
-                стараюсь привносить исследовательский подход в каждый проект.
-              </Text>
+          <FadeIn direction="right" delay={0.16} className={styles.about__introColumn}>
+            <div className={styles.about__intro}>
+              <div className={styles.about__introLead}>
+                <span className={styles.about__kicker}>Коротко обо мне</span>
+                <Text tag="h3" view="p-32" weight="bold" className={styles.about__statement}>
+                  Соединяю разработку, дизайн и исследовательский подход.
+                </Text>
+              </div>
+
+              <div className={styles.about__bio}>
+                <Text tag="p" view="p-16">
+                  Я frontend-разработчик и дизайнер интерфейсов. Проектирую корпоративные продукты,
+                  сайты и мобильные приложения — от структуры и прототипа до аккуратной реализации.
+                </Text>
+                <Text tag="p" view="p-16" color="secondary">
+                  Окончил Московский Политех с красным дипломом и изучал нейросетевые технологии.
+                  Научный опыт помогает проверять идеи, а не просто украшать их.
+                </Text>
+              </div>
+
+              <ul className={styles.about__focusList} aria-label="Основные направления">
+                {FOCUS_AREAS.map((area, index) => (
+                  <motion.li
+                    key={area}
+                    className={styles.about__focusItem}
+                    initial={{ opacity: 0, y: 8 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.24 + index * 0.06 }}
+                  >
+                    {area}
+                  </motion.li>
+                ))}
+              </ul>
+
+              <div className={styles.about__facts}>
+                {FACTS.map((fact) => (
+                  <div key={fact.value} className={styles.about__fact}>
+                    <Text tag="span" view="p-24" weight="bold">
+                      {fact.value}
+                    </Text>
+                    <Text tag="span" view="p-12" color="secondary">
+                      {fact.label}
+                    </Text>
+                  </div>
+                ))}
+              </div>
             </div>
           </FadeIn>
         </div>
 
         <div className={styles.about__bottom}>
-          <FadeIn delay={0.1}>
+          <FadeIn delay={0.1} className={styles.about__timelineColumn}>
             <div className={styles.about__block}>
-              <Text tag="h3" view="p-24" weight="bold">
-                Образование
-              </Text>
+              <div className={styles.about__blockHeader}>
+                <span className={styles.about__blockIndex}>01</span>
+                <Text tag="h3" view="p-24" weight="bold">
+                  Образование
+                </Text>
+              </div>
               <div className={styles.timeline}>
                 {EDUCATION.map((entry, i) => (
                   <TimelineItem
@@ -170,11 +239,14 @@ const AboutSection: React.FC = () => {
             </div>
           </FadeIn>
 
-          <FadeIn delay={0.2}>
+          <FadeIn delay={0.2} className={styles.about__timelineColumn}>
             <div className={styles.about__block}>
-              <Text tag="h3" view="p-24" weight="bold">
-                Работа
-              </Text>
+              <div className={styles.about__blockHeader}>
+                <span className={styles.about__blockIndex}>02</span>
+                <Text tag="h3" view="p-24" weight="bold">
+                  Опыт
+                </Text>
+              </div>
               <div className={styles.timeline}>
                 {WORK.map((entry, i) => (
                   <TimelineItem

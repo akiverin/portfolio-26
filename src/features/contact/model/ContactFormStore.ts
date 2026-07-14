@@ -4,16 +4,18 @@ import { ILocalStore } from 'shared/types/ILocalStore';
 import { Meta } from 'shared/lib/meta';
 import { sendContactMessage } from '../api/sendContactMessage';
 
-type ContactFields = 'name' | 'email' | 'message';
+type ContactFields = 'name' | 'email' | 'message' | 'projectType';
 
 export class ContactFormStore implements ILocalStore {
   name = '';
   email = '';
   message = '';
+  projectType = 'website';
   errors: Record<ContactFields, string> = {
     name: '',
     email: '',
     message: '',
+    projectType: '',
   };
   meta: Meta = Meta.initial;
 
@@ -44,7 +46,7 @@ export class ContactFormStore implements ILocalStore {
     const msgErr = this._validateMessage();
 
     runInAction(() => {
-      this.errors = { name: nameErr, email: emailErr, message: msgErr };
+      this.errors = { name: nameErr, email: emailErr, message: msgErr, projectType: '' };
     });
 
     return !nameErr && !emailErr && !msgErr;
@@ -59,6 +61,7 @@ export class ContactFormStore implements ILocalStore {
       name: this.name.trim(),
       email: this.email.trim(),
       message: this.message.trim(),
+      projectType: this.projectType,
     });
 
     if (response.isError) {
@@ -73,6 +76,7 @@ export class ContactFormStore implements ILocalStore {
       this.name = '';
       this.email = '';
       this.message = '';
+      this.projectType = 'website';
     });
   }
 
@@ -80,7 +84,8 @@ export class ContactFormStore implements ILocalStore {
     this.name = '';
     this.email = '';
     this.message = '';
-    this.errors = { name: '', email: '', message: '' };
+    this.projectType = 'website';
+    this.errors = { name: '', email: '', message: '', projectType: '' };
     this.meta = Meta.initial;
   }
 

@@ -1,0 +1,121 @@
+@use "mixins" as *;
+@use "adaptive" as *;
+@use "colors" as *;
+
+.page {
+  @include wrapper;
+
+  padding-top: 120px;
+  padding-bottom: 80px;
+  min-height: 100vh;
+
+  @include smallerThanTablet {
+    padding-top: 90px;
+    padding-bottom: 40px;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+
+    @include smallerThanTablet {
+      margin-bottom: 24px;
+    }
+  }
+
+  &__content {
+    background-color: $project-bg;
+    border-radius: 24px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+
+    @include smallerThanTablet {
+      padding: 20px 12px;
+      gap: 20px;
+      border-radius: 16px;
+    }
+  }
+
+  &__controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+
+    --input-bg: #{$white};
+    --input-text: #{$black};
+    --input-placeholder: #999;
+
+    @include smallerThanTablet {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+  }
+
+  &__search {
+    flex: 1;
+    max-width: 360px;
+
+    @include smallerThanTablet {
+      max-width: 100%;
+    }
+  }
+
+  &__sort {
+    flex-shrink: 0;
+    min-width: 200px;
+
+    @include smallerThanTablet {
+      min-width: 100%;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 40px;
+
+    @include smallerThanLaptop {
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    @include smallerThanTablet {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+
+  &__empty {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+  }
+
+  &__skeletonCard {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__skeletonCover {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+
+  &__skeletonInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 12px;
+  }
+}

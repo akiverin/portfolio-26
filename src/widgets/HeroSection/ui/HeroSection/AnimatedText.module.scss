@@ -1,16 +1,52 @@
 @use "adaptive" as *;
 
 .animatedText {
+  position: relative;
   display: flex;
-  flex-wrap: nowrap;
-  white-space: nowrap;
   width: 100%;
+  flex-direction: column;
+  overflow: visible;
+  color: #f7fafb;
+  font-weight: 900;
+  letter-spacing: -0.07em;
+  line-height: 0.78;
+  perspective: 800px;
+  text-transform: uppercase;
+}
+
+.word {
+  display: flex;
+  width: fit-content;
   overflow: hidden;
+  padding: 0.08em 0.07em 0.12em 0;
+
+  &:last-of-type {
+    align-self: flex-end;
+    margin-top: -0.04em;
+    background: linear-gradient(105deg, #f7fafb 5%, #a5fff1 45%, #a997ff 100%);
+    background-clip: text;
+    color: transparent;
+  }
 }
 
 .letter {
   display: inline-block;
-  line-height: 1;
-  font-size: clamp(36px, 11.56vw, 222px);
+  font-size: clamp(64px, 10.7vw, 205px);
+  transform-origin: center bottom;
   will-change: transform, opacity, filter;
+
+  @include smallerThanTablet {
+    font-size: clamp(56px, 16vw, 118px);
+  }
+}
+
+.accent {
+  position: absolute;
+  width: clamp(10px, 1.1vw, 20px);
+  aspect-ratio: 1;
+  right: -0.02em;
+  bottom: 0.08em;
+  border-radius: 50%;
+  background: #72f4e0;
+  box-shadow: 0 0 28px rgb(114 244 224 / 55%);
 }

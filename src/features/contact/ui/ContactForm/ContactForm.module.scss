@@ -1,37 +1,133 @@
-@use "colors.scss" as *;
+@use "colors" as *;
 @use "adaptive" as *;
 @use "sizes" as *;
-@use "mixins" as *;
 
 .contact {
-  &__form {
-    display: flex;
-    flex-direction: column;
-    gap: $space-l;
-    width: 100%;
-    padding: 32px;
-    background: rgb(255 255 255 / 92%);
-    border: 1px solid rgb(0 0 0 / 8%);
-    border-radius: 20px;
+  &__form,
+  &__success {
     position: relative;
+    display: flex;
+    width: 100%;
     overflow: hidden;
-    box-shadow: 0 8px 32px rgb(0 0 0 / 6%);
+    flex-direction: column;
+    border: 1px solid rgb(255 255 255 / 70%);
+    border-radius: 26px;
+    background:
+      radial-gradient(circle at 100% 0%, rgb(66 189 218 / 10%), transparent 28%),
+      #f6f8f8;
+    box-shadow: 0 24px 70px rgb(0 0 0 / 22%);
+    color: #172027;
 
     --input-bg: #fff;
-    --input-text: #1a1a1a;
-    --input-placeholder: #999;
-    --input-bg-disabled: #f5f5f5;
-    --input-text-disabled: #aaa;
+    --input-text: #172027;
+    --input-placeholder: #929ba0;
+    --input-bg-disabled: #edf0f1;
+    --input-text-disabled: #a4aaae;
 
     @include smallerThanTablet {
-      padding: 24px 16px;
-      border-radius: 16px;
+      border-radius: 20px;
     }
   }
 
+  &__form {
+    gap: 26px;
+    padding: clamp(24px, 4vw, 42px);
+  }
+
+  &__formHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid rgb(23 32 39 / 8%);
+  }
+
+  &__formIndex {
+    display: block;
+    margin-bottom: 8px;
+    color: #778189;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
   &__formTitle {
-    color: #1a1a1a;
-    margin-bottom: 4px;
+    letter-spacing: -0.02em;
+  }
+
+  &__formIcon {
+    flex: 0 0 auto;
+    color: #309cb5;
+    transform: rotate(-7deg);
+  }
+
+  &__projectFieldset {
+    min-width: 0;
+    padding: 0;
+    border: 0;
+
+    & legend {
+      margin-bottom: 10px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+  }
+
+  &__projectTypes {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 7px;
+
+    @include smallerThanPhone {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  &__projectType {
+    position: relative;
+    display: grid;
+    min-width: 0;
+    min-height: 42px;
+    padding: 0 10px;
+    border: 1px solid rgb(23 32 39 / 8%);
+    border-radius: 11px;
+    background: rgb(255 255 255 / 58%);
+    color: #667179;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    place-items: center;
+    text-align: center;
+    transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+
+    & input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    &:hover {
+      border-color: rgb(66 189 218 / 36%);
+      color: #25353d;
+      transform: translateY(-1px);
+    }
+
+    &:has(input:focus-visible) {
+      outline: 2px solid $brand;
+      outline-offset: 2px;
+    }
+
+    &--active {
+      border-color: #1c3038;
+      background: #14232a;
+      color: #f7fbfc;
+      box-shadow: 0 7px 16px rgb(20 35 42 / 13%);
+    }
   }
 
   &__fields {
@@ -52,33 +148,109 @@
 
   &__field {
     display: flex;
+    min-width: 0;
     flex-direction: column;
-    gap: 6px;
+    gap: 7px;
+
+    & label {
+      color: #4b5860;
+    }
+
+    & svg {
+      flex: 0 0 auto;
+      color: #89949a;
+    }
+  }
+
+  &__messageLabel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    & span {
+      color: #89949a;
+      font-size: 10px;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  &__error {
+    padding: 11px 13px;
+    border: 1px solid rgb(229 72 75 / 16%);
+    border-radius: 10px;
+    background: rgb(229 72 75 / 7%);
+    color: #c73d42;
+    font-size: 12px;
   }
 
   &__actions {
-    display: flex;
-    justify-content: flex-start;
+    display: grid;
+    grid-template-columns: minmax(180px, 0.7fr) 1fr;
+    align-items: center;
+    gap: 18px;
+    padding-top: 4px;
+
+    @include smallerThanPhone {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__submit {
+    width: 100%;
+    min-height: 50px;
+    border-radius: 14px;
+
+    & svg {
+      transition: transform 0.2s ease;
+    }
+
+    &:hover svg {
+      transform: translate(2px, -2px);
+    }
+  }
+
+  &__legal {
+    color: #879198;
+    line-height: 1.45;
+
+    & a {
+      color: #4b6873;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
   }
 
   &__success {
+    min-height: 570px;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 26px;
+    padding: clamp(32px, 6vw, 64px);
+  }
+
+  &__successCopy {
     display: flex;
+    max-width: 390px;
     flex-direction: column;
-    align-items: center;
-    gap: $space-m;
-    padding: 60px 20px;
-    text-align: center;
+    gap: 8px;
+    line-height: 1.5;
   }
 
   &__checkmark {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: rgb(66 189 218 / 15%);
     display: flex;
+    width: 68px;
+    height: 68px;
     align-items: center;
     justify-content: center;
-    margin-bottom: 8px;
-    color: $brand;
+    border-radius: 20px;
+    background: #15272e;
+    box-shadow: 0 14px 28px rgb(21 39 46 / 18%);
+    color: #75eddd;
+  }
+
+  &__againButton {
+    min-height: 46px;
+    border: 1px solid rgb(23 32 39 / 10%);
   }
 }

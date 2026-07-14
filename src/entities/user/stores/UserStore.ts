@@ -141,10 +141,11 @@ export class UserStore extends BaseStore implements ILocalStore {
     try {
       const user = await signInWithGooglePopup();
       await this._bootstrapUser(user);
+      return user;
     } catch (e) {
       if ((e as FirebaseError).code === 'auth/cancelled-popup-request') {
         this.reset();
-        return;
+        return null;
       }
       this.setError(e);
       throw e;
@@ -172,6 +173,23 @@ export class UserStore extends BaseStore implements ILocalStore {
         this.currentUser = { ...this.currentUser!, ...patch };
       });
       this.setSuccess();
+    } catch (e) {
+      this.setError(e);
+      throw e;
+    }
+  }
+
+  async deleteAccount() {
+    if (!this.currentUser) throw new Error('No user');
+    this.setLoading();
+    try {
+      const uid = this.currentUser.id;
+      await deleteUserProfileFromFirestore(uid);
+      await deleteAccountFromFirebase();
+      runInAction(() => {
+        this.currentUser = null;
+      });
+      this.reset();
     } catch (e) {
       this.setError(e);
       throw e;

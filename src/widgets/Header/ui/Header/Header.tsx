@@ -43,9 +43,25 @@ const Header: React.FC = observer(() => {
 
   useEffect(() => {
     const handleScroll = () => setScrolled(globalThis.scrollY > 20);
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname, location.hash]);
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsMenuOpen(false);
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isMenuOpen]);
 
   useEffect(() => {
     if (location.pathname !== '/') {
@@ -122,7 +138,7 @@ const Header: React.FC = observer(() => {
       data-auth-route={AUTH_PATHS.includes(location.pathname) ? 'true' : undefined}
     >
       <div className={styles.header__wrapper}>
-        <nav className={styles.header__nav}>
+        <nav className={styles.header__nav} aria-label="Основная навигация">
           <ul className={styles.header__navList}>
             {NAV_LINKS.map(({ to, label }) => (
               <li key={to} className={styles.header__navItem}>
@@ -205,7 +221,9 @@ const Header: React.FC = observer(() => {
               isMenuOpen && styles['header__burger--open'],
             )}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
+            aria-label={isMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-navigation"
             type="button"
           >
             <span />
@@ -217,6 +235,7 @@ const Header: React.FC = observer(() => {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
+            id="mobile-navigation"
             className={styles.header__mobileMenu}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}

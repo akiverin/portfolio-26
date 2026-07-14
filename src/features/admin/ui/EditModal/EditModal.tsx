@@ -5,6 +5,9 @@ import { doc } from 'firebase/firestore';
 import styles from './EditModal.module.scss';
 import { FieldDef } from 'features/admin/model/types';
 import { db } from 'shared/api/firebase';
+import classNames from 'classnames';
+import Badge, { ColorsBadgeT, IconsBadgeT } from 'shared/ui/Badge';
+import { AdminOption } from 'features/admin/model/types';
 
 const timestampToDateStr = (val: unknown): string => {
   if (!val) return '';
@@ -22,7 +25,7 @@ type EditModalProps = {
   fields: FieldDef[];
   data: Record<string, unknown> | null;
   loading?: boolean;
-  asyncOptions?: Record<string, { value: string; label: string }[]>;
+  asyncOptions?: Record<string, AdminOption[]>;
   darkMode?: boolean;
   onSave: (data: Record<string, unknown>) => void;
   onClose: () => void;
@@ -174,7 +177,13 @@ const EditModal: React.FC<EditModalProps> = ({
                             : [];
                           const isChecked = selected.includes(opt.value);
                           return (
-                            <label key={opt.value} className={styles.modal__multiselectItem}>
+                            <label
+                              key={opt.value}
+                              className={classNames(
+                                styles.modal__multiselectItem,
+                                isChecked && styles['modal__multiselectItem--selected'],
+                              )}
+                            >
                               <input
                                 type="checkbox"
                                 checked={isChecked}
@@ -186,7 +195,15 @@ const EditModal: React.FC<EditModalProps> = ({
                                 }}
                                 className={styles.modal__multiselectCheckbox}
                               />
-                              <span className={styles.modal__multiselectLabel}>{opt.label}</span>
+                              <Badge
+                                title={opt.label}
+                                color={opt.color as ColorsBadgeT}
+                                icon={opt.icon as IconsBadgeT}
+                                className={styles.modal__badgePreview}
+                              />
+                              <span className={styles.modal__selectionMark} aria-hidden="true">
+                                ✓
+                              </span>
                             </label>
                           );
                         })}

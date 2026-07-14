@@ -1,5 +1,6 @@
 import React from 'react';
 import { ColumnDef, FieldDef } from 'features/admin/model/types';
+import Badge, { ColorsBadgeT, IconsBadgeT } from 'shared/ui/Badge';
 
 export type AdminSection = {
   key: string;
@@ -99,7 +100,7 @@ export const ADMIN_SECTIONS: AdminSection[] = [
       },
       { key: 'date', label: 'Дата', sortable: true, type: 'timestamp', minWidth: '120px' },
       { key: 'link', label: 'Ссылка', type: 'url', editable: true, minWidth: '160px' },
-      { key: 'badges', label: 'Бейджи', minWidth: '150px' },
+      { key: 'badges', label: 'Бейджи', type: 'badges', minWidth: '240px' },
     ],
     fields: [
       { key: 'title', label: 'Название', type: 'text', required: true, placeholder: 'Название достижения' },
@@ -116,6 +117,17 @@ export const ADMIN_SECTIONS: AdminSection[] = [
     collection: 'grants',
     icon: 'wallet',
     columns: [
+      {
+        key: 'preview',
+        label: 'Предпросмотр',
+        minWidth: '180px',
+        render: (_value, row) =>
+          React.createElement(Badge, {
+            title: String(row.title || 'Без названия'),
+            color: row.color as ColorsBadgeT,
+            icon: row.icon as IconsBadgeT,
+          }),
+      },
       { key: 'title', label: 'Название', sortable: true, editable: true, minWidth: '200px' },
       { key: 'desc', label: 'Описание', editable: true, minWidth: '200px' },
       { key: 'sum', label: 'Сумма', sortable: true, editable: true, type: 'number', minWidth: '120px' },

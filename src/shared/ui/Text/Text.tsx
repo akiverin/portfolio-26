@@ -53,29 +53,43 @@ const Text: React.FC<TextProps> = ({
   maxLines,
   full,
   noWrap,
+  ...restProps
 }: TextProps) => {
+  const textClassName = classNames(styles.text, className, {
+    [styles['text--w-black']]: weight === 'black',
+    [styles['text--w-bold']]: weight === 'bold',
+    [styles['text--full']]: full === true,
+    [styles['text--uppercase']]: uppercase === true,
+    [styles['text--w-medium']]: weight === 'medium',
+    [styles[`text--v-${view}`]]: view,
+    [styles[`text--c-${color}`]]: color,
+    [styles[`text--f-${font}`]]: font,
+    [styles['text--no-wrap']]: noWrap,
+  });
+  const textStyle = maxLines
+    ? { ...restProps.style, WebkitLineClamp: maxLines, display: '-webkit-box' }
+    : restProps.style;
+
+  if (Tag === 'label') {
+    const labelProps = restProps as LabelHTMLAttributes<HTMLLabelElement>;
+    return (
+      <label {...labelProps} className={textClassName} style={textStyle} htmlFor={htmlFor}>
+        {children}
+      </label>
+    );
+  }
+
+  const Component = Tag;
+  const elementProps = restProps as HTMLAttributes<HTMLElement>;
+
   return (
-    <Tag
-      className={classNames(styles.text, className, {
-        [styles['text--w-black']]: weight === 'black',
-        [styles['text--w-bold']]: weight === 'bold',
-        [styles['text--full']]: full === true,
-        [styles['text--uppercase']]: uppercase === true,
-        [styles['text--w-medium']]: weight === 'medium',
-        [styles[`text--v-${view}`]]: view,
-        [styles[`text--c-${color}`]]: color,
-        [styles[`text--f-${font}`]]: font,
-        [styles['text--no-wrap']]: noWrap,
-      })}
-      style={
-        maxLines
-          ? { WebkitLineClamp: maxLines, display: '-webkit-box' }
-          : undefined
-      }
-      htmlFor={htmlFor}
+    <Component
+      {...elementProps}
+      className={textClassName}
+      style={textStyle}
     >
       {children}
-    </Tag>
+    </Component>
   );
 };
 

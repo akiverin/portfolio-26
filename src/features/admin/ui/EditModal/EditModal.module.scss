@@ -144,23 +144,27 @@
   }
 
   &__multiselect {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 10px 14px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 10px;
+    padding: 12px;
     background: var(--admin-input-bg, rgb(255, 255, 255, 5%));
     border: 1px solid var(--admin-input-border, rgb(255, 255, 255, 8%));
     border-radius: 10px;
-    max-height: 200px;
+    max-height: 240px;
     overflow-y: auto;
   }
 
   &__multiselectItem {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 4px 10px;
-    border-radius: 6px;
+    justify-content: space-between;
+    gap: 8px;
+    min-width: 0;
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 10px;
     background: var(--admin-row-hover, rgb(255, 255, 255, 4%));
     cursor: pointer;
     transition: background 0.15s ease;
@@ -169,18 +173,46 @@
     &:hover {
       background: var(--admin-sidebar-item-hover, rgb(255, 255, 255, 8%));
     }
+
+    &--selected {
+      border-color: var(--admin-checkbox-accent, #42bdda);
+      background: var(--admin-row-selected, rgb(66, 189, 218, 8%));
+
+      & .modal__selectionMark {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
   }
 
   &__multiselectCheckbox {
-    width: 14px;
-    height: 14px;
-    accent-color: var(--admin-checkbox-accent, #42bdda);
-    cursor: pointer;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
-  &__multiselectLabel {
-    color: var(--admin-text, #fff);
-    user-select: none;
+  &__badgePreview {
+    min-width: 0;
+    max-width: calc(100% - 24px);
+  }
+
+  &__selectionMark {
+    display: grid;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: var(--admin-checkbox-accent, #42bdda);
+    color: #071014;
+    font-size: 12px;
+    font-weight: 700;
+    opacity: 0;
+    place-items: center;
+    transform: scale(0.75);
+    transition: opacity 0.15s ease, transform 0.15s ease;
   }
 
   &__multiselectEmpty {

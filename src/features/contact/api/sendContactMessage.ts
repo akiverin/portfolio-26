@@ -6,6 +6,7 @@ export type ContactMessage = {
   name: string;
   email: string;
   message: string;
+  projectType: string;
 };
 
 export const sendContactMessage = async (

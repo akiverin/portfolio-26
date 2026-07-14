@@ -1,19 +1,4 @@
-/**
- * @license
- * Copyright 2025 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */const Dd=()=>{};var ec={};/**
+const Dd=()=>{};var ec={};/**
  * @license
  * Copyright 2017 Google LLC
  *
@@ -3347,4 +3332,4 @@ This typically indicates that your device does not have a healthy Internet conne
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */const nT=300,rT=Nu("authIdTokenMaxAge")||nT;let Pu=null;const sT=n=>async e=>{const t=e&&await e.getIdTokenResult(),r=t&&(new Date().getTime()-Date.parse(t.issuedAtTime))/1e3;if(r&&r>rT)return;const s=t==null?void 0:t.token;Pu!==s&&(Pu=s,await fetch(n,{method:s?"POST":"DELETE",headers:s?{Authorization:`Bearer ${s}`}:{}}))};function VT(n=Fu()){const e=no(n,"auth");if(e.isInitialized())return e.getImmediate();const t=by(n,{popupRedirectResolver:XE,persistence:[lE,Xy,Hh]}),r=Nu("authTokenSyncURL");if(r&&typeof isSecureContext=="boolean"&&isSecureContext){const o=new URL(r,location.origin);if(location.origin===o.origin){const a=sT(o.toString());Qy(t,a,()=>a(t.currentUser)),Ky(t,u=>a(u))}}const s=ku("auth");return s&&ky(t,`http://${s}`),t}function iT(){var n;return((n=document.getElementsByTagName("head"))==null?void 0:n[0])??document}Iy({loadJS(n){return new Promise((e,t)=>{const r=document.createElement("script");r.setAttribute("src",n),r.onload=e,r.onerror=s=>{const o=Me("internal-error");o.customData=s,t(o)},r.type="text/javascript",r.charset="UTF-8",iT().appendChild(r)})},gapiScript:"https://apis.google.com/js/api.js",recaptchaV2Script:"https://www.google.com/recaptcha/api.js",recaptchaEnterpriseScript:"https://www.google.com/recaptcha/enterprise.js?render="});tT("Browser");export{mt as G,VT as a,gT as b,aT as c,pT as d,mT as e,C_ as f,cT as g,TT as h,op as i,uT as j,RT as k,dT as l,AT as m,PT as n,hT as o,bT as p,lT as q,vT as r,fT as s,wT as t,ST as u,CT as v,_T as w,yT as x,ET as y,IT as z};
+ */const nT=300,rT=Nu("authIdTokenMaxAge")||nT;let Pu=null;const sT=n=>async e=>{const t=e&&await e.getIdTokenResult(),r=t&&(new Date().getTime()-Date.parse(t.issuedAtTime))/1e3;if(r&&r>rT)return;const s=t==null?void 0:t.token;Pu!==s&&(Pu=s,await fetch(n,{method:s?"POST":"DELETE",headers:s?{Authorization:`Bearer ${s}`}:{}}))};function VT(n=Fu()){const e=no(n,"auth");if(e.isInitialized())return e.getImmediate();const t=by(n,{popupRedirectResolver:XE,persistence:[lE,Xy,Hh]}),r=Nu("authTokenSyncURL");if(r&&typeof isSecureContext=="boolean"&&isSecureContext){const o=new URL(r,location.origin);if(location.origin===o.origin){const a=sT(o.toString());Qy(t,a,()=>a(t.currentUser)),Ky(t,u=>a(u))}}const s=ku("auth");return s&&ky(t,`http://${s}`),t}function iT(){var n;return((n=document.getElementsByTagName("head"))==null?void 0:n[0])??document}Iy({loadJS(n){return new Promise((e,t)=>{const r=document.createElement("script");r.setAttribute("src",n),r.onload=e,r.onerror=s=>{const o=Me("internal-error");o.customData=s,t(o)},r.type="text/javascript",r.charset="UTF-8",iT().appendChild(r)})},gapiScript:"https://apis.google.com/js/api.js",recaptchaV2Script:"https://www.google.com/recaptcha/api.js",recaptchaEnterpriseScript:"https://www.google.com/recaptcha/enterprise.js?render="});tT("Browser");export{mt as G,VT as a,gT as b,aT as c,pT as d,mT as e,C_ as f,cT as g,TT as h,op as i,uT as j,RT as k,dT as l,AT as m,PT as n,hT as o,bT as p,lT as q,vT as r,fT as s,CT as t,ST as u,wT as v,_T as w,yT as x,ET as y,IT as z};

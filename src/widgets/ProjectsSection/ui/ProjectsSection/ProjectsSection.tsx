@@ -2,15 +2,18 @@ import { observer } from 'mobx-react-lite';
 import { motion } from 'framer-motion';
 import styles from './ProjectsSection.module.scss';
 import Text from 'shared/ui/Text';
+import Button from 'shared/ui/Button';
 import { ProjectListStore } from 'entities/Project/stores/ProjectListStore';
-import { useEffect } from 'react';
+import { useMemo, useEffect } from 'react';
 import ProjectCard from 'entities/Project/ui/ProjectCard';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useLocalStore } from 'shared/hooks/useLocalStore';
 import { Meta } from 'shared/lib/meta';
 import Skeleton from 'shared/ui/Skeleton';
 import FadeIn from 'shared/ui/FadeIn';
+import { ROUTES } from 'shared/configs/routes';
 
+const DISPLAY_COUNT = 5;
 const SKELETON_COUNT = 4;
 
 const ProjectCardSkeleton: React.FC = () => (
@@ -46,6 +49,11 @@ const ProjectsSection: React.FC = observer(() => {
 
   const isLoading = store.meta === Meta.initial || store.meta === Meta.loading;
 
+  const latestProjects = useMemo(
+    () => store.projects.slice(0, DISPLAY_COUNT),
+    [store.projects],
+  );
+
   return (
     <section className={styles.projects} id="projects">
       <FadeIn>
@@ -73,7 +81,7 @@ const ProjectsSection: React.FC = observer(() => {
       <div className={styles.projects__list}>
         {isLoading
           ? Array.from({ length: SKELETON_COUNT }, (_, i) => <ProjectCardSkeleton key={i} />)
-          : store.projects.map((project, i) => (
+          : latestProjects.map((project, i) => (
               <motion.div
                 key={project.id}
                 variants={cardVariants}
@@ -86,6 +94,18 @@ const ProjectsSection: React.FC = observer(() => {
               </motion.div>
             ))}
       </div>
+
+      {!isLoading && store.projects.length > DISPLAY_COUNT && (
+        <FadeIn delay={0.2}>
+          <div className={styles.projects__allBtn}>
+            <Button href={ROUTES.PROJECTS} theme="dark">
+              <Text view="p-16" weight="medium">
+                Все проекты
+              </Text>
+            </Button>
+          </div>
+        </FadeIn>
+      )}
     </section>
   );
 });

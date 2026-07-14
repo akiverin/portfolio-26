@@ -1,24 +1,27 @@
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { FlatCompat } from '@eslint/eslintrc';
+import js from '@eslint/js';
+import tsParser from '@typescript-eslint/parser';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
 import boundaries from 'eslint-plugin-boundaries';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
 
 /** @type {import("eslint").Linter.Config[]} */
 const eslintConfig = [
-  ...compat.extends('eslint:recommended'),
-
   {
+    ignores: ['node_modules/**', 'dist/**', 'build/**'],
+  },
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        ecmaFeatures: { jsx: true },
+      },
+    },
     plugins: {
+      '@typescript-eslint': tsPlugin,
       boundaries,
     },
-
     settings: {
       'boundaries/elements': [
         { type: 'app', pattern: 'src/app/*' },
@@ -30,9 +33,8 @@ const eslintConfig = [
       ],
       'boundaries/ignore': ['**/*.test.*', '**/*.spec.*'],
     },
-
     rules: {
-      /* ── FSD layer boundaries ── */
+      ...js.configs.recommended.rules,
       'boundaries/element-types': [
         'warn',
         {
@@ -47,11 +49,7 @@ const eslintConfig = [
           ],
         },
       ],
-
-      /* ── Code quality ── */
       'no-console': ['warn', { allow: ['warn', 'error'] }],
-
-      /* ── No enums ── */
       'no-restricted-syntax': [
         'error',
         {
@@ -59,18 +57,15 @@ const eslintConfig = [
           message: 'Use `as const` objects instead of enums.',
         },
       ],
-
-      /* ── TypeScript ── */
+      'no-undef': 'off',
+      'no-redeclare': 'off',
+      'no-unused-vars': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-unused-vars': [
         'warn',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
     },
-  },
-
-  {
-    ignores: ['node_modules/**', 'dist/**', 'build/**', '*.config.*'],
   },
 ];
 

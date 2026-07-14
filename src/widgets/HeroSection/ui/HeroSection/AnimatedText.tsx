@@ -11,51 +11,71 @@ type AnimatedTextProps = {
 const containerVariants: Variants = {
   hidden: {},
   visible: {
-    transition: {
-      staggerChildren: 0.04,
-      delayChildren: 0.2,
-    },
+    transition: { delayChildren: 0.25 },
   },
 };
 
 const letterVariants: Variants = {
   hidden: {
-    y: '100%',
+    y: '115%',
     opacity: 0,
-    filter: 'blur(8px)',
+    rotateX: -72,
+    rotateZ: 3,
+    filter: 'blur(14px)',
   },
-  visible: {
+  visible: (index: number) => ({
     y: '0%',
     opacity: 1,
+    rotateX: 0,
+    rotateZ: 0,
     filter: 'blur(0px)',
     transition: {
       type: 'spring',
-      damping: 25,
-      stiffness: 200,
+      damping: 24,
+      stiffness: 125,
+      mass: 0.72,
+      delay: index * 0.045,
     },
-  },
+  }),
 };
 
 const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
-  const letters = useMemo(() => Array.from(text), [text]);
+  const words = useMemo(() => text.split(' '), [text]);
+  let letterIndex = 0;
 
   return (
     <motion.h1
       className={classNames(styles.animatedText, className)}
       variants={containerVariants}
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-50px' }}
+      animate="visible"
+      aria-label={text}
     >
-      {letters.map((char, index) => (
-        <motion.span
-          key={`${char}-${index}`}
-          className={styles.letter}
-          variants={letterVariants}
-        >
-          {char === ' ' ? '\u00A0' : char}
-        </motion.span>
+      {words.map((word) => (
+        <span key={word} className={styles.word} aria-hidden="true">
+          {Array.from(word).map((char) => {
+            const index = letterIndex++;
+            return (
+              <motion.span
+                key={`${char}-${index}`}
+                className={styles.letter}
+                variants={letterVariants}
+                custom={index}
+                whileHover={{ y: '-7%', transition: { duration: 0.18 } }}
+              >
+                {char}
+              </motion.span>
+            );
+          })}
+        </span>
       ))}
+      <motion.span
+        className={styles.accent}
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: 'spring', delay: 1.05, stiffness: 160, damping: 16 }}
+        aria-hidden="true"
+      />
     </motion.h1>
   );
 };

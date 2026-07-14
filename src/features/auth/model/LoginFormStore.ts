@@ -23,6 +23,12 @@ export class LoginFormStore implements ILocalStore {
     return validateEmail(this.identifier);
   }
 
+  validateIdentifier(): boolean {
+    const error = this._validateIdentifier();
+    this.errors.identifier = error;
+    return !error;
+  }
+
   private _validatePassword(): string {
     return validatePassword(this.password);
   }

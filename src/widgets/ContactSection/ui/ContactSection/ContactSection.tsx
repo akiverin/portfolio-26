@@ -2,25 +2,35 @@ import { motion } from 'framer-motion';
 import styles from './ContactSection.module.scss';
 import Text from 'shared/ui/Text';
 import ContactForm from 'features/contact/ui/ContactForm';
-import { IconBrandTelegram, IconMail, IconPhone } from '@tabler/icons-react';
+import {
+  IconArrowUpRight,
+  IconBrandTelegram,
+  IconClock,
+  IconMail,
+  IconPhone,
+  IconSparkles,
+} from '@tabler/icons-react';
 
-const socials = [
+const SOCIALS = [
   {
     href: 'mailto:kiverin03@yandex.ru',
     icon: IconMail,
+    type: 'Email',
     label: 'kiverin03@yandex.ru',
   },
   {
     href: 'https://t.me/andkiv',
     icon: IconBrandTelegram,
-    label: 'Телеграм',
+    type: 'Telegram',
+    label: '@andkiv',
   },
   {
     href: 'tel:89531370800',
     icon: IconPhone,
+    type: 'Телефон',
     label: '+7 (953) 137-08-00',
   },
-];
+] as const;
 
 const sectionVariants = {
   hidden: { opacity: 0 },
@@ -70,34 +80,68 @@ const ContactSection: React.FC = () => {
         whileInView="visible"
         viewport={{ once: true, margin: '-60px' }}
       >
-        <div className={styles.contact__glow} />
-        <div className={styles.contact__glow2} />
+        <div className={styles.contact__background} aria-hidden="true">
+          <div className={styles.contact__mesh} />
+          <div className={styles.contact__orbit} />
+          <span className={styles.contact__backgroundWord}>LET'S TALK</span>
+        </div>
 
         <motion.div className={styles.contact__intro} variants={itemVariants}>
-          <Text tag="h3" view="p-28" weight="bold" className={styles.contact__introTitle}>
-            Давайте работать вместе
-          </Text>
-          <Text tag="p" view="p-16" className={styles.contact__introText}>
-            Если у вас есть вопрос, предложение о сотрудничестве или просто хотите
-            пообщаться — напишите мне. Буду рад ответить!
-          </Text>
+          <div className={styles.contact__introTop}>
+            <span className={styles.contact__eyebrow}>
+              <IconSparkles size={15} /> Новая задача начинается здесь
+            </span>
+            <Text tag="h3" view="p-32" weight="bold" className={styles.contact__introTitle}>
+              Давайте создадим продукт, который хочется использовать.
+            </Text>
+            <Text tag="p" view="p-16" className={styles.contact__introText}>
+              Расскажите об идее, задаче или продукте. Помогу найти ясную форму и превратить её в
+              работающий цифровой опыт.
+            </Text>
+          </div>
+
+          <div className={styles.contact__responseCard}>
+            <span className={styles.contact__responseIcon}>
+              <IconClock size={18} stroke={1.6} />
+            </span>
+            <div>
+              <Text tag="span" view="p-12" weight="medium">
+                Обычно отвечаю в течение дня
+              </Text>
+              <Text tag="span" view="p-10" className={styles.contact__responseMeta}>
+                Будни · 10:00–20:00 МСК
+              </Text>
+            </div>
+          </div>
 
           <div className={styles.contact__socials}>
-            {socials.map(({ href, icon: Icon, label }) => (
+            {SOCIALS.map(({ href, icon: Icon, type, label }) => (
               <motion.a
                 key={href}
                 href={href}
-                target="_blank"
-                rel="noopener noreferrer"
+                target={href.startsWith('https') ? '_blank' : undefined}
+                rel={href.startsWith('https') ? 'noopener noreferrer' : undefined}
                 className={styles.contact__socialLink}
                 variants={itemVariants}
+                whileHover={{ x: 5 }}
               >
-                <Icon className={styles.contact__socialIcon} stroke={1.5} />
-                <Text view="p-14" weight="medium">
-                  {label}
-                </Text>
+                <span className={styles.contact__socialIcon}>
+                  <Icon size={19} stroke={1.5} />
+                </span>
+                <span className={styles.contact__socialCopy}>
+                  <small>{type}</small>
+                  <Text tag="span" view="p-14" weight="medium">
+                    {label}
+                  </Text>
+                </span>
+                <IconArrowUpRight className={styles.contact__socialArrow} size={17} stroke={1.5} />
               </motion.a>
             ))}
+          </div>
+
+          <div className={styles.contact__signature} aria-hidden="true">
+            <span>AK</span>
+            <span>Portfolio · 2026</span>
           </div>
         </motion.div>
 

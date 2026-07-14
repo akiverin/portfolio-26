@@ -10,6 +10,7 @@ import { ROUTES } from 'shared/configs/routes';
 export const App: React.FC = () => {
   const { pathname } = useLocation();
   const isAdmin = pathname.startsWith(ROUTES.ADMIN);
+  const isAuth = pathname === ROUTES.AUTH || pathname === ROUTES.REGISTER;
 
   if (isAdmin) {
     return (
@@ -27,7 +28,7 @@ export const App: React.FC = () => {
       <div className={styles.app__content}>
         <AppRouter />
       </div>
-      <Footer />
+      {!isAuth && <Footer />}
     </div>
   );
 };

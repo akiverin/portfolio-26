@@ -10,6 +10,15 @@ import Team from 'shared/ui/icons/Team';
 import Code from 'shared/ui/icons/Code';
 import Trophy from 'shared/ui/icons/Trophy';
 import Student from 'shared/ui/icons/Student';
+import {
+  IconBolt,
+  IconCrown,
+  IconDiamond,
+  IconFlame,
+  IconHeart,
+  IconMedal,
+  IconStar,
+} from '@tabler/icons-react';
 
 export type ColorsBadgeT =
   | 'black'
@@ -30,7 +39,14 @@ export type IconsBadgeT =
   | 'team'
   | 'trophy'
   | 'student'
-  | 'code';
+  | 'code'
+  | 'medal'
+  | 'star'
+  | 'flame'
+  | 'lightning'
+  | 'diamond'
+  | 'heart'
+  | 'crown';
 
 const ICONS: Record<IconsBadgeT, React.ReactNode> = {
   article: <Article height={14} width={14} className={styles.badge__icon} />,
@@ -41,6 +57,13 @@ const ICONS: Record<IconsBadgeT, React.ReactNode> = {
   trophy: <Trophy height={14} width={14} className={styles.badge__icon} />,
   student: <Student height={14} width={14} className={styles.badge__icon} />,
   code: <Code height={14} width={14} className={styles.badge__icon} />,
+  medal: <IconMedal size={14} className={styles.badge__icon} />,
+  star: <IconStar size={14} className={styles.badge__icon} />,
+  flame: <IconFlame size={14} className={styles.badge__icon} />,
+  lightning: <IconBolt size={14} className={styles.badge__icon} />,
+  diamond: <IconDiamond size={14} className={styles.badge__icon} />,
+  heart: <IconHeart size={14} className={styles.badge__icon} />,
+  crown: <IconCrown size={14} className={styles.badge__icon} />,
 };
 
 export type BadgeProps = {
@@ -55,7 +78,7 @@ const Badge: React.FC<BadgeProps> = ({ title, color = 'black', icon, className }
 
   return (
     <div className={badgeClasses}>
-      {icon && ICONS[icon]}
+      {icon && ICONS[icon] ? ICONS[icon] : null}
       <Text weight="medium" view="p-14" noWrap className={styles.badge__title}>
         {title}
       </Text>

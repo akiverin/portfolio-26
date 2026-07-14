@@ -5,8 +5,15 @@ export type ColumnDef = {
   minWidth?: string;
   sortable?: boolean;
   editable?: boolean;
-  type?: 'text' | 'number' | 'timestamp' | 'image' | 'url' | 'email';
+  type?: 'text' | 'number' | 'timestamp' | 'image' | 'url' | 'email' | 'badges';
   render?: (value: unknown, row: Record<string, unknown>) => React.ReactNode;
+};
+
+export type AdminOption = {
+  value: string;
+  label: string;
+  color?: string;
+  icon?: string;
 };
 
 export type FieldDef = {
@@ -15,7 +22,7 @@ export type FieldDef = {
   type: 'text' | 'number' | 'textarea' | 'url' | 'email' | 'select' | 'date' | 'multiselect';
   required?: boolean;
   placeholder?: string;
-  options?: { value: string; label: string }[];
+  options?: AdminOption[];
   asyncOptions?: string;
 };
 

@@ -18,6 +18,7 @@ import { useUserStore } from 'shared/stores/StoreContext';
 import { useNotification } from 'shared/ui/Notifications';
 import { ROUTES } from 'shared/configs/routes';
 import { Meta } from 'shared/lib/meta';
+import { AdminOption } from 'features/admin/model/types';
 
 const AdminPage: React.FC = observer(() => {
   const navigate = useNavigate();
@@ -41,21 +42,26 @@ const AdminPage: React.FC = observer(() => {
     }
   });
 
-  const [asyncOptions, setAsyncOptions] = useState<
-    Record<string, { value: string; label: string }[]>
-  >({});
+  const [asyncOptions, setAsyncOptions] = useState<Record<string, AdminOption[]>>({});
 
-  useEffect(() => {
-    const fetchAsyncOptions = async () => {
+  const fetchBadgeOptions = useCallback(async () => {
+    try {
       const badgesSnap = await getDocs(collection(db, 'badges'));
       const badgeOpts = badgesSnap.docs.map((docSnap) => ({
         value: docSnap.id,
-        label: (docSnap.data().title as string) || docSnap.id,
+        label: (docSnap.data().title as string) || 'Без названия',
+        color: String(docSnap.data().color || 'black'),
+        icon: String(docSnap.data().icon || ''),
       }));
       setAsyncOptions((prev) => ({ ...prev, badges: badgeOpts }));
-    };
-    void fetchAsyncOptions();
-  }, []);
+    } catch {
+      notify('Не удалось загрузить список бейджей', 'error');
+    }
+  }, [notify]);
+
+  useEffect(() => {
+    void fetchBadgeOptions();
+  }, [fetchBadgeOptions]);
 
   const section = ADMIN_SECTIONS.find((s) => s.key === activeSection) ?? ADMIN_SECTIONS[0];
 
@@ -127,6 +133,7 @@ const AdminPage: React.FC = observer(() => {
       try {
         if (store.editingId) {
           await store.update(store.editingId, data);
+          if (activeSection === 'badges') await fetchBadgeOptions();
           store.closeEdit();
           notify('Запись обновлена', 'success');
         }
@@ -134,20 +141,21 @@ const AdminPage: React.FC = observer(() => {
         notify('Ошибка при сохранении', 'error');
       }
     },
-    [store, notify],
+    [store, notify, activeSection, fetchBadgeOptions],
   );
 
   const handleSaveCreate = useCallback(
     async (data: Record<string, unknown>) => {
       try {
         await store.create(data);
+        if (activeSection === 'badges') await fetchBadgeOptions();
         store.closeCreate();
         notify('Запись создана', 'success');
       } catch {
         notify('Ошибка при создании', 'error');
       }
     },
-    [store, notify],
+    [store, notify, activeSection, fetchBadgeOptions],
   );
 
   const handleConfirmDelete = useCallback(async () => {
@@ -271,6 +279,7 @@ const AdminPage: React.FC = observer(() => {
           onDelete={(id) => store.openDelete(id)}
           onCellEdit={handleCellEdit}
           onPageChange={(p) => store.setPage(p)}
+          badgeOptions={asyncOptions.badges ?? []}
         />
       </main>
 

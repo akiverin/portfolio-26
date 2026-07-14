@@ -4,15 +4,22 @@
 @use "adaptive" as *;
 
 .legal {
-  padding-top: 100px;
-  padding-bottom: 20px;
+  padding-top: 120px;
+  padding-bottom: 60px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f8fafc 0%, #f0f0f5 100%);
 
   @include wrapper;
 
+  @include smallerThanTablet {
+    padding-top: 90px;
+    padding-bottom: 32px;
+  }
+
   &__container {
     max-width: 780px;
-    margin: 80px auto 0;
-    background-color: $project-bg;
+    margin: 0 auto;
+    background-color: $white;
     border-radius: 24px;
     padding: 48px;
     display: flex;
@@ -20,22 +27,34 @@
     gap: 20px;
     color: $black;
     line-height: 1.65;
+    border: 1px solid rgb(0 0 0 / 6%);
+    box-shadow: 0 8px 32px rgb(0 0 0 / 5%);
 
     @include smallerThanTablet {
-      padding: 32px 20px;
+      padding: 28px 20px;
+      border-radius: 16px;
     }
   }
 
   &__back {
     margin-bottom: 8px;
     width: fit-content;
+
+    @include transition(opacity, transform);
+
+    &:hover {
+      opacity: 0.7;
+      transform: translateX(-2px);
+    }
   }
 
   &__section {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin-top: 8px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgb(0 0 0 / 5%);
   }
 
   &__list {

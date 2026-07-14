@@ -11,7 +11,8 @@ import {
 } from '@tabler/icons-react';
 import styles from './AdminTable.module.scss';
 import classNames from 'classnames';
-import { ColumnDef } from 'features/admin/model/types';
+import { AdminOption, ColumnDef } from 'features/admin/model/types';
+import Badge, { ColorsBadgeT, IconsBadgeT } from 'shared/ui/Badge';
 
 type AdminTableProps = {
   columns: ColumnDef[];
@@ -31,6 +32,7 @@ type AdminTableProps = {
   onDelete: (id: string) => void;
   onCellEdit: (id: string, key: string, value: string) => void;
   onPageChange: (page: number) => void;
+  badgeOptions?: AdminOption[];
 };
 
 const formatTimestamp = (val: unknown): string => {
@@ -63,6 +65,17 @@ type InlineCellProps = {
   type?: string;
   editable?: boolean;
   onSave: (id: string, key: string, value: string) => void;
+  badgeOptions?: AdminOption[];
+};
+
+const getReferenceId = (value: unknown): string | null => {
+  if (typeof value === 'string') return value;
+  if (!value || typeof value !== 'object') return null;
+  if ('id' in value && typeof value.id === 'string') return value.id;
+  if ('path' in value && typeof value.path === 'string') {
+    return value.path.split('/').filter(Boolean).at(-1) ?? null;
+  }
+  return null;
 };
 
 const InlineCell: React.FC<InlineCellProps> = ({
@@ -72,6 +85,7 @@ const InlineCell: React.FC<InlineCellProps> = ({
   type,
   editable,
   onSave,
+  badgeOptions = [],
 }) => {
   const [editing, setEditing] = useState(false);
   const [editValue, setEditValue] = useState('');
@@ -122,6 +136,32 @@ const InlineCell: React.FC<InlineCellProps> = ({
     );
   }
 
+  if (type === 'badges') {
+    const references = Array.isArray(value) ? value : [];
+    const badges = references
+      .map(getReferenceId)
+      .filter((id): id is string => Boolean(id))
+      .map((id) => badgeOptions.find((option) => option.value === id))
+      .filter((option): option is AdminOption => Boolean(option));
+
+    if (badges.length === 0) {
+      return <span className={styles.table__emptyValue}>Нет бейджей</span>;
+    }
+
+    return (
+      <div className={styles.table__badgeList}>
+        {badges.map((badge) => (
+          <Badge
+            key={badge.value}
+            title={badge.label}
+            color={badge.color as ColorsBadgeT}
+            icon={badge.icon as IconsBadgeT}
+          />
+        ))}
+      </div>
+    );
+  }
+
   return (
     <span
       className={classNames(styles.table__cellText, editable && styles['table__cellText--editable'])}
@@ -166,6 +206,7 @@ const AdminTable: React.FC<AdminTableProps> = observer(
     onDelete,
     onCellEdit,
     onPageChange,
+    badgeOptions,
   }) => {
     const getSortIcon = (key: string) => {
       if (sortKey !== key) return <IconArrowsSort size={14} stroke={1.5} />;
@@ -264,6 +305,7 @@ const AdminTable: React.FC<AdminTableProps> = observer(
                             type={col.type}
                             editable={col.editable}
                             onSave={onCellEdit}
+                            badgeOptions={badgeOptions}
                           />
                         )}
                       </td>

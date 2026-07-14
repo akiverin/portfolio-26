@@ -59,19 +59,13 @@
     }
   }
 
-  &__dateToggle {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    user-select: none;
-  }
+  &__search {
+    flex: 1;
+    max-width: 360px;
 
-  &__dateCheckbox {
-    width: 16px;
-    height: 16px;
-    accent-color: $brand;
-    cursor: pointer;
+    @include smallerThanTablet {
+      max-width: 100%;
+    }
   }
 
   &__sort {

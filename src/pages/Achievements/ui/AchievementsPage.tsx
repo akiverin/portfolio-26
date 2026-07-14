@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { motion } from 'framer-motion';
 import styles from './AchievementsPage.module.scss';
 import Text from 'shared/ui/Text';
 import Select from 'shared/ui/Select';
-import Pagination from 'shared/ui/Pagination';
+import Input from 'shared/ui/Input';
 import Skeleton from 'shared/ui/Skeleton';
 import AchievementCard from 'entities/Achievement/ui/AchievementCard';
 import { AchievementListStore, SORT_OPTIONS } from 'entities/Achievement/stores/AchievementListStore';
 import { useLocalStore } from 'shared/hooks/useLocalStore';
+import { useDebounce } from 'shared/hooks/useDebounce';
 import { Meta } from 'shared/lib/meta';
 import FadeIn from 'shared/ui/FadeIn';
 import { AnimatedCheckbox } from 'shared/ui/AnimatedCheckbox';
+import { IconSearch } from '@tabler/icons-react';
 
-const PAGE_SIZE = 10;
 const SKELETON_COUNT = 10;
 
 const cardVariants = {
@@ -41,14 +42,24 @@ const AchievementCardSkeleton: React.FC = () => (
 );
 
 export const AchievementsPage: React.FC = observer(() => {
-  const store = useLocalStore(() => new AchievementListStore({ pageSize: PAGE_SIZE }));
+  const store = useLocalStore(() => new AchievementListStore({ pageSize: 100 }));
   const [showDates, setShowDates] = useState(true);
+  const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 300);
 
   useEffect(() => {
     store.fetchAchievements();
   }, [store]);
 
   const isLoading = store.meta === Meta.initial || store.meta === Meta.loading;
+
+  const filtered = useMemo(() => {
+    if (!debouncedSearch.trim()) return store.achievements;
+    const q = debouncedSearch.toLowerCase();
+    return store.achievements.filter(
+      (a) => a.title.toLowerCase().includes(q) || a.desc.toLowerCase().includes(q),
+    );
+  }, [store.achievements, debouncedSearch]);
 
   return (
     <main className={styles.page}>
@@ -65,6 +76,15 @@ export const AchievementsPage: React.FC = observer(() => {
 
       <div className={styles.page__content}>
         <div className={styles.page__controls}>
+          <div className={styles.page__search}>
+            <Input
+              value={search}
+              onChange={setSearch}
+              placeholder="Поиск достижений..."
+              aria-label="Поиск достижений"
+              afterSlot={<IconSearch size={18} stroke={1.5} />}
+            />
+          </div>
           <AnimatedCheckbox
             checked={showDates}
             onChange={setShowDates}
@@ -83,14 +103,21 @@ export const AchievementsPage: React.FC = observer(() => {
         </div>
 
         <div className={styles.page__grid}>
+          {store.meta === Meta.error && (
+            <div className={styles.page__empty} role="alert">
+              <Text view="p-16" color="accent">
+                Не удалось загрузить достижения. Попробуйте обновить страницу.
+              </Text>
+            </div>
+          )}
           {isLoading &&
             Array.from({ length: SKELETON_COUNT }, (_, i) => (
               <AchievementCardSkeleton key={i} />
             ))}
 
           {!isLoading &&
-            store.achievements.length > 0 &&
-            store.achievements.map((achievement, i) => (
+            filtered.length > 0 &&
+            filtered.map((achievement, i) => (
               <motion.div
                 key={achievement.id}
                 variants={cardVariants}
@@ -103,24 +130,14 @@ export const AchievementsPage: React.FC = observer(() => {
               </motion.div>
             ))}
 
-          {!isLoading && store.achievements.length === 0 && (
+          {!isLoading && store.meta !== Meta.error && filtered.length === 0 && (
             <div className={styles.page__empty}>
               <Text view="p-16" color="secondary">
-                Ничего не найдено
+                {search ? 'Ничего не найдено' : 'Достижения отсутствуют'}
               </Text>
             </div>
           )}
         </div>
-
-        {store.totalPages > 1 && (
-          <div className={styles.page__pagination}>
-            <Pagination
-              page={store.pagination.page}
-              pageCount={store.totalPages}
-              onPageChange={(p) => store.setPage(p)}
-            />
-          </div>
-        )}
       </div>
     </main>
   );

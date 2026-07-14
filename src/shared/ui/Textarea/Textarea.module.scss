@@ -11,6 +11,9 @@
   padding: $space-s $space-0;
   color: var(--input-text);
   border-radius: $border-radius;
+  border: 1.5px solid transparent;
+
+  @include transition(border-color, box-shadow);
 
   & textarea {
     box-sizing: border-box;
@@ -37,6 +40,8 @@
   }
 
   &:has(textarea:focus) {
+    border-color: rgb(66 189 218 / 40%);
+    box-shadow: 0 0 0 3px rgb(66 189 218 / 8%);
     background-color: var(--input-bg);
     color: var(--input-text);
   }

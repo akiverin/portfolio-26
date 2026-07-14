@@ -156,6 +156,18 @@
     }
   }
 
+  &__badgeList {
+    display: flex;
+    min-width: 200px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  &__emptyValue {
+    color: var(--admin-text-secondary);
+    font-size: 13px;
+  }
+
   &__inlineInput {
     width: 100%;
     padding: 4px 8px;

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useId } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './Select.module.scss';
 import classNames from 'classnames';
@@ -47,6 +47,7 @@ const Select: React.FC<SelectProps> = ({
   const [search, setSearch] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
+  const dropdownId = useId();
 
   const selectedOption = options.find((o) => o.value === value);
 
@@ -73,6 +74,20 @@ const Select: React.FC<SelectProps> = ({
     }
   }, [isOpen, searchable]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+        setSearch('');
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
+
   const handleSelect = (optionValue: string) => {
     onChange(optionValue);
     setIsOpen(false);
@@ -87,6 +102,9 @@ const Select: React.FC<SelectProps> = ({
           [styles['select__trigger--open']]: isOpen,
         })}
         onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
+        aria-controls={dropdownId}
       >
         <Text view="p-14" weight="medium">
           {selectedOption ? selectedOption.label : placeholder}
@@ -109,6 +127,7 @@ const Select: React.FC<SelectProps> = ({
             animate="visible"
             exit="exit"
             style={{ transformOrigin: 'top center' }}
+            id={dropdownId}
           >
             {searchable && (
               <input
@@ -118,9 +137,10 @@ const Select: React.FC<SelectProps> = ({
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Поиск..."
                 className={styles.select__search}
+                aria-label="Поиск по вариантам"
               />
             )}
-            <ul className={styles.select__options}>
+            <ul className={styles.select__options} role="listbox">
               {filteredOptions.map((option) => (
                 <li key={option.value}>
                   <button
@@ -129,6 +149,8 @@ const Select: React.FC<SelectProps> = ({
                       [styles['select__option--active']]: option.value === value,
                     })}
                     onClick={() => handleSelect(option.value)}
+                    role="option"
+                    aria-selected={option.value === value}
                   >
                     <Text view="p-14">{option.label}</Text>
                     {option.value === value && (
