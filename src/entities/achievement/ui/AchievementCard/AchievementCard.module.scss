@@ -104,11 +104,16 @@
   &__inspect {
     position: absolute;
     z-index: 3;
-    inset: 0;
+    top: 10px;
+    right: 10px;
     display: grid;
+    width: 32px;
+    height: 32px;
     padding: 0;
     border: 0;
-    background: radial-gradient(circle, rgb(5 12 16 / 32%) 0 20px, transparent 42px);
+    border-radius: 10px;
+    background: rgb(5 16 20 / 58%);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 22%);
     color: #effffd;
     cursor: zoom-in;
     opacity: 0;
@@ -116,14 +121,9 @@
     transition: opacity 0.3s ease;
 
     svg {
-      padding: 10px;
-      box-sizing: content-box;
-      border: 1px solid rgb(220 255 250 / 28%);
-      border-radius: 50%;
-      background: rgb(5 16 20 / 58%);
-      box-shadow: 0 10px 30px rgb(0 0 0 / 24%);
-      backdrop-filter: blur(10px);
-      transform: scale(0.8);
+      width: 16px;
+      height: 16px;
+      transform: scale(0.82);
       transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
     }
 
@@ -139,7 +139,7 @@
       opacity: 1;
 
       svg {
-        transform: scale(0.9);
+        transform: scale(0.88);
       }
     }
   }
