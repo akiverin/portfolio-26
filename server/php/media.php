@@ -134,6 +134,33 @@ function mediaEntity(): string
     return $entity;
 }
 
+function iniBytes(string $value): int
+{
+    $value = trim($value);
+    if ($value === '') return 0;
+    $unit = strtolower(substr($value, -1));
+    $number = (float) $value;
+    return match ($unit) {
+        'g' => (int) ($number * 1024 * 1024 * 1024),
+        'm' => (int) ($number * 1024 * 1024),
+        'k' => (int) ($number * 1024),
+        default => (int) $number,
+    };
+}
+
+function uploadErrorMessage(int $error): string
+{
+    return match ($error) {
+        UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => 'Файл превышает допустимый размер: изображения до 20 МБ, видео до 150 МБ.',
+        UPLOAD_ERR_PARTIAL => 'Файл загружен не полностью. Повторите попытку.',
+        UPLOAD_ERR_NO_FILE => 'Файл не передан.',
+        UPLOAD_ERR_NO_TMP_DIR => 'На сервере отсутствует временный каталог для загрузки.',
+        UPLOAD_ERR_CANT_WRITE => 'Серверу не удалось сохранить файл на диск.',
+        UPLOAD_ERR_EXTENSION => 'Загрузка файла остановлена расширением PHP.',
+        default => 'Не удалось принять файл.',
+    };
+}
+
 function storageRoot(array $config): string
 {
     $root = rtrim($config['storage_path'], '/');
@@ -150,22 +177,29 @@ function upload(array $config): never
     $entity = mediaEntity();
     $file = $_FILES['media'] ?? null;
     if (!is_array($file) || !isset($file['error'], $file['tmp_name'], $file['size'])) {
+        $contentLength = (int) ($_SERVER['CONTENT_LENGTH'] ?? 0);
+        if ($contentLength > iniBytes(ini_get('post_max_size'))) {
+            respond(413, ['error' => 'Файл превышает допустимый размер: изображения до 20 МБ, видео до 150 МБ.']);
+        }
         respond(422, ['error' => 'Файл не передан.']);
     }
-    if ($file['error'] !== UPLOAD_ERR_OK) respond(422, ['error' => 'Не удалось принять файл.']);
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        $status = in_array($file['error'], [UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE], true) ? 413 : 422;
+        respond($status, ['error' => uploadErrorMessage($file['error'])]);
+    }
     if (!is_uploaded_file($file['tmp_name'])) respond(422, ['error' => 'Некорректный источник файла.']);
 
     $finfo = new finfo(FILEINFO_MIME_TYPE);
     $mimeType = $finfo->file($file['tmp_name']);
     $allowedTypes = [
-        'image/jpeg' => ['jpg', 'image', 10 * 1024 * 1024],
-        'image/png' => ['png', 'image', 10 * 1024 * 1024],
-        'image/webp' => ['webp', 'image', 10 * 1024 * 1024],
-        'image/gif' => ['gif', 'image', 10 * 1024 * 1024],
-        'image/avif' => ['avif', 'image', 10 * 1024 * 1024],
-        'video/mp4' => ['mp4', 'video', 100 * 1024 * 1024],
-        'video/webm' => ['webm', 'video', 100 * 1024 * 1024],
-        'video/quicktime' => ['mov', 'video', 100 * 1024 * 1024],
+        'image/jpeg' => ['jpg', 'image', 20 * 1024 * 1024],
+        'image/png' => ['png', 'image', 20 * 1024 * 1024],
+        'image/webp' => ['webp', 'image', 20 * 1024 * 1024],
+        'image/gif' => ['gif', 'image', 20 * 1024 * 1024],
+        'image/avif' => ['avif', 'image', 20 * 1024 * 1024],
+        'video/mp4' => ['mp4', 'video', 150 * 1024 * 1024],
+        'video/webm' => ['webm', 'video', 150 * 1024 * 1024],
+        'video/quicktime' => ['mov', 'video', 150 * 1024 * 1024],
     ];
     if (!is_string($mimeType) || !isset($allowedTypes[$mimeType])) {
         respond(415, ['error' => 'Поддерживаются JPEG, PNG, WebP, GIF, AVIF, MP4, WebM и MOV.']);
@@ -173,7 +207,7 @@ function upload(array $config): never
 
     [$extension, $mediaType, $maxSize] = $allowedTypes[$mimeType];
     if (!is_int($file['size']) || $file['size'] < 1 || $file['size'] > $maxSize) {
-        respond(413, ['error' => $mediaType === 'image' ? 'Изображение не должно превышать 10 МБ.' : 'Видео не должно превышать 100 МБ.']);
+        respond(413, ['error' => $mediaType === 'image' ? 'Изображение не должно превышать 20 МБ.' : 'Видео не должно превышать 150 МБ.']);
     }
 
     $root = storageRoot($config);

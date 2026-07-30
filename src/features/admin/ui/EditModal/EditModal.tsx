@@ -305,7 +305,7 @@ const EditModal: React.FC<EditModalProps> = ({
                           ) : null}
                         </div>
                         <span className={styles.modal__mediaHint}>
-                          Изображения до 10 МБ; MP4, WebM и MOV до 100 МБ.
+                          Изображения до 20 МБ; MP4, WebM и MOV до 150 МБ.
                         </span>
                       </div>
                     ) : field.type === 'textarea' ? (
