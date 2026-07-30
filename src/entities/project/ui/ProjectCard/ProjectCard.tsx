@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './ProjectCard.module.scss';
 import classNames from 'classnames';
 import { Project } from 'entities/Project/model/types';
@@ -21,17 +21,43 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
     : '—';
   const mediaUrl = getMediaUrl(project.cover, 'projects');
   const isVideo = isVideoMedia(project.cover, project.coverType);
+  const [isPortraitImage, setIsPortraitImage] = useState(false);
+
+  useEffect(() => {
+    setIsPortraitImage(false);
+  }, [mediaUrl]);
+
+  const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
+    const { naturalHeight, naturalWidth } = event.currentTarget;
+    setIsPortraitImage(naturalHeight > naturalWidth);
+  };
 
   return (
     <article className={classNames(styles.projectCard, className)}>
-      <div className={styles.projectCard__cover}>
+      <div
+        className={classNames(styles.projectCard__cover, {
+          [styles['projectCard__cover--portrait']]: !isVideo && isPortraitImage,
+        })}
+      >
         {!isVideo ? (
-          <ImageWithFallback
-            src={mediaUrl}
-            className={styles.projectCard__media}
-            alt={project.title}
-            loading="lazy"
-          />
+          <>
+            {isPortraitImage && (
+              <img
+                src={mediaUrl}
+                className={styles.projectCard__backdrop}
+                alt=""
+                aria-hidden="true"
+              />
+            )}
+            <ImageWithFallback
+              src={mediaUrl}
+              className={styles.projectCard__media}
+              alt={project.title}
+              loading="lazy"
+              onLoad={handleImageLoad}
+              onError={() => setIsPortraitImage(false)}
+            />
+          </>
         ) : (
           <VideoWithFallback
             src={mediaUrl}

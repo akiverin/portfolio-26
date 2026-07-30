@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './AchievementCard.module.scss';
 import classNames from 'classnames';
 import { Achievement } from 'entities/Achievement/model/types';
@@ -44,10 +44,24 @@ const AchievementCard: React.FC<AchievementCardProps> = ({
 }) => {
   const mediaUrl = getMediaUrl(achievement.cover, 'achievements');
   const isVideo = isVideoMedia(achievement.cover, achievement.coverType);
+  const [isPortraitImage, setIsPortraitImage] = useState(false);
+
+  useEffect(() => {
+    setIsPortraitImage(false);
+  }, [mediaUrl]);
+
+  const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
+    const { naturalHeight, naturalWidth } = event.currentTarget;
+    setIsPortraitImage(naturalHeight > naturalWidth);
+  };
 
   return (
     <article className={classNames(styles.achievementCard, className)}>
-      <div className={styles.achievementCard__cover}>
+      <div
+        className={classNames(styles.achievementCard__cover, {
+          [styles['achievementCard__cover--portrait']]: !isVideo && isPortraitImage,
+        })}
+      >
         {isVideo ? (
           <VideoWithFallback
             src={mediaUrl}
@@ -58,12 +72,24 @@ const AchievementCard: React.FC<AchievementCardProps> = ({
             playsInline
           />
         ) : (
-          <ImageWithFallback
-            src={mediaUrl}
-            className={styles.achievementCard__image}
-            alt={achievement.title}
-            loading="lazy"
-          />
+          <>
+            {isPortraitImage && (
+              <img
+                src={mediaUrl}
+                className={styles.achievementCard__backdrop}
+                alt=""
+                aria-hidden="true"
+              />
+            )}
+            <ImageWithFallback
+              src={mediaUrl}
+              className={styles.achievementCard__image}
+              alt={achievement.title}
+              loading="lazy"
+              onLoad={handleImageLoad}
+              onError={() => setIsPortraitImage(false)}
+            />
+          </>
         )}
       </div>
       {achievement.badges && (

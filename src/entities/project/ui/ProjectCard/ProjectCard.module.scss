@@ -57,19 +57,54 @@
     @include smallerThanTablet {
       border-radius: 14px;
     }
+
+    &--portrait {
+      isolation: isolate;
+      background: #10191f;
+
+      &::after {
+        position: absolute;
+        z-index: 1;
+        inset: 0;
+        background: linear-gradient(90deg, rgb(7 12 16 / 22%), transparent 28%, transparent 72%, rgb(7 12 16 / 22%));
+        content: "";
+        pointer-events: none;
+      }
+    }
+  }
+
+  &__backdrop {
+    position: absolute;
+    z-index: 0;
+    inset: -18px;
+    display: block;
+    width: calc(100% + 36px);
+    height: calc(100% + 36px);
+    object-fit: cover;
+    object-position: center;
+    filter: blur(18px) saturate(1.16) brightness(0.72);
+    opacity: 0.82;
+    transform: scale(1.08);
   }
 
   &__media {
+    position: relative;
+    z-index: 2;
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center center;
     transition: transform 0.65s cubic-bezier(0.2, 0.7, 0.2, 1);
+
+    .projectCard__cover--portrait & {
+      object-fit: contain;
+    }
   }
 
   &__coverMeta {
     position: absolute;
+    z-index: 3;
     display: flex;
     right: 10px;
     bottom: 10px;
