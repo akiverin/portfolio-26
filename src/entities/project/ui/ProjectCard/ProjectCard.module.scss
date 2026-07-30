@@ -44,6 +44,14 @@
     & .projectCard__coverMeta {
       opacity: 1;
     }
+
+    & .projectCard__inspect {
+      opacity: 1;
+
+      svg {
+        transform: scale(1);
+      }
+    }
   }
 
   &__cover {
@@ -58,15 +66,28 @@
       border-radius: 14px;
     }
 
-    &--portrait {
+    &--framed {
       isolation: isolate;
       background: #10191f;
+    }
 
+    &--portrait {
       &::after {
         position: absolute;
         z-index: 1;
         inset: 0;
         background: linear-gradient(90deg, rgb(7 12 16 / 22%), transparent 28%, transparent 72%, rgb(7 12 16 / 22%));
+        content: "";
+        pointer-events: none;
+      }
+    }
+
+    &--landscape {
+      &::after {
+        position: absolute;
+        z-index: 1;
+        inset: 0;
+        background: linear-gradient(0deg, rgb(7 12 16 / 25%), transparent 30%, transparent 70%, rgb(7 12 16 / 25%));
         content: "";
         pointer-events: none;
       }
@@ -97,8 +118,51 @@
     object-position: center center;
     transition: transform 0.65s cubic-bezier(0.2, 0.7, 0.2, 1);
 
-    .projectCard__cover--portrait & {
+    .projectCard__cover--framed & {
       object-fit: contain;
+    }
+  }
+
+  &__inspect {
+    position: absolute;
+    z-index: 4;
+    inset: 0;
+    display: grid;
+    padding: 0;
+    border: 0;
+    background: radial-gradient(circle, rgb(5 12 16 / 34%) 0 20px, transparent 42px);
+    color: #dbfffb;
+    cursor: zoom-in;
+    opacity: 0;
+    place-items: center;
+    transition: opacity 0.3s ease;
+
+    svg {
+      padding: 10px;
+      box-sizing: content-box;
+      border: 1px solid rgb(210 255 249 / 28%);
+      border-radius: 50%;
+      background: rgb(5 16 20 / 58%);
+      box-shadow: 0 10px 30px rgb(0 0 0 / 24%);
+      backdrop-filter: blur(10px);
+      transform: scale(0.8);
+      transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+
+    &:focus-visible {
+      opacity: 1;
+
+      svg {
+        transform: scale(1);
+      }
+    }
+
+    @media (hover: none) {
+      opacity: 1;
+
+      svg {
+        transform: scale(0.9);
+      }
     }
   }
 

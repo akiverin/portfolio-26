@@ -5,9 +5,10 @@ import { Achievement } from 'entities/Achievement/model/types';
 import Text from 'shared/ui/Text';
 import Badge, { ColorsBadgeT, IconsBadgeT } from 'shared/ui/Badge';
 import { ImageWithFallback } from 'shared/ui/ImageWithFallback';
-import { IconArrowUpRight, IconCalendarEvent } from '@tabler/icons-react';
+import { IconArrowUpRight, IconCalendarEvent, IconZoomIn } from '@tabler/icons-react';
 import { VideoWithFallback } from 'shared/ui/VideoWithFallback';
-import { getMediaUrl, isVideoMedia } from 'shared/lib/media';
+import { getImageFit, getMediaUrl, ImageFit, isVideoMedia } from 'shared/lib/media';
+import MediaLightbox from 'shared/ui/MediaLightbox';
 
 const MONTHS_RU = [
   'января',
@@ -44,22 +45,25 @@ const AchievementCard: React.FC<AchievementCardProps> = ({
 }) => {
   const mediaUrl = getMediaUrl(achievement.cover, 'achievements');
   const isVideo = isVideoMedia(achievement.cover, achievement.coverType);
-  const [isPortraitImage, setIsPortraitImage] = useState(false);
+  const [imageFit, setImageFit] = useState<ImageFit>(null);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   useEffect(() => {
-    setIsPortraitImage(false);
+    setImageFit(null);
   }, [mediaUrl]);
 
   const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
     const { naturalHeight, naturalWidth } = event.currentTarget;
-    setIsPortraitImage(naturalHeight > naturalWidth);
+    setImageFit(getImageFit(naturalWidth, naturalHeight));
   };
 
   return (
     <article className={classNames(styles.achievementCard, className)}>
       <div
         className={classNames(styles.achievementCard__cover, {
-          [styles['achievementCard__cover--portrait']]: !isVideo && isPortraitImage,
+          [styles['achievementCard__cover--framed']]: !isVideo && imageFit,
+          [styles['achievementCard__cover--portrait']]: !isVideo && imageFit === 'portrait',
+          [styles['achievementCard__cover--landscape']]: !isVideo && imageFit === 'landscape',
         })}
       >
         {isVideo ? (
@@ -73,7 +77,7 @@ const AchievementCard: React.FC<AchievementCardProps> = ({
           />
         ) : (
           <>
-            {isPortraitImage && (
+            {imageFit && (
               <img
                 src={mediaUrl}
                 className={styles.achievementCard__backdrop}
@@ -87,11 +91,27 @@ const AchievementCard: React.FC<AchievementCardProps> = ({
               alt={achievement.title}
               loading="lazy"
               onLoad={handleImageLoad}
-              onError={() => setIsPortraitImage(false)}
+              onError={() => setImageFit(null)}
             />
+            <button
+              type="button"
+              className={styles.achievementCard__inspect}
+              onClick={() => setIsLightboxOpen(true)}
+              aria-label={`Открыть изображение достижения «${achievement.title}»`}
+            >
+              <IconZoomIn size={22} stroke={1.6} />
+            </button>
           </>
         )}
       </div>
+      {!isVideo && (
+        <MediaLightbox
+          isOpen={isLightboxOpen}
+          src={mediaUrl}
+          alt={achievement.title}
+          onClose={() => setIsLightboxOpen(false)}
+        />
+      )}
       {achievement.badges && (
         <div className={styles.achievementCard__badges}>
           {achievement.badges.map((badge) => (

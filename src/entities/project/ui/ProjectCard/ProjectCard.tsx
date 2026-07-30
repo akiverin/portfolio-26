@@ -7,8 +7,9 @@ import Github from 'shared/ui/icons/Github';
 import Behance from 'shared/ui/icons/Behance';
 import { ImageWithFallback } from 'shared/ui/ImageWithFallback';
 import { VideoWithFallback } from 'shared/ui/VideoWithFallback';
-import { IconArrowUpRight, IconExternalLink } from '@tabler/icons-react';
-import { getMediaUrl, isVideoMedia } from 'shared/lib/media';
+import { IconArrowUpRight, IconExternalLink, IconZoomIn } from '@tabler/icons-react';
+import { getImageFit, getMediaUrl, ImageFit, isVideoMedia } from 'shared/lib/media';
+import MediaLightbox from 'shared/ui/MediaLightbox';
 
 export type ProjectCardProps = {
   project: Project;
@@ -21,27 +22,30 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
     : '—';
   const mediaUrl = getMediaUrl(project.cover, 'projects');
   const isVideo = isVideoMedia(project.cover, project.coverType);
-  const [isPortraitImage, setIsPortraitImage] = useState(false);
+  const [imageFit, setImageFit] = useState<ImageFit>(null);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   useEffect(() => {
-    setIsPortraitImage(false);
+    setImageFit(null);
   }, [mediaUrl]);
 
   const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
     const { naturalHeight, naturalWidth } = event.currentTarget;
-    setIsPortraitImage(naturalHeight > naturalWidth);
+    setImageFit(getImageFit(naturalWidth, naturalHeight));
   };
 
   return (
     <article className={classNames(styles.projectCard, className)}>
       <div
         className={classNames(styles.projectCard__cover, {
-          [styles['projectCard__cover--portrait']]: !isVideo && isPortraitImage,
+          [styles['projectCard__cover--framed']]: !isVideo && imageFit,
+          [styles['projectCard__cover--portrait']]: !isVideo && imageFit === 'portrait',
+          [styles['projectCard__cover--landscape']]: !isVideo && imageFit === 'landscape',
         })}
       >
         {!isVideo ? (
           <>
-            {isPortraitImage && (
+            {imageFit && (
               <img
                 src={mediaUrl}
                 className={styles.projectCard__backdrop}
@@ -55,8 +59,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
               alt={project.title}
               loading="lazy"
               onLoad={handleImageLoad}
-              onError={() => setIsPortraitImage(false)}
+              onError={() => setImageFit(null)}
             />
+            <button
+              type="button"
+              className={styles.projectCard__inspect}
+              onClick={() => setIsLightboxOpen(true)}
+              aria-label={`Открыть изображение проекта «${project.title}»`}
+            >
+              <IconZoomIn size={22} stroke={1.6} />
+            </button>
           </>
         ) : (
           <VideoWithFallback
@@ -74,6 +86,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
           </Text>
         </div>
       </div>
+      {!isVideo && (
+        <MediaLightbox
+          isOpen={isLightboxOpen}
+          src={mediaUrl}
+          alt={project.title}
+          onClose={() => setIsLightboxOpen(false)}
+        />
+      )}
       <div className={styles.projectCard__info}>
         <div className={styles.projectCard__heading}>
           <Text view="p-24" tag="h3" weight="medium">
