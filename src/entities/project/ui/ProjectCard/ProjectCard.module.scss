@@ -1,63 +1,182 @@
-@use "colors" as *;
-@use "mixins" as *;
 @use "adaptive" as *;
 
 .projectCard {
   position: relative;
+  display: flex;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  flex-direction: column;
+  padding: 8px 8px 16px;
+  border: 1px solid rgb(255 255 255 / 9%);
+  border-radius: 22px;
+  background: rgb(255 255 255 / 5%);
+  color: #f4f7f8;
+  transition: border-color 0.35s ease, background 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+
+  &::after {
+    position: absolute;
+    height: 1px;
+    right: 18px;
+    bottom: 0;
+    left: 18px;
+    background: linear-gradient(90deg, transparent, rgb(116 236 221 / 50%), transparent);
+    content: "";
+    opacity: 0;
+    transform: scaleX(0.4);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+
+  &:hover {
+    border-color: rgb(128 239 225 / 24%);
+    background: rgb(255 255 255 / 7%);
+    box-shadow: 0 24px 55px rgb(0 0 0 / 20%);
+
+    &::after {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+
+    & .projectCard__media {
+      transform: scale(1.035);
+    }
+
+    & .projectCard__coverMeta {
+      opacity: 1;
+    }
+  }
 
   &__cover {
-    border: 4px solid $white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: $project-shadow;
-    background-color: $white;
+    position: relative;
     width: 100%;
-    height: auto;
-    inset: 0;
-    max-width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: 16px;
+    background: #172027;
 
     @include smallerThanTablet {
-      border-width: 3px;
-      border-radius: 10px;
+      border-radius: 14px;
     }
   }
 
   &__media {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
     object-fit: cover;
-    border-radius: 4px;
     object-position: center center;
+    transition: transform 0.65s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  &__coverMeta {
+    position: absolute;
+    display: flex;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+
+    & > span {
+      padding: 6px 9px;
+      border: 1px solid rgb(255 255 255 / 13%);
+      border-radius: 999px;
+      background: rgb(8 13 18 / 68%);
+      color: rgb(255 255 255 / 78%);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      backdrop-filter: blur(12px);
+    }
   }
 
   &__info {
-    padding: 12px;
     display: flex;
+    min-height: 124px;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
+    padding: 18px 10px 14px;
+
+    & > p {
+      color: rgb(255 255 255 / 50%);
+      line-height: 1.55;
+    }
 
     @include smallerThanTablet {
-      padding: 10px 8px;
-      gap: 4px;
+      min-height: 0;
+      padding: 16px 8px 12px;
     }
+  }
+
+  &__heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+
+    & h3 {
+      min-width: 0;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+    }
+  }
+
+  &__year {
+    flex: 0 0 auto;
+    padding-top: 5px;
+    color: rgb(255 255 255 / 36%);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.06em;
   }
 
   &__actions {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 16px;
-    margin-top: 8px;
     flex-wrap: wrap;
+    gap: 7px;
+    margin-top: auto;
+    padding: 0 10px;
 
-    @include smallerThanTablet {
-      gap: 8px;
-      margin-top: 4px;
+    & a {
+      display: flex;
+      min-height: 34px;
+      align-items: center;
+      gap: 7px;
+      padding: 0 10px;
+      border: 1px solid rgb(255 255 255 / 9%);
+      border-radius: 999px;
+      color: rgb(255 255 255 / 64%);
+      transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+
+      & svg:last-child {
+        opacity: 0;
+        transform: translateX(-3px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+
+      &:hover {
+        border-color: rgb(125 237 223 / 28%);
+        background: rgb(125 237 223 / 8%);
+        color: #a4f8ed;
+
+        & svg:last-child {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
     }
   }
 
-  &__github svg {
-    color: $black;
+  &__soon {
+    display: grid;
+    min-height: 34px;
+    padding: 0 11px;
+    border: 1px dashed rgb(255 255 255 / 10%);
+    border-radius: 999px;
+    color: rgb(255 255 255 / 32%);
+    place-items: center;
   }
 }

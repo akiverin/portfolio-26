@@ -13,6 +13,7 @@ export interface Achievement {
   desc: string;
   date: Timestamp;
   cover: string;
+  coverType?: 'image' | 'video';
   link?: string;
   badges?: Badge[];
 }

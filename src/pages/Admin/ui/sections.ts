@@ -1,6 +1,7 @@
 import React from 'react';
 import { ColumnDef, FieldDef } from 'features/admin/model/types';
 import Badge, { ColorsBadgeT, IconsBadgeT } from 'shared/ui/Badge';
+import { getMediaUrl, isVideoMedia } from 'shared/lib/media';
 
 export type AdminSection = {
   key: string;
@@ -44,11 +45,17 @@ export const ADMIN_SECTIONS: AdminSection[] = [
         minWidth: '80px',
         render: (val) =>
           val
-            ? React.createElement('img', {
-                src: `https://andkiv.com/assets/projects/${val}`,
-                alt: '',
-                style: { width: 32, height: 32, borderRadius: 6, objectFit: 'cover' },
-              })
+            ? isVideoMedia(String(val))
+              ? React.createElement('video', {
+                  src: getMediaUrl(String(val), 'projects'),
+                  muted: true,
+                  style: { width: 32, height: 32, borderRadius: 6, objectFit: 'cover' },
+                })
+              : React.createElement('img', {
+                  src: getMediaUrl(String(val), 'projects'),
+                  alt: '',
+                  style: { width: 32, height: 32, borderRadius: 6, objectFit: 'cover' },
+                })
             : '—',
       },
       { key: 'coverType', label: 'Тип обложки', sortable: true, editable: true, minWidth: '120px' },
@@ -60,8 +67,16 @@ export const ADMIN_SECTIONS: AdminSection[] = [
     fields: [
       { key: 'title', label: 'Название', type: 'text', required: true, placeholder: 'Название проекта' },
       { key: 'desc', label: 'Описание', type: 'textarea', required: true, placeholder: 'Описание проекта' },
-      { key: 'cover', label: 'Обложка (URL)', type: 'url', placeholder: 'https://...' },
-      { key: 'coverType', label: 'Тип обложки', type: 'text', placeholder: 'image/video' },
+      { key: 'cover', label: 'Обложка', type: 'media', mediaEntity: 'projects', placeholder: 'https://...' },
+      {
+        key: 'coverType',
+        label: 'Тип обложки',
+        type: 'select',
+        options: [
+          { value: 'image', label: 'Изображение' },
+          { value: 'video', label: 'Видео' },
+        ],
+      },
       { key: 'link', label: 'Ссылка на проект', type: 'url', placeholder: 'https://...' },
       { key: 'github', label: 'GitHub', type: 'url', placeholder: 'https://github.com/...' },
       { key: 'date', label: 'Дата проекта', type: 'date' },
@@ -91,11 +106,17 @@ export const ADMIN_SECTIONS: AdminSection[] = [
         minWidth: '80px',
         render: (val) =>
           val
-            ? React.createElement('img', {
-                src: `https://andkiv.com/assets/achievements/${val}`,
-                alt: '',
-                style: { width: 32, height: 32, borderRadius: 6, objectFit: 'cover' },
-              })
+            ? isVideoMedia(String(val))
+              ? React.createElement('video', {
+                  src: getMediaUrl(String(val), 'achievements'),
+                  muted: true,
+                  style: { width: 32, height: 32, borderRadius: 6, objectFit: 'cover' },
+                })
+              : React.createElement('img', {
+                  src: getMediaUrl(String(val), 'achievements'),
+                  alt: '',
+                  style: { width: 32, height: 32, borderRadius: 6, objectFit: 'cover' },
+                })
             : '—',
       },
       { key: 'date', label: 'Дата', sortable: true, type: 'timestamp', minWidth: '120px' },
@@ -105,7 +126,16 @@ export const ADMIN_SECTIONS: AdminSection[] = [
     fields: [
       { key: 'title', label: 'Название', type: 'text', required: true, placeholder: 'Название достижения' },
       { key: 'desc', label: 'Описание', type: 'textarea', required: true, placeholder: 'Описание' },
-      { key: 'cover', label: 'Обложка (URL)', type: 'url', placeholder: 'https://...' },
+      { key: 'cover', label: 'Обложка', type: 'media', mediaEntity: 'achievements', placeholder: 'https://...' },
+      {
+        key: 'coverType',
+        label: 'Тип обложки',
+        type: 'select',
+        options: [
+          { value: 'image', label: 'Изображение' },
+          { value: 'video', label: 'Видео' },
+        ],
+      },
       { key: 'link', label: 'Ссылка', type: 'url', placeholder: 'https://...' },
       { key: 'date', label: 'Дата достижения', type: 'date' },
       { key: 'badges', label: 'Бейджи', type: 'multiselect', asyncOptions: 'badges' },

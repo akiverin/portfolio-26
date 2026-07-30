@@ -3,11 +3,12 @@ import styles from './ProjectCard.module.scss';
 import classNames from 'classnames';
 import { Project } from 'entities/Project/model/types';
 import Text from 'shared/ui/Text';
-import Button from 'shared/ui/Button';
 import Github from 'shared/ui/icons/Github';
 import Behance from 'shared/ui/icons/Behance';
 import { ImageWithFallback } from 'shared/ui/ImageWithFallback';
 import { VideoWithFallback } from 'shared/ui/VideoWithFallback';
+import { IconArrowUpRight, IconExternalLink } from '@tabler/icons-react';
+import { getMediaUrl, isVideoMedia } from 'shared/lib/media';
 
 export type ProjectCardProps = {
   project: Project;
@@ -15,19 +16,25 @@ export type ProjectCardProps = {
 };
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
+  const year = project.date?.seconds
+    ? new Date(project.date.seconds * 1000).getFullYear()
+    : '—';
+  const mediaUrl = getMediaUrl(project.cover, 'projects');
+  const isVideo = isVideoMedia(project.cover, project.coverType);
+
   return (
-    <div className={classNames(styles.projectCard, className)}>
+    <article className={classNames(styles.projectCard, className)}>
       <div className={styles.projectCard__cover}>
-        {project.coverType === 'image' ? (
+        {!isVideo ? (
           <ImageWithFallback
-            src={`https://andkiv.com/assets/projects/${project.cover}`}
+            src={mediaUrl}
             className={styles.projectCard__media}
             alt={project.title}
             loading="lazy"
           />
         ) : (
           <VideoWithFallback
-            src={`https://andkiv.com/assets/projects/${project.cover}`}
+            src={mediaUrl}
             className={styles.projectCard__media}
             autoPlay
             loop
@@ -35,52 +42,63 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
             playsInline
           />
         )}
+        <div className={styles.projectCard__coverMeta}>
+          <Text tag="span" view="p-12" weight="medium">
+            {!isVideo ? 'Case study' : 'Motion project'}
+          </Text>
+        </div>
       </div>
       <div className={styles.projectCard__info}>
-        <Text view="p-24" tag="h3" weight="medium">
-          {project.title}
-        </Text>
-        <Text view="p-16" maxLines={2} color="secondary">
+        <div className={styles.projectCard__heading}>
+          <Text view="p-24" tag="h3" weight="medium">
+            {project.title}
+          </Text>
+          <Text tag="span" view="p-12" className={styles.projectCard__year}>{year}</Text>
+        </div>
+        <Text view="p-14" maxLines={2} color="secondary">
           {project.desc}
         </Text>
       </div>
 
       <div className={styles.projectCard__actions}>
         {project.behance && (
-          <Button theme="dark" href={project.behance} target="_blank">
-            <Behance height={20} width={20} />
-            <Text view="p-16" weight="medium">
+          <a href={project.behance} target="_blank" rel="noopener noreferrer">
+            <Behance height={16} width={16} />
+            <Text tag="span" view="p-14" weight="medium">
               Behance
             </Text>
-          </Button>
+            <IconArrowUpRight size={15} stroke={1.6} />
+          </a>
         )}
         {project.github && (
-          <Button
-            theme="dark"
-            className={styles.projectCard__github}
+          <a
             href={project.github}
             target="_blank"
+            rel="noopener noreferrer"
           >
-            <Github width={20} height={20} />
-            <Text view="p-16" weight="medium">
-              Репозиторий
+            <Github width={16} height={16} />
+            <Text tag="span" view="p-14" weight="medium">
+              GitHub
             </Text>
-          </Button>
+            <IconArrowUpRight size={15} stroke={1.6} />
+          </a>
         )}
-        {project.link && (
-          <Button
-            theme="accent"
-            href={project.disabled ? undefined : project.link}
-            target="_blank"
-            disabled={project.disabled}
-          >
-            <Text view="p-16" weight="medium">
-              Перейти
+        {project.link && !project.disabled && (
+          <a href={project.link} target="_blank" rel="noopener noreferrer">
+            <IconExternalLink size={16} stroke={1.6} />
+            <Text tag="span" view="p-14" weight="medium">
+              Открыть
             </Text>
-          </Button>
+            <IconArrowUpRight size={15} stroke={1.6} />
+          </a>
+        )}
+        {project.disabled && (
+          <Text tag="span" view="p-12" className={styles.projectCard__soon}>
+            Скоро
+          </Text>
         )}
       </div>
-    </div>
+    </article>
   );
 };
 

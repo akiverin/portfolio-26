@@ -6,7 +6,7 @@ export type SkeletonProps = {
   width?: string | number;
   height?: string | number;
   borderRadius?: string | number;
-  /** Use light variant for light backgrounds ($project-bg) */
+  /** Use the higher-contrast variant on dark showcase surfaces. */
   light?: boolean;
   className?: string;
 };

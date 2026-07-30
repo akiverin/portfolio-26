@@ -3,13 +3,25 @@ import styles from './AchievementCard.module.scss';
 import classNames from 'classnames';
 import { Achievement } from 'entities/Achievement/model/types';
 import Text from 'shared/ui/Text';
-import Button from 'shared/ui/Button';
 import Badge, { ColorsBadgeT, IconsBadgeT } from 'shared/ui/Badge';
 import { ImageWithFallback } from 'shared/ui/ImageWithFallback';
+import { IconArrowUpRight, IconCalendarEvent } from '@tabler/icons-react';
+import { VideoWithFallback } from 'shared/ui/VideoWithFallback';
+import { getMediaUrl, isVideoMedia } from 'shared/lib/media';
 
 const MONTHS_RU = [
-  'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-  'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря',
+  'января',
+  'февраля',
+  'марта',
+  'апреля',
+  'мая',
+  'июня',
+  'июля',
+  'августа',
+  'сентября',
+  'октября',
+  'ноября',
+  'декабря',
 ];
 
 const formatAchievementDate = (date: { seconds: number }): string => {
@@ -30,15 +42,29 @@ const AchievementCard: React.FC<AchievementCardProps> = ({
   showDate,
   fullDescription,
 }) => {
+  const mediaUrl = getMediaUrl(achievement.cover, 'achievements');
+  const isVideo = isVideoMedia(achievement.cover, achievement.coverType);
+
   return (
-    <div className={classNames(styles.achievementCard, className)}>
+    <article className={classNames(styles.achievementCard, className)}>
       <div className={styles.achievementCard__cover}>
-        <ImageWithFallback
-          src={`https://andkiv.com/assets/achievements/${achievement.cover}`}
-          className={styles.achievementCard__image}
-          alt={achievement.title}
-          loading="lazy"
-        />
+        {isVideo ? (
+          <VideoWithFallback
+            src={mediaUrl}
+            className={styles.achievementCard__image}
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
+        ) : (
+          <ImageWithFallback
+            src={mediaUrl}
+            className={styles.achievementCard__image}
+            alt={achievement.title}
+            loading="lazy"
+          />
+        )}
       </div>
       {achievement.badges && (
         <div className={styles.achievementCard__badges}>
@@ -54,14 +80,15 @@ const AchievementCard: React.FC<AchievementCardProps> = ({
       )}
 
       <div className={styles.achievementCard__info}>
-        <Text view="p-16" maxLines={fullDescription ? undefined : 4} tag="h3" weight="medium">
+        <Text view="p-18" maxLines={fullDescription ? undefined : 3} tag="h3" weight="medium">
           {achievement.title}
         </Text>
-        <Text view="p-14" maxLines={fullDescription ? undefined : 4} color="secondary">
+        <Text view="p-14" maxLines={fullDescription ? undefined : 3} color="secondary">
           {achievement.desc}
         </Text>
         {showDate && achievement.date && (
-          <Text view="p-12" color="secondary" className={styles.achievementCard__date}>
+          <Text tag="span" view="p-12" className={styles.achievementCard__date}>
+            <IconCalendarEvent size={14} stroke={1.5} />
             {formatAchievementDate(achievement.date)}
           </Text>
         )}
@@ -69,14 +96,15 @@ const AchievementCard: React.FC<AchievementCardProps> = ({
 
       <div className={styles.achievementCard__actions}>
         {achievement.link && (
-          <Button theme="accent" href={achievement.link} target="_blank">
-            <Text view="p-16" weight="medium">
-              Подробнее
+          <a href={achievement.link} target="_blank" rel="noopener noreferrer">
+            <Text tag="span" view="p-12" weight="medium">
+              О достижении
             </Text>
-          </Button>
+            <IconArrowUpRight size={17} stroke={1.6} />
+          </a>
         )}
       </div>
-    </div>
+    </article>
   );
 };
 

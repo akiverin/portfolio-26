@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IconAlertTriangle } from '@tabler/icons-react';
+import Text from 'shared/ui/Text';
 import styles from './ConfirmModal.module.scss';
 
 type ConfirmModalProps = {
@@ -35,6 +36,9 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
         >
           <motion.div
             className={styles.modal}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="confirm-modal-title"
             initial={{ opacity: 0, y: 20, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.97 }}
@@ -44,8 +48,18 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
             <div className={styles.modal__icon}>
               <IconAlertTriangle size={28} stroke={1.5} />
             </div>
-            <h3 className={styles.modal__title}>{title}</h3>
-            <p className={styles.modal__message}>{message}</p>
+            <Text
+              id="confirm-modal-title"
+              tag="h3"
+              view="p-18"
+              weight="medium"
+              className={styles.modal__title}
+            >
+              {title}
+            </Text>
+            <Text view="p-14" className={styles.modal__message}>
+              {message}
+            </Text>
             <div className={styles.modal__actions}>
               <button
                 type="button"
@@ -53,7 +67,9 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
                 onClick={onCancel}
                 disabled={loading}
               >
-                Отмена
+                <Text tag="span" view="p-14" weight="medium">
+                  Отмена
+                </Text>
               </button>
               <button
                 type="button"
@@ -61,7 +77,9 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
                 onClick={onConfirm}
                 disabled={loading}
               >
-                {loading ? 'Удаление...' : confirmLabel}
+                <Text tag="span" view="p-14" weight="medium">
+                  {loading ? 'Удаление...' : confirmLabel}
+                </Text>
               </button>
             </div>
           </motion.div>

@@ -12,22 +12,23 @@
   }
 
   &__header {
-    position: relative;
+    grid-column: 1 / -1;
+    display: flex;
     width: fit-content;
-    margin: 0 auto 80px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 8px;
 
     @include smallerThanTablet {
-      margin-bottom: 40px;
+      margin-bottom: 0;
     }
   }
 
-  &__subtitle {
-    position: absolute;
-    top: -32px;
-    right: 0;
-    width: auto;
-    padding-right: 2px;
-    transform: rotate(2deg);
+  &__sectionIndex {
+    color: #7ce8dc;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
   }
 
   &__container {
@@ -106,18 +107,6 @@
     }
   }
 
-  &__backgroundWord {
-    position: absolute;
-    bottom: -0.12em;
-    left: -0.03em;
-    color: rgb(255 255 255 / 2.8%);
-    font-size: clamp(80px, 14vw, 250px);
-    font-weight: 900;
-    letter-spacing: -0.08em;
-    line-height: 1;
-    white-space: nowrap;
-  }
-
   &__intro,
   &__introTop {
     display: flex;
@@ -140,7 +129,7 @@
     align-items: center;
     gap: 8px;
     color: #78eadb;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.04em;
   }
@@ -203,7 +192,9 @@
     border: 1px solid transparent;
     border-radius: 14px;
     color: rgb(255 255 255 / 78%);
-    transition: border-color 0.2s ease, background 0.2s ease;
+    transition:
+      border-color 0.2s ease,
+      background 0.2s ease;
 
     &:hover {
       border-color: rgb(255 255 255 / 8%);
@@ -211,7 +202,7 @@
 
       & .contact__socialArrow {
         color: #79eadc;
-        transform: translate(2px, -2px);
+        transform: translateX(2px);
       }
     }
   }
@@ -233,9 +224,8 @@
     flex-direction: column;
     gap: 1px;
 
-    & small {
+    & .contact__socialType {
       color: rgb(255 255 255 / 34%);
-      font-size: 9px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
@@ -243,7 +233,9 @@
 
   &__socialArrow {
     color: rgb(255 255 255 / 28%);
-    transition: color 0.2s ease, transform 0.2s ease;
+    transition:
+      color 0.2s ease,
+      transform 0.2s ease;
   }
 
   &__signature {
@@ -253,7 +245,7 @@
     padding-top: 22px;
     border-top: 1px solid rgb(255 255 255 / 7%);
     color: rgb(255 255 255 / 28%);
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
 

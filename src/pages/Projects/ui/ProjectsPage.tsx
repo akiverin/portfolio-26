@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { motion } from 'framer-motion';
 import styles from './ProjectsPage.module.scss';
@@ -12,7 +12,10 @@ import { useLocalStore } from 'shared/hooks/useLocalStore';
 import { useDebounce } from 'shared/hooks/useDebounce';
 import { Meta } from 'shared/lib/meta';
 import FadeIn from 'shared/ui/FadeIn';
-import { IconSearch } from '@tabler/icons-react';
+import Pagination from 'shared/ui/Pagination';
+import { IconFolder, IconSearch, IconSparkles } from '@tabler/icons-react';
+
+const PAGE_SIZE = 6;
 
 const SORT_OPTIONS = [
   { value: 'date-desc', label: 'Сначала новые' },
@@ -49,6 +52,8 @@ export const ProjectsPage: React.FC = observer(() => {
   const store = useLocalStore(() => new ProjectListStore());
   const [sort, setSort] = useState('date-desc');
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const gridRef = useRef<HTMLDivElement>(null);
   const debouncedSearch = useDebounce(search, 300);
 
   useEffect(() => {
@@ -81,15 +86,39 @@ export const ProjectsPage: React.FC = observer(() => {
     return items;
   }, [store.projects, debouncedSearch, sort]);
 
+  const pageCount = Math.max(1, Math.ceil(filteredAndSorted.length / PAGE_SIZE));
+  const visibleProjects = useMemo(
+    () => filteredAndSorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+    [filteredAndSorted, page],
+  );
+
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, sort]);
+
+  useEffect(() => {
+    if (page > pageCount) setPage(pageCount);
+  }, [page, pageCount]);
+
+  const handlePageChange = (nextPage: number) => {
+    setPage(nextPage);
+    requestAnimationFrame(() => {
+      gridRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  };
+
   return (
     <main className={styles.page}>
       <FadeIn>
         <div className={styles.page__header}>
+          <Text tag="span" view="p-12" className={styles.page__eyebrow}>
+            <IconSparkles size={14} /> Selected work · Archive
+          </Text>
           <Text tag="h1" view="title" weight="black" uppercase>
             Проекты
           </Text>
           <Text view="p-16" color="secondary">
-            Все мои проекты и работы
+            Шесть работ на странице — спокойно изучайте детали и выбирайте интересное.
           </Text>
         </div>
       </FadeIn>
@@ -113,7 +142,7 @@ export const ProjectsPage: React.FC = observer(() => {
           />
         </div>
 
-        <div className={styles.page__grid}>
+        <div className={styles.page__grid} ref={gridRef}>
           {store.meta === Meta.error && (
             <div className={styles.page__empty} role="alert">
               <Text view="p-16" color="accent">
@@ -122,18 +151,18 @@ export const ProjectsPage: React.FC = observer(() => {
             </div>
           )}
           {isLoading &&
-            Array.from({ length: 4 }, (_, i) => <ProjectCardSkeleton key={i} />)}
+            Array.from({ length: PAGE_SIZE }, (_, i) => <ProjectCardSkeleton key={i} />)}
 
           {!isLoading &&
             filteredAndSorted.length > 0 &&
-            filteredAndSorted.map((project, i) => (
+            visibleProjects.map((project, i) => (
               <motion.div
                 key={project.id}
                 variants={cardVariants}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: '-40px' }}
-                custom={i % 3}
+                custom={i}
               >
                 <ProjectCard project={project} />
               </motion.div>
@@ -147,6 +176,20 @@ export const ProjectsPage: React.FC = observer(() => {
             </div>
           )}
         </div>
+
+        {!isLoading && filteredAndSorted.length > 0 && (
+          <div className={styles.page__paginationRow}>
+            <Text tag="span" view="p-12" className={styles.page__resultCount}>
+              <IconFolder size={15} stroke={1.5} /> {filteredAndSorted.length} работ
+            </Text>
+            <Pagination
+              page={page}
+              pageCount={pageCount}
+              onPageChange={handlePageChange}
+              className={styles.page__pagination}
+            />
+          </div>
+        )}
       </div>
     </main>
   );

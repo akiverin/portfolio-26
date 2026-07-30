@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
-import { IconTrash } from '@tabler/icons-react';
+import { IconCheck, IconRefresh, IconUserEdit } from '@tabler/icons-react';
 import Text from 'shared/ui/Text';
 import Button from 'shared/ui/Button';
 import Input from 'shared/ui/Input';
@@ -11,14 +11,21 @@ import { ROUTES } from 'shared/configs/routes';
 import { Meta } from 'shared/lib/meta';
 import { ProfileFormStore } from 'features/profile/model/ProfileFormStore';
 import ConfirmModal from 'features/admin/ui/ConfirmModal';
+import { useNotification } from 'shared/ui/Notifications';
+import AccountActions from './AccountActions';
+import ProfileField from './ProfileField';
+import ProfileSummary from './ProfileSummary';
 import styles from './ProfileForm.module.scss';
 
 const ProfileForm: React.FC = observer(() => {
   const userStore = useUserStore();
   const navigate = useNavigate();
+  const notify = useNotification();
   const form = useLocalStore(() => new ProfileFormStore());
+  const populatedUserId = useRef<string | null>(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const user = userStore.currentUser;
 
   useEffect(() => {
     if (userStore.isInitialized && !userStore.isAuth) {
@@ -27,13 +34,14 @@ const ProfileForm: React.FC = observer(() => {
   }, [userStore.isInitialized, userStore.isAuth, navigate]);
 
   useEffect(() => {
-    if (userStore.currentUser) {
-      form.populateFromUser(userStore.currentUser);
+    if (user && populatedUserId.current !== user.id) {
+      form.populateFromUser(user);
+      populatedUserId.current = user.id;
     }
-  }, [userStore.currentUser, form]);
+  }, [user, form]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     if (!form.validateAll()) return;
 
     const patch = form.getPatch();
@@ -42,16 +50,21 @@ const ProfileForm: React.FC = observer(() => {
     form.setMeta(Meta.loading);
     try {
       await userStore.updateProfile(patch);
-      form.setSuccessMessage('Данные успешно обновлены');
-      form.setMeta(Meta.success);
+      form.commitChanges('Изменения сохранены');
+      notify('Профиль обновлён', 'success');
     } catch {
       form.setMeta(Meta.error);
+      notify('Не удалось обновить профиль', 'error');
     }
   };
 
   const handleSignOut = async () => {
-    await userStore.signOut();
-    navigate(ROUTES.HOME, { replace: true });
+    try {
+      await userStore.signOut();
+      navigate(ROUTES.HOME, { replace: true });
+    } catch {
+      notify('Не удалось завершить сеанс', 'error');
+    }
   };
 
   const handleDeleteAccount = async () => {
@@ -62,29 +75,24 @@ const ProfileForm: React.FC = observer(() => {
     } catch {
       setDeleting(false);
       setDeleteModalOpen(false);
+      notify('Не удалось удалить аккаунт', 'error');
     }
   };
 
   if (!userStore.isInitialized) {
     return (
-      <div className={styles.profile}>
-        <div className={styles.profile__card}>
-          <Text view="p-16" color="secondary">
-            Загрузка...
+      <section className={styles.profile}>
+        <div className={styles.profile__loading} role="status">
+          <span className={styles.profile__spinner} aria-hidden="true" />
+          <Text view="p-16" className={styles.profile__loadingText}>
+            Загружаем профиль
           </Text>
         </div>
-      </div>
+      </section>
     );
   }
 
-  const user = userStore.currentUser;
   if (!user) return null;
-
-  const initials = (user.displayName || user.email || '?')
-    .split(' ')
-    .map((w) => w[0])
-    .join('')
-    .slice(0, 2);
 
   const createdDate = user.createdAt
     ? new Date(user.createdAt.seconds * 1000).toLocaleDateString('ru-RU', {
@@ -95,160 +103,148 @@ const ProfileForm: React.FC = observer(() => {
     : null;
 
   return (
-    <div className={styles.profile}>
-      <div className={styles.profile__card}>
-        <form onSubmit={handleSubmit} className={styles.profile__form}>
-          <div className={styles.profile__header}>
-            <Text view="p-32" tag="h1" weight="bold">
+    <section className={styles.profile} aria-labelledby="profile-title">
+      <div className={styles.profile__grid} aria-hidden="true" />
+      <div className={styles.profile__container}>
+        <header className={styles.profile__pageHeader}>
+          <div>
+            <Text tag="span" view="p-14" className={styles.profile__eyebrow}>
+              Личный кабинет
+            </Text>
+            <Text id="profile-title" tag="h1" view="p-32" weight="medium">
               Профиль
             </Text>
-            <Text view="p-16" color="secondary">
-              Управляйте своими данными
-            </Text>
           </div>
+          <Text view="p-16" className={styles.profile__pageDescription}>
+            Настройки личных данных и аккаунта.
+          </Text>
+        </header>
 
-          <div className={styles.profile__avatarSection}>
-            {user.photoURL ? (
-              <img
-                src={user.photoURL}
-                alt={user.displayName}
-                className={styles.profile__avatar}
-              />
-            ) : (
-              <div className={styles.profile__avatarPlaceholder}>{initials}</div>
-            )}
-            <div className={styles.profile__avatarInfo}>
-              <Text view="p-16" weight="bold">
-                {user.displayName}
-              </Text>
-              <Text view="p-14" color="secondary">
-                {user.email}
-              </Text>
-            </div>
-          </div>
+        <div className={styles.profile__layout}>
+          <ProfileSummary
+            displayName={form.displayName}
+            email={form.email || user.email}
+            photoURL={form.photoURL}
+            role={user.role}
+            createdDate={createdDate}
+          />
 
-          <div className={styles.profile__divider} />
+          <div className={styles.profile__main}>
+            <form onSubmit={handleSubmit} className={styles.profile__settingsCard}>
+              <div className={styles.profile__cardHeader}>
+                <span className={styles.profile__cardIcon} aria-hidden="true">
+                  <IconUserEdit size={20} stroke={1.6} />
+                </span>
+                <div>
+                  <Text tag="h2" view="p-20" weight="medium">
+                    Данные профиля
+                  </Text>
+                  <Text view="p-14" className={styles.profile__cardDescription}>
+                    Имя и фотография, видимые в аккаунте.
+                  </Text>
+                </div>
+              </div>
 
-          <div className={styles.profile__fields}>
-            <div className={styles.profile__field}>
-              <Text tag="label" view="p-14" weight="medium" htmlFor="displayName">
-                Имя
-              </Text>
-              <Input
-                id="displayName"
-                type="text"
-                value={form.displayName}
-                onChange={(v) => form.setField('displayName', v)}
-                placeholder="Введите имя"
-              />
-              {form.errors.displayName && (
-                <Text view="p-14" color="accent">
-                  {form.errors.displayName}
+              <div className={styles.profile__fields}>
+                <ProfileField id="displayName" label="Имя" error={form.errors.displayName}>
+                  <Input
+                    id="displayName"
+                    type="text"
+                    value={form.displayName}
+                    onChange={(value) => form.setField('displayName', value)}
+                    placeholder="Введите имя"
+                    autoComplete="name"
+                  />
+                </ProfileField>
+
+                <ProfileField id="email" label="Email" helper="Email используется для входа">
+                  <Input
+                    id="email"
+                    type="email"
+                    value={form.email}
+                    onChange={(value) => form.setField('email', value)}
+                    placeholder="Введите email"
+                    autoComplete="email"
+                    disabled
+                  />
+                </ProfileField>
+
+                <ProfileField
+                  id="photoURL"
+                  label="Ссылка на фотографию"
+                  error={form.errors.photoURL}
+                >
+                  <Input
+                    id="photoURL"
+                    type="url"
+                    value={form.photoURL}
+                    onChange={(value) => form.setField('photoURL', value)}
+                    placeholder="https://example.com/photo.jpg"
+                    autoComplete="url"
+                  />
+                </ProfileField>
+              </div>
+
+              {form.successMessage && (
+                <div className={styles.profile__success} role="status">
+                  <IconCheck size={18} stroke={1.8} aria-hidden="true" />
+                  <Text view="p-14" weight="medium">
+                    {form.successMessage}
+                  </Text>
+                </div>
+              )}
+
+              {form.meta === Meta.error && userStore.error && (
+                <Text view="p-14" color="accent" role="alert">
+                  {userStore.error}
                 </Text>
               )}
-            </div>
 
-            <div className={styles.profile__field}>
-              <Text tag="label" view="p-14" weight="medium" htmlFor="email">
-                Email
-              </Text>
-              <Input
-                id="email"
-                type="email"
-                value={form.email}
-                onChange={(v) => form.setField('email', v)}
-                placeholder="Введите email"
-                disabled
-              />
-              <Text view="p-12" color="secondary">
-                Email нельзя изменить
-              </Text>
-            </div>
+              <div className={styles.profile__formActions}>
+                {form.isDirty && (
+                  <button
+                    type="button"
+                    className={styles.profile__resetButton}
+                    onClick={() => form.resetChanges()}
+                  >
+                    <IconRefresh size={17} stroke={1.6} aria-hidden="true" />
+                    <Text tag="span" view="p-14" weight="medium">
+                      Отменить изменения
+                    </Text>
+                  </button>
+                )}
+                <Button
+                  type="submit"
+                  theme="accent"
+                  loading={form.meta === Meta.loading}
+                  disabled={!form.isDirty}
+                  className={styles.profile__saveButton}
+                >
+                  <Text view="p-14" weight="medium">
+                    Сохранить
+                  </Text>
+                </Button>
+              </div>
+            </form>
 
-            <div className={styles.profile__field}>
-              <Text tag="label" view="p-14" weight="medium" htmlFor="photoURL">
-                Ссылка на фото
-              </Text>
-              <Input
-                id="photoURL"
-                type="url"
-                value={form.photoURL}
-                onChange={(v) => form.setField('photoURL', v)}
-                placeholder="https://example.com/photo.jpg"
-              />
-            </div>
+            <AccountActions
+              onSignOut={() => void handleSignOut()}
+              onDelete={() => setDeleteModalOpen(true)}
+            />
           </div>
-
-          {form.successMessage && (
-            <div className={styles.profile__success}>
-              <Text view="p-14" weight="medium">
-                {form.successMessage}
-              </Text>
-            </div>
-          )}
-
-          {userStore.meta === Meta.error && userStore.error && (
-            <Text view="p-14" color="accent">
-              {userStore.error}
-            </Text>
-          )}
-
-          <div className={styles.profile__actions}>
-            <Button
-              type="submit"
-              theme="accent"
-              loading={form.meta === Meta.loading}
-              disabled={!form.isDirty}
-            >
-              <Text view="p-16" weight="medium">
-                Сохранить
-              </Text>
-            </Button>
-          </div>
-
-          <div className={styles.profile__divider} />
-
-          {createdDate && (
-            <div className={styles.profile__meta}>
-              <Text view="p-12" color="secondary">
-                Аккаунт создан: {createdDate}
-              </Text>
-              {user.role && (
-                <Text view="p-12" color="secondary">
-                  Роль: {user.role}
-                </Text>
-              )}
-            </div>
-          )}
-
-          <div className={styles.profile__dangerZone}>
-            <Button type="button" onClick={handleSignOut}>
-              <Text view="p-16" weight="medium">
-                Выйти из аккаунта
-              </Text>
-            </Button>
-            <button
-              type="button"
-              className={styles.profile__deleteBtn}
-              onClick={() => setDeleteModalOpen(true)}
-            >
-              <IconTrash size={16} stroke={1.5} />
-              Удалить аккаунт
-            </button>
-          </div>
-        </form>
+        </div>
       </div>
 
       <ConfirmModal
         isOpen={deleteModalOpen}
         title="Удаление аккаунта"
-        message="Вы уверены, что хотите удалить свой аккаунт? Это действие необратимо — все данные будут безвозвратно утеряны."
+        message="Удалить аккаунт и связанные с ним данные? Это действие нельзя отменить."
         confirmLabel="Удалить аккаунт"
         loading={deleting}
-        onConfirm={handleDeleteAccount}
+        onConfirm={() => void handleDeleteAccount()}
         onCancel={() => setDeleteModalOpen(false)}
       />
-    </div>
+    </section>
   );
 });
 

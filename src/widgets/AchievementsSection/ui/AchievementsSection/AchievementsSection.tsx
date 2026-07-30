@@ -1,46 +1,49 @@
+import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import {
+  IconArrowUpRight,
+  IconAward,
+  IconEye,
+  IconEyeOff,
+  IconRosetteDiscountCheck,
+} from '@tabler/icons-react';
 import styles from './AchievementsSection.module.scss';
 import Text from 'shared/ui/Text';
-import { useEffect, useState } from 'react';
-import {
-  AchievementListStore,
-} from 'entities/Achievement/stores/AchievementListStore';
+import { AchievementListStore } from 'entities/Achievement/stores/AchievementListStore';
 import AchievementCard from 'entities/Achievement/ui/AchievementCard';
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useLocalStore } from 'shared/hooks/useLocalStore';
 import Skeleton from 'shared/ui/Skeleton';
 import { Meta } from 'shared/lib/meta';
-import FadeIn from 'shared/ui/FadeIn';
-import Button from 'shared/ui/Button';
-import { AnimatedCheckbox } from 'shared/ui/AnimatedCheckbox';
 import { ROUTES } from 'shared/configs/routes';
 
 const DISPLAY_COUNT = 6;
-const SKELETON_COUNT = 6;
 
 const AchievementCardSkeleton: React.FC = () => (
   <div className={styles.achievements__skeletonCard}>
-    <Skeleton light borderRadius={12} className={styles.achievements__skeletonCover} />
+    <Skeleton light borderRadius={16} className={styles.achievements__skeletonCover} />
     <div className={styles.achievements__skeletonInfo}>
-      <Skeleton light width="70%" height={16} />
-      <Skeleton light width="90%" height={14} />
+      <Skeleton light width="72%" height={18} />
+      <Skeleton light width="92%" height={14} />
     </div>
   </div>
 );
 
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.07 } },
+};
+
 const cardVariants = {
-  hidden: { opacity: 0, y: 30, scale: 0.97 },
-  visible: (i: number) => ({
+  hidden: { opacity: 0, y: 38, rotateX: 7, filter: 'blur(6px)' },
+  visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.4,
-      delay: i * 0.06,
-      ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
-    },
-  }),
+    rotateX: 0,
+    filter: 'blur(0px)',
+    transition: { type: 'spring' as const, damping: 24, stiffness: 110 },
+  },
 };
 
 const AchievementsSection: React.FC = observer(() => {
@@ -55,85 +58,99 @@ const AchievementsSection: React.FC = observer(() => {
 
   return (
     <section className={styles.achievements} id="achievements">
-      <FadeIn>
-        <div className={styles.achievements__info}>
-          <Text
-            font="caveat"
-            view="p-24"
-            weight="medium"
-            color="secondary"
-            className={styles.achievements__desc}
-          >
-            с 2021 по сей день
-          </Text>
-          <Text tag="h2" view="title" weight="black" uppercase>
-            <span className={styles.achievements__titleSpan}>
-              Последние <br />
-              достижения
-              <DotLottieReact
-                className={styles.achievements__decorate}
-                src="https://assets.awwwards.com/assets/redesign/images/lottie/laurel-wreath.json"
-                loop
-                autoplay
-              />
-            </span>
-          </Text>
+      <div className={styles.achievements__shell}>
+        <div className={styles.achievements__background} aria-hidden="true">
+          <div className={styles.achievements__radar} />
         </div>
-      </FadeIn>
 
-      <FadeIn delay={0.15}>
-        <div className={styles.achievements__content}>
-          <div className={styles.achievements__controls}>
-            <AnimatedCheckbox
-              checked={showDates}
-              onChange={setShowDates}
-              label={
-                <Text view="p-14" weight="medium">
-                  Показывать дату
-                </Text>
-              }
-            />
+        <motion.header
+          className={styles.achievements__header}
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-70px' }}
+          transition={{ duration: 0.65, ease: [0.2, 0.7, 0.2, 1] }}
+        >
+          <div className={styles.achievements__heading}>
+            <Text tag="span" view="p-14" className={styles.achievements__eyebrow}>
+              <IconRosetteDiscountCheck size={15} stroke={1.6} /> 03 · Recognition
+            </Text>
+            <Text tag="h2" view="title" weight="black" uppercase>
+              Достижения
+            </Text>
           </div>
 
-          <div className={styles.achievements__list}>
-            {isLoading &&
-              Array.from({ length: SKELETON_COUNT }, (_, i) => (
-                <AchievementCardSkeleton key={i} />
-              ))}
-
-            {!isLoading &&
-              store.achievements.length > 0 &&
-              store.achievements.map((achievement, i) => (
-                <motion.div
-                  key={achievement.id}
-                  variants={cardVariants}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, margin: '-40px' }}
-                  custom={i % 3}
-                >
-                  <AchievementCard achievement={achievement} showDate={showDates} />
-                </motion.div>
-              ))}
-
-            {!isLoading && store.achievements.length === 0 && (
-              <div className={styles.achievements__empty}>
-                <Text view="p-16" color="secondary">
-                  Ничего не найдено
-                </Text>
-              </div>
-            )}
-          </div>
-
-          <div className={styles.achievements__allBtn}>
-            <Button href={ROUTES.ACHIEVEMENTS} theme="dark">
-              <Text view="p-16" weight="medium">
-                Все достижения
+          <div className={styles.achievements__intro}>
+            <Text tag="p" view="p-16">
+              Награды, публикации и профессиональные результаты — коротко и по существу.
+            </Text>
+            <button
+              type="button"
+              className={styles.achievements__dateToggle}
+              onClick={() => setShowDates((value) => !value)}
+              aria-pressed={showDates}
+            >
+              {showDates ? <IconEyeOff size={16} /> : <IconEye size={16} />}
+              <Text tag="span" view="p-12" weight="medium">
+                {showDates ? 'Скрыть даты' : 'Показать даты'}
               </Text>
-            </Button>
+            </button>
           </div>
-        </div>
-      </FadeIn>
+        </motion.header>
+
+        <motion.div
+          className={styles.achievements__list}
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-80px' }}
+        >
+          {store.meta === Meta.error && (
+            <div className={styles.achievements__empty} role="alert">
+              <IconAward size={28} stroke={1.3} />
+              <Text view="p-14">Не удалось загрузить достижения</Text>
+            </div>
+          )}
+
+          {isLoading &&
+            Array.from({ length: DISPLAY_COUNT }, (_, index) => (
+              <AchievementCardSkeleton key={index} />
+            ))}
+
+          {!isLoading &&
+            store.achievements.slice(0, DISPLAY_COUNT).map((achievement) => (
+              <motion.div key={achievement.id} variants={cardVariants}>
+                <AchievementCard achievement={achievement} showDate={showDates} />
+              </motion.div>
+            ))}
+
+          {!isLoading && store.meta !== Meta.error && store.achievements.length === 0 && (
+            <div className={styles.achievements__empty}>
+              <IconAward size={28} stroke={1.3} />
+              <Text view="p-14">Достижения скоро появятся</Text>
+            </div>
+          )}
+        </motion.div>
+
+        {!isLoading && store.meta !== Meta.error && (
+          <motion.footer
+            className={styles.achievements__footer}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <div className={styles.achievements__footerNote}>
+              <span className={styles.achievements__pulse} />
+              <Text tag="span" view="p-12">
+                Архив обновляется
+              </Text>
+            </div>
+            <Link to={ROUTES.ACHIEVEMENTS} className={styles.achievements__allLink}>
+              Все достижения
+              <IconArrowUpRight size={18} stroke={1.7} />
+            </Link>
+          </motion.footer>
+        )}
+      </div>
     </section>
   );
 });

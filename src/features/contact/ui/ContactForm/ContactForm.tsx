@@ -74,7 +74,9 @@ const ContactForm: React.FC = observer(() => {
     <form onSubmit={handleSubmit} className={styles.contact__form} noValidate>
       <div className={styles.contact__formHeader}>
         <div>
-          <span className={styles.contact__formIndex}>Форма заявки · 01</span>
+          <Text tag="span" view="p-12" className={styles.contact__formIndex}>
+            Форма заявки · 01
+          </Text>
           <Text tag="h3" view="p-24" weight="bold" className={styles.contact__formTitle}>
             Расскажите о задаче
           </Text>
@@ -83,7 +85,9 @@ const ContactForm: React.FC = observer(() => {
       </div>
 
       <fieldset className={styles.contact__projectFieldset}>
-        <legend>Что нужно сделать?</legend>
+        <legend>
+          <Text tag="span" view="p-14" weight="medium">Что нужно сделать?</Text>
+        </legend>
         <div className={styles.contact__projectTypes}>
           {PROJECT_TYPES.map((type) => (
             <label
@@ -101,7 +105,7 @@ const ContactForm: React.FC = observer(() => {
                 checked={form.projectType === type.value}
                 onChange={(event) => form.setField('projectType', event.target.value)}
               />
-              <span>{type.label}</span>
+              <Text tag="span" view="p-14" weight="medium">{type.label}</Text>
             </label>
           ))}
         </div>
@@ -157,7 +161,9 @@ const ContactForm: React.FC = observer(() => {
             <Text tag="label" view="p-12" weight="medium" htmlFor="contact-message">
               О проекте
             </Text>
-            <span>{form.message.length} / {MESSAGE_LIMIT}</span>
+            <Text tag="span" view="p-12">
+              {form.message.length} / {MESSAGE_LIMIT}
+            </Text>
           </div>
           <Textarea
             id="contact-message"
@@ -179,7 +185,9 @@ const ContactForm: React.FC = observer(() => {
 
       {form.meta === Meta.error && (
         <div className={styles.contact__error} role="alert">
-          Не удалось отправить сообщение. Проверьте соединение и попробуйте ещё раз.
+          <Text view="p-14">
+            Не удалось отправить сообщение. Проверьте соединение и попробуйте ещё раз.
+          </Text>
         </div>
       )}
 
@@ -195,9 +203,11 @@ const ContactForm: React.FC = observer(() => {
           </Text>
           <IconArrowUpRight size={18} stroke={1.8} />
         </Button>
-        <Text tag="p" view="p-10" className={styles.contact__legal}>
+        <Text tag="p" view="p-12" className={styles.contact__legal}>
           Нажимая кнопку, вы соглашаетесь с{' '}
-          <Link to={ROUTES.PRIVACY}>политикой конфиденциальности</Link>
+          <Link to={ROUTES.PRIVACY}>
+            <Text tag="span" view="p-12">политикой конфиденциальности</Text>
+          </Link>
         </Text>
       </div>
     </form>

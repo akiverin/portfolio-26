@@ -96,16 +96,11 @@
     color: $white;
     text-decoration: none;
 
-    @include transition(background, border-color, transform);
+    @include transition(background, border-color);
 
     &:hover {
       background: rgb(255, 255, 255, 10%);
       border-color: rgb(66, 189, 218, 40%);
-      transform: translateY(-2px);
-    }
-
-    &:active {
-      transform: translateY(0);
     }
   }
 }

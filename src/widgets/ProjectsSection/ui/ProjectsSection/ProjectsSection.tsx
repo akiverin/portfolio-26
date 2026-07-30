@@ -1,43 +1,49 @@
+import { useEffect, useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { IconArrowUpRight, IconCode, IconSparkles } from '@tabler/icons-react';
 import styles from './ProjectsSection.module.scss';
 import Text from 'shared/ui/Text';
-import Button from 'shared/ui/Button';
 import { ProjectListStore } from 'entities/Project/stores/ProjectListStore';
-import { useMemo, useEffect } from 'react';
 import ProjectCard from 'entities/Project/ui/ProjectCard';
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useLocalStore } from 'shared/hooks/useLocalStore';
 import { Meta } from 'shared/lib/meta';
 import Skeleton from 'shared/ui/Skeleton';
-import FadeIn from 'shared/ui/FadeIn';
 import { ROUTES } from 'shared/configs/routes';
 
-const DISPLAY_COUNT = 5;
-const SKELETON_COUNT = 4;
+const DISPLAY_COUNT = 6;
 
 const ProjectCardSkeleton: React.FC = () => (
   <div className={styles.projects__skeletonCard}>
-    <Skeleton light borderRadius={12} className={styles.projects__skeletonCover} />
+    <Skeleton light borderRadius={16} className={styles.projects__skeletonCover} />
     <div className={styles.projects__skeletonInfo}>
-      <Skeleton light width="55%" height={24} />
-      <Skeleton light width="80%" height={16} />
+      <Skeleton light width="58%" height={24} />
+      <Skeleton light width="88%" height={14} />
     </div>
   </div>
 );
 
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.08 },
+  },
+};
+
 const cardVariants = {
-  hidden: { opacity: 0, y: 40, filter: 'blur(4px)' },
-  visible: (i: number) => ({
+  hidden: { opacity: 0, y: 44, scale: 0.97, filter: 'blur(7px)' },
+  visible: {
     opacity: 1,
     y: 0,
+    scale: 1,
     filter: 'blur(0px)',
     transition: {
-      duration: 0.5,
-      delay: i * 0.1,
-      ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
+      type: 'spring' as const,
+      damping: 24,
+      stiffness: 105,
     },
-  }),
+  },
 };
 
 const ProjectsSection: React.FC = observer(() => {
@@ -48,64 +54,83 @@ const ProjectsSection: React.FC = observer(() => {
   }, [store]);
 
   const isLoading = store.meta === Meta.initial || store.meta === Meta.loading;
-
-  const latestProjects = useMemo(
-    () => store.projects.slice(0, DISPLAY_COUNT),
-    [store.projects],
-  );
+  const latestProjects = useMemo(() => store.projects.slice(0, DISPLAY_COUNT), [store.projects]);
 
   return (
     <section className={styles.projects} id="projects">
-      <FadeIn>
-        <div className={styles.projects__info}>
-          <Text
-            font="caveat"
-            view="p-24"
-            weight="medium"
-            color="secondary"
-            className={styles.projects__desc}
-          >
-            с 2021 по сей день
-          </Text>
-          <Text tag="h2" view="title" weight="black" uppercase>
-            Последние <br />
-            проекты
-          </Text>
-          <DotLottieReact
-            className={styles.projects__decorate}
-            src="https://lottie.host/c9b6b0f9-6f25-4988-bf22-68c0dd970e57/BEvlo1T9Ft.lottie"
-            autoplay
-          />
+      <div className={styles.projects__shell}>
+        <div className={styles.projects__background} aria-hidden="true">
+          <div className={styles.projects__glow} />
+          <div className={styles.projects__gridPattern} />
         </div>
-      </FadeIn>
-      <div className={styles.projects__list}>
-        {isLoading
-          ? Array.from({ length: SKELETON_COUNT }, (_, i) => <ProjectCardSkeleton key={i} />)
-          : latestProjects.map((project, i) => (
-              <motion.div
-                key={project.id}
-                variants={cardVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '-60px' }}
-                custom={i % 2}
-              >
+
+        <motion.header
+          className={styles.projects__header}
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-70px' }}
+          transition={{ duration: 0.65, ease: [0.2, 0.7, 0.2, 1] }}
+        >
+          <div className={styles.projects__heading}>
+            <Text tag="span" view="p-14" className={styles.projects__eyebrow}>
+              <IconSparkles size={14} stroke={1.6} /> 02 · Selected work
+            </Text>
+            <Text tag="h2" view="title" weight="black" uppercase>
+              Проекты
+            </Text>
+          </div>
+          <div className={styles.projects__intro}>
+            <Text tag="p" view="p-16">
+              От продуктовой логики до последнего пикселя — проекты, где дизайн работает вместе с
+              кодом.
+            </Text>
+          </div>
+        </motion.header>
+
+        <motion.div
+          className={styles.projects__list}
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-80px' }}
+        >
+          {store.meta === Meta.error && (
+            <div className={styles.projects__empty} role="alert">
+              <IconCode size={28} stroke={1.3} />
+              <Text view="p-14">Не удалось загрузить проекты</Text>
+            </div>
+          )}
+
+          {isLoading &&
+            Array.from({ length: DISPLAY_COUNT }, (_, index) => (
+              <ProjectCardSkeleton key={index} />
+            ))}
+
+          {!isLoading &&
+            latestProjects.map((project) => (
+              <motion.div key={project.id} variants={cardVariants}>
                 <ProjectCard project={project} />
               </motion.div>
             ))}
-      </div>
+        </motion.div>
 
-      {!isLoading && store.projects.length > DISPLAY_COUNT && (
-        <FadeIn delay={0.2}>
-          <div className={styles.projects__allBtn}>
-            <Button href={ROUTES.PROJECTS} theme="dark">
-              <Text view="p-16" weight="medium">
-                Все проекты
-              </Text>
-            </Button>
-          </div>
-        </FadeIn>
-      )}
+        {!isLoading && store.meta !== Meta.error && (
+          <motion.div
+            className={styles.projects__footer}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <Text tag="span" view="p-12">
+              {store.projects.length} работ в коллекции
+            </Text>
+            <Link to={ROUTES.PROJECTS} className={styles.projects__allLink}>
+              Все проекты
+              <IconArrowUpRight size={18} stroke={1.7} />
+            </Link>
+          </motion.div>
+        )}
+      </div>
     </section>
   );
 });

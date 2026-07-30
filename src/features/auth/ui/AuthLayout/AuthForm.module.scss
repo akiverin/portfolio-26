@@ -1,0 +1,166 @@
+@use "sizes" as *;
+
+.form,
+.header,
+.fields,
+.field,
+.actions {
+  display: flex;
+  flex-direction: column;
+}
+
+.form {
+  width: 100%;
+  gap: 22px;
+}
+
+.header {
+  gap: 8px;
+  margin-bottom: 2px;
+
+  & > :last-child {
+    color: rgb(255 255 255 / 48%);
+  }
+}
+
+.title {
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+}
+
+.fields {
+  gap: $space-m;
+}
+
+.field {
+  gap: 8px;
+
+  & > label {
+    color: rgb(255 255 255 / 58%);
+  }
+}
+
+.actions {
+  align-items: stretch;
+  gap: 10px;
+
+  & > button:first-child {
+    min-height: 48px;
+    border-radius: 12px;
+  }
+}
+
+.back,
+.passwordToggle,
+.textButton {
+  border: 0;
+  background: transparent;
+  color: rgb(255 255 255 / 44%);
+}
+
+.back {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+
+  &:hover,
+  &:focus-visible {
+    color: #69e2d4;
+  }
+}
+
+.passwordToggle {
+  display: grid;
+  padding: 5px;
+  place-items: center;
+  transition: color 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    color: #fff;
+  }
+}
+
+.textButton {
+  width: fit-content;
+  align-self: center;
+  padding: 0;
+  transition: color 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    color: #fff;
+  }
+}
+
+.link {
+  color: #69e2d4;
+  transition: color 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    color: #a0f1e8;
+  }
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  & span {
+    height: 1px;
+    flex: 1;
+    background: rgb(255 255 255 / 7%);
+  }
+
+  & p {
+    color: rgb(255 255 255 / 36%);
+  }
+}
+
+.providerButton {
+  min-height: 48px;
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 12px;
+  background-image: none;
+  background-color: rgb(255 255 255 / 4%);
+  box-shadow: none;
+
+  &:hover,
+  &:active {
+    border-color: rgb(105 226 212 / 22%);
+    background-image: none !important;
+    background-color: rgb(255 255 255 / 7%);
+    box-shadow: none !important;
+  }
+}
+
+.legal {
+  text-align: center;
+
+  & a {
+    display: inline-flex;
+  }
+}
+
+.terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  line-height: 1.5;
+
+  & p {
+    color: rgb(255 255 255 / 48%);
+  }
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  accent-color: #42bdda;
+}

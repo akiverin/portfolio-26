@@ -275,12 +275,12 @@
   }
 
   &__primaryAction {
-    background: $white;
-    color: #091016;
+    border: 1px solid rgb(255 255 255 / 11%);
+    background: #111a20;
+    color: #f3f7f8;
 
     &:hover {
       background: #8ff4e7;
-      transform: translateY(-2px);
     }
   }
 
@@ -293,7 +293,6 @@
     &:hover {
       border-color: rgb(143 244 231 / 42%);
       color: $white;
-      transform: translateY(-2px);
     }
   }
 

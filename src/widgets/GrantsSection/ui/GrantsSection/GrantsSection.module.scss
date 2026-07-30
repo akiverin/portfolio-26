@@ -1,184 +1,374 @@
-@use "mixins" as *;
 @use "adaptive" as *;
-@use "colors" as *;
 
 .grants {
-  @include paddingTop;
-
-  position: relative;
+  margin-top: 180px;
 
   @include smallerThanTablet {
-    padding-top: 40px;
+    margin-top: 100px;
   }
 
-  &__head {
-    text-align: center;
+  &__shell {
     position: relative;
-    width: fit-content;
-    margin: 0 auto 80px;
+    display: grid;
+    overflow: hidden;
+    grid-template-columns: minmax(270px, 0.72fr) minmax(520px, 1.28fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    column-gap: clamp(36px, 7vw, 112px);
+    row-gap: 14px;
+    padding: clamp(30px, 5vw, 72px);
+    border: 1px solid rgb(255 255 255 / 8%);
+    border-radius: 32px;
+    background: #101716;
+    color: #f3f7f6;
+    isolation: isolate;
+
+    @include smallerThanLaptop {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      gap: 50px;
+    }
 
     @include smallerThanTablet {
-      margin-bottom: 40px;
+      gap: 38px;
+      padding: 28px 14px 18px;
+      border-radius: 24px;
     }
   }
 
-  &__titleSpan {
-    position: relative;
+  &__background {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
   }
 
-  &__desc {
+  &__halo {
     position: absolute;
-    top: -32px;
-    right: 0;
-    width: auto;
-    transform: rotate(2deg);
-    padding-right: 2px;
+    width: 740px;
+    height: 740px;
+    top: -470px;
+    left: -320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgb(161 213 92 / 24%), transparent 64%);
+    filter: blur(15px);
+    animation: grant-halo 10s ease-in-out infinite alternate;
   }
 
-  &__decorate {
+  &__orbit {
     position: absolute;
-    top: 40%;
-    left: 70%;
-    width: 160px;
+    width: 560px;
+    height: 560px;
+    right: -390px;
+    bottom: -330px;
+    border: 1px solid rgb(185 235 121 / 8%);
+    border-radius: 50%;
 
-    @include smallerThanTablet {
-      width: 100px;
-      left: 75%;
+    &::before,
+    &::after {
+      position: absolute;
+      border: 1px solid rgb(185 235 121 / 7%);
+      border-radius: inherit;
+      content: "";
+    }
+
+    &::before {
+      inset: 18%;
+    }
+
+    &::after {
+      inset: 36%;
     }
   }
 
-  &__details {
+  &__aside {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 42px;
+    grid-column: 1;
+    grid-row: 1;
+
+    @include smallerThanTablet {
+      padding: 0 8px;
+    }
+  }
+
+  &__heading {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+    & h2 {
+      letter-spacing: -0.055em;
+      line-height: 0.86;
+    }
+
+    & p {
+      max-width: 440px;
+      color: rgb(255 255 255 / 50%);
+      line-height: 1.55;
+    }
+  }
+
+  &__eyebrow {
     display: flex;
     align-items: center;
-    column-gap: 6px;
-    flex-wrap: wrap;
+    gap: 8px;
+    color: #b7e77e;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+  }
+
+  &__asideNote {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: rgb(255 255 255 / 36%);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  &__archive {
+    min-width: 0;
+    padding: 8px;
+    border: 1px solid rgb(255 255 255 / 8%);
+    border-radius: 24px;
+    background: rgb(255 255 255 / 4%);
+    backdrop-filter: blur(16px);
+    grid-column: 2;
+    grid-row: 1 / span 2;
+
+    @include smallerThanLaptop {
+      grid-column: 1;
+      grid-row: auto;
+    }
+  }
+
+  &__archiveHeader {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(210px, 270px);
+    align-items: center;
+    gap: 20px;
+    padding: 8px 8px 16px 14px;
+    color: rgb(255 255 255 / 30%);
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+
+    @include smallerThanPhone {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__sort {
+    grid-column: 2;
+    width: 100%;
+
+    @include smallerThanPhone {
+      grid-column: 1;
+    }
+
+    --input-bg: rgb(255 255 255 / 7%);
+    --input-text: #f3f7f6;
+    --input-placeholder: rgb(255 255 255 / 40%);
   }
 
   &__content {
     display: flex;
     flex-direction: column;
-    padding: 0 0 40px;
-    position: relative;
-    max-height: 240px;
-    overflow-y: hidden;
-    transition: max-height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-
-    &::before {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 200px;
-      background: linear-gradient(180deg, rgb(255 255 255 / 0%) 0%, $white 100%);
-      backdrop-filter: blur(0.2px);
-      z-index: 2;
-      pointer-events: none;
-      transition: opacity 0.6s ease;
-    }
-  }
-
-  &__content--active {
-    max-height: 2000px;
-
-    &::before {
-      opacity: 0;
-    }
-  }
-
-  &__buttonWrapper {
-    display: flex;
-    justify-content: center;
-    position: relative;
-    z-index: 5;
-    margin-top: -30px;
   }
 
   &__item {
-    border-bottom: 1px solid rgb(0 0 0 / 8%);
-    padding: 16px 0;
-    display: flex;
-    justify-content: space-between;
+    position: relative;
+    display: grid;
+    min-width: 0;
+    grid-template-columns: 52px minmax(0, 1fr) auto;
     align-items: center;
     gap: 16px;
+    padding: 18px 14px;
+    border-top: 1px solid rgb(255 255 255 / 8%);
+    transition:
+      background 0.25s ease,
+      border-color 0.25s ease;
 
-    &:first-child {
-      border-top: 1px solid rgb(0 0 0 / 8%);
+    &:hover {
+      border-color: rgb(187 233 129 / 20%);
+      background: rgb(183 231 126 / 5%);
+
+      & .grants__iconBox {
+        border-color: rgb(183 231 126 / 28%);
+        background: rgb(255 255 255 / 15%);
+        color: #c8f391;
+        transform: rotate(-3deg);
+      }
+    }
+
+    @include smallerThanTablet {
+      grid-template-columns: 44px minmax(0, 1fr);
+      gap: 12px;
+      padding: 16px 10px;
     }
   }
 
-  &__dates {
-    text-align: end;
-    flex-shrink: 0;
+  &__iconBox {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgb(255 255 255 / 12%);
+    border-radius: 12px;
+    background: rgb(255 255 255 / 11%);
+    color: rgb(255 255 255 / 76%);
+    place-items: center;
+    transition:
+      border-color 0.25s ease,
+      background 0.25s ease,
+      color 0.25s ease,
+      transform 0.25s ease;
+
+    & svg {
+      max-width: 22px;
+      max-height: 22px;
+    }
+  }
+
+  &__copy {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 6px;
+
+    & h3 {
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+    }
+
+    & p {
+      color: rgb(255 255 255 / 42%);
+      line-height: 1.45;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    min-width: 150px;
+    align-items: flex-end;
+    flex-direction: column;
+    gap: 7px;
+    text-align: right;
+
+    & .grants__amount {
+      color: #d2f3a9;
+      font-variant-numeric: tabular-nums;
+    }
+
+    & .grants__period {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: rgb(255 255 255 / 34%);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    @include smallerThanTablet {
+      grid-column: 2;
+      min-width: 0;
+      align-items: flex-start;
+      text-align: left;
+    }
+  }
+
+  &__skeletonCopy {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 8px;
   }
 
   &__expandBtn {
-    z-index: 5;
-    position: relative;
     display: flex;
+    width: calc(100% - 12px);
+    min-height: 48px;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin: 0 auto;
-    margin-top: -10px;
-    padding: 12px 28px;
-    border: 1px solid rgb(0 0 0 / 10%);
-    border-radius: 100px;
-    background: rgb(255 255 255 / 95%);
-    backdrop-filter: blur(20px);
-    color: #333;
-    font-family: Pretendard, sans-serif;
-    font-size: 14px;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 6px;
+    padding: 0 14px;
+    border: 1px solid rgb(255 255 255 / 9%);
+    border-radius: 14px;
+    background: rgb(255 255 255 / 5%);
+    color: rgb(255 255 255 / 68%);
     font-weight: 500;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    white-space: nowrap;
-    box-shadow: 0 4px 20px rgb(0 0 0 / 8%);
+    transition:
+      border-color 0.2s ease,
+      background 0.2s ease,
+      color 0.2s ease;
+
+    & > span:last-child {
+      display: flex;
+    }
 
     &:hover {
-      border-color: rgb(66 189 218 / 40%);
-      color: #1a1a1a;
-      background: #fff;
-      box-shadow: 0 4px 24px rgb(66 189 218 / 12%);
-      transform: translateY(-1px);
-    }
-
-    &:active {
-      transform: translateY(0);
+      border-color: rgb(183 231 126 / 24%);
+      background: rgb(183 231 126 / 8%);
+      color: #d4f6a8;
     }
   }
 
-  &__expandLabel {
-    line-height: 1;
+  &__summary {
+    display: grid;
+    grid-column: 1;
+    grid-row: 2;
+    grid-template-columns: 1fr;
+    align-self: end;
+    overflow: hidden;
+    margin: 0;
+    border: 1px solid rgb(183 231 126 / 14%);
+    border-radius: 14px;
+    background: rgb(183 231 126 / 6%);
+
+    & > div {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      gap: 5px;
+      padding: 15px;
+
+      & + div {
+        border-top: 1px solid rgb(183 231 126 / 14%);
+      }
+
+      & > span:first-child {
+        color: rgb(255 255 255 / 46%);
+      }
+
+      & > span:last-child {
+        color: #d2f3a9;
+        font-variant-numeric: tabular-nums;
+      }
+    }
+
+    @include smallerThanLaptop {
+      grid-column: 1;
+      grid-row: auto;
+    }
   }
 
-  &__expandIcon {
-    display: flex;
-    align-items: center;
+  &__empty {
+    display: grid;
+    min-height: 180px;
+    color: rgb(255 255 255 / 40%);
+    place-items: center;
   }
 }
 
-@include smallerThanLaptop {
-  .grants {
-    &__item {
-      flex-direction: column;
-      align-items: start;
-      gap: 8px;
-    }
-
-    &__titles {
-      width: 100%;
-    }
-
-    &__details {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 4px;
-    }
-
-    &__dates {
-      display: flex;
-      gap: 4px;
-      text-align: start;
-    }
+@keyframes grant-halo {
+  to {
+    transform: translate(90px, 70px) scale(1.06);
   }
 }
