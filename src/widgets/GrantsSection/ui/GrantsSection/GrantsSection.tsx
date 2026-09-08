@@ -61,6 +61,16 @@ const formatMonthYear = (date: Date): string => `${MONTHS[date.getMonth()]} ${da
 const formatAmount = (value: string | number): string =>
   `${Number(value).toLocaleString('ru-RU', { maximumFractionDigits: 0 })} ₽`;
 
+const getGrantMonthCount = (startDate: Date, endDate: Date): number => {
+  const months =
+    (endDate.getFullYear() - startDate.getFullYear()) * 12 +
+    endDate.getMonth() -
+    startDate.getMonth() +
+    1;
+
+  return Math.max(1, months);
+};
+
 const GrantItemSkeleton: React.FC = () => (
   <li className={styles.grants__item}>
     <Skeleton width={44} height={44} borderRadius={12} />
@@ -170,6 +180,10 @@ const GrantsSection: React.FC = observer(() => {
                     grant.icon && grant.icon in GRANT_ICONS
                       ? GRANT_ICONS[grant.icon as keyof typeof GRANT_ICONS]
                       : null;
+                  const startDate = timestampToDate(grant.startDate);
+                  const endDate = timestampToDate(grant.endDate);
+                  const monthCount = getGrantMonthCount(startDate, endDate);
+                  const monthlyAmount = Math.round(Number(grant.sum) / monthCount);
 
                   return (
                     <motion.li
@@ -194,18 +208,27 @@ const GrantsSection: React.FC = observer(() => {
                       </div>
 
                       <div className={styles.grants__meta}>
-                        <Text
-                          tag="span"
-                          view="p-16"
-                          weight="bold"
-                          className={styles.grants__amount}
-                        >
-                          {formatAmount(grant.sum)}
-                        </Text>
+                        <div className={styles.grants__amounts}>
+                          <Text
+                            tag="span"
+                            view="p-12"
+                            className={styles.grants__monthlyAmount}
+                            title={`В среднем за период: ${monthCount} мес.`}
+                          >
+                            {formatAmount(monthlyAmount)}/мес
+                          </Text>
+                          <Text
+                            tag="span"
+                            view="p-16"
+                            weight="bold"
+                            className={styles.grants__amount}
+                          >
+                            {formatAmount(grant.sum)}
+                          </Text>
+                        </div>
                         <Text tag="span" view="p-12" className={styles.grants__period}>
                           <IconCalendarEvent size={13} stroke={1.5} />
-                          {formatMonthYear(timestampToDate(grant.startDate))} —{' '}
-                          {formatMonthYear(timestampToDate(grant.endDate))}
+                          {formatMonthYear(startDate)} — {formatMonthYear(endDate)}
                         </Text>
                       </div>
                     </motion.li>

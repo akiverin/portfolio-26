@@ -201,10 +201,10 @@
       background: rgb(183 231 126 / 5%);
 
       & .grants__iconBox {
-        border-color: rgb(183 231 126 / 28%);
-        background: rgb(255 255 255 / 15%);
-        color: #c8f391;
-        transform: rotate(-3deg);
+        border-color: #c8f391;
+        background: #fff;
+        box-shadow: 0 10px 24px rgb(0 0 0 / 18%), 0 0 0 3px rgb(183 231 126 / 10%);
+        color: #527a45;
       }
     }
 
@@ -219,20 +219,21 @@
     display: grid;
     width: 44px;
     height: 44px;
-    border: 1px solid rgb(255 255 255 / 12%);
-    border-radius: 12px;
-    background: rgb(255 255 255 / 11%);
-    color: rgb(255 255 255 / 76%);
+    border: 1px solid rgb(255 255 255 / 76%);
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 7px 18px rgb(0 0 0 / 16%), inset 0 1px 0 rgb(255 255 255 / 92%);
+    color: #3d565a;
     place-items: center;
     transition:
       border-color 0.25s ease,
       background 0.25s ease,
       color 0.25s ease,
-      transform 0.25s ease;
+      box-shadow 0.25s ease;
 
     & svg {
-      max-width: 22px;
-      max-height: 22px;
+      max-width: 25px;
+      max-height: 25px;
     }
   }
 
@@ -261,9 +262,24 @@
     gap: 7px;
     text-align: right;
 
+    & .grants__amounts {
+      display: flex;
+      align-items: baseline;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
     & .grants__amount {
       color: #d2f3a9;
       font-variant-numeric: tabular-nums;
+    }
+
+    & .grants__monthlyAmount {
+      color: #92c98d;
+      font-size: 11px;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
     }
 
     & .grants__period {
@@ -280,6 +296,10 @@
       min-width: 0;
       align-items: flex-start;
       text-align: left;
+
+      & .grants__amounts {
+        justify-content: flex-start;
+      }
     }
   }
 
