@@ -14,6 +14,7 @@ import { GrantListStore } from 'entities/Grant/stores/GrantListStore';
 import GovScience from 'shared/ui/icons/GovScience';
 import Polytech from 'shared/ui/icons/Polytech';
 import Moscow from 'shared/ui/icons/Moscow';
+import Alfa from 'shared/ui/icons/Alfa';
 import Skeleton from 'shared/ui/Skeleton';
 import Select from 'shared/ui/Select';
 import { useLocalStore } from 'shared/hooks/useLocalStore';
@@ -23,6 +24,7 @@ const GRANT_ICONS = {
   govScience: GovScience,
   polytech: Polytech,
   moscow: Moscow,
+  alfa: Alfa,
 };
 
 const COLLAPSED_COUNT = 3;

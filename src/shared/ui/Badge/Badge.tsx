@@ -10,6 +10,10 @@ import Team from 'shared/ui/icons/Team';
 import Code from 'shared/ui/icons/Code';
 import Trophy from 'shared/ui/icons/Trophy';
 import Student from 'shared/ui/icons/Student';
+import GovScience from 'shared/ui/icons/GovScience';
+import Polytech from 'shared/ui/icons/Polytech';
+import Moscow from 'shared/ui/icons/Moscow';
+import Alfa from 'shared/ui/icons/Alfa';
 import {
   IconBolt,
   IconCrown,
@@ -46,7 +50,11 @@ export type IconsBadgeT =
   | 'lightning'
   | 'diamond'
   | 'heart'
-  | 'crown';
+  | 'crown'
+  | 'govScience'
+  | 'polytech'
+  | 'moscow'
+  | 'alfa';
 
 const ICONS: Record<IconsBadgeT, React.ReactNode> = {
   article: <Article height={14} width={14} className={styles.badge__icon} />,
@@ -64,6 +72,10 @@ const ICONS: Record<IconsBadgeT, React.ReactNode> = {
   diamond: <IconDiamond size={14} className={styles.badge__icon} />,
   heart: <IconHeart size={14} className={styles.badge__icon} />,
   crown: <IconCrown size={14} className={styles.badge__icon} />,
+  govScience: <GovScience height={14} width={14} className={styles.badge__icon} />,
+  polytech: <Polytech height={14} width={14} className={styles.badge__icon} />,
+  moscow: <Moscow height={14} width={14} className={styles.badge__icon} />,
+  alfa: <Alfa height={14} width={14} className={styles.badge__icon} />,
 };
 
 export type BadgeProps = {

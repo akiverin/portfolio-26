@@ -1,6 +1,6 @@
 import { Timestamp } from 'firebase/firestore';
 
-type GrantIconName = 'govScience' | 'polytech' | 'moscow';
+type GrantIconName = 'govScience' | 'polytech' | 'moscow' | 'alfa';
 
 export interface Grant {
   id: string;

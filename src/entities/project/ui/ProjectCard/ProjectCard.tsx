@@ -80,11 +80,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
             playsInline
           />
         )}
-        <div className={styles.projectCard__coverMeta}>
-          <Text tag="span" view="p-12" weight="medium">
-            {!isVideo ? 'Case study' : 'Motion project'}
-          </Text>
-        </div>
       </div>
       {!isVideo && (
         <MediaLightbox
@@ -137,11 +132,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
             </Text>
             <IconArrowUpRight size={15} stroke={1.6} />
           </a>
-        )}
-        {project.disabled && (
-          <Text tag="span" view="p-12" className={styles.projectCard__soon}>
-            Скоро
-          </Text>
         )}
       </div>
     </article>

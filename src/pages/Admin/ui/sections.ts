@@ -173,6 +173,7 @@ export const ADMIN_SECTIONS: AdminSection[] = [
         { value: 'govScience', label: 'Правительство' },
         { value: 'polytech', label: 'Политех' },
         { value: 'moscow', label: 'Москва' },
+        { value: 'alfa', label: 'Alfa' },
       ]},
       { key: 'startDate', label: 'Дата начала', type: 'date', required: true },
       { key: 'endDate', label: 'Дата окончания', type: 'date', required: true },
