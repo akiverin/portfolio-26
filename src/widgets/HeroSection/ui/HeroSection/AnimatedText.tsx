@@ -61,7 +61,6 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, className }) => {
                 className={styles.letter}
                 variants={letterVariants}
                 custom={index}
-                whileHover={{ y: '-7%', transition: { duration: 0.18 } }}
               >
                 {char}
               </motion.span>

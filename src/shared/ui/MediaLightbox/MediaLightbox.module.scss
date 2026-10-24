@@ -1,0 +1,149 @@
+.lightbox {
+  position: fixed;
+  z-index: 1100;
+  inset: 0;
+  display: grid;
+  overflow: hidden;
+  background: rgb(5 10 14 / 86%);
+  color: #f6fbfb;
+  isolation: isolate;
+  place-items: center;
+  backdrop-filter: blur(18px);
+
+  &__backdrop {
+    position: absolute;
+    z-index: -2;
+    inset: -48px;
+    width: calc(100% + 96px);
+    height: calc(100% + 96px);
+    object-fit: cover;
+    filter: blur(32px) saturate(1.2) brightness(0.38);
+    opacity: 0.7;
+    pointer-events: none;
+    transform: scale(1.08);
+  }
+
+  &::after {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 24%, rgb(3 7 10 / 48%) 100%);
+    content: "";
+    pointer-events: none;
+  }
+
+  &__topbar {
+    position: absolute;
+    z-index: 2;
+    top: 20px;
+    right: 24px;
+    left: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  &__hint,
+  &__scale {
+    border: 1px solid rgb(255 255 255 / 12%);
+    border-radius: 999px;
+    background: rgb(10 19 25 / 62%);
+    color: rgb(245 255 255 / 72%);
+    font-size: 12px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    backdrop-filter: blur(14px);
+  }
+
+  &__hint {
+    padding: 10px 13px;
+  }
+
+  &__stage {
+    width: min(92vw, 1440px);
+    height: min(80vh, 900px);
+    overflow: hidden;
+    touch-action: none;
+
+    &[data-dragging="true"] {
+      cursor: grab;
+
+      &:active {
+        cursor: grabbing;
+      }
+    }
+  }
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    user-select: none;
+  }
+
+  &__controls {
+    position: absolute;
+    z-index: 2;
+    bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px;
+    border: 1px solid rgb(255 255 255 / 12%);
+    border-radius: 18px;
+    background: rgb(10 19 25 / 70%);
+    box-shadow: 0 16px 48px rgb(0 0 0 / 28%);
+    backdrop-filter: blur(18px);
+  }
+
+  &__iconButton {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: transparent;
+    color: rgb(246 255 255 / 78%);
+    cursor: pointer;
+    place-items: center;
+    transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+      border-color: rgb(126 239 224 / 28%);
+      background: rgb(126 239 224 / 12%);
+      color: #b7fff4;
+      transform: translateY(-1px);
+    }
+  }
+
+  &__scale {
+    min-width: 52px;
+    padding: 10px 8px;
+    text-align: center;
+  }
+
+  @media (width <= 640px) {
+    &__topbar {
+      top: 12px;
+      right: 12px;
+      left: 12px;
+    }
+
+    &__hint {
+      display: none;
+    }
+
+    &__stage {
+      width: 100vw;
+      height: 78vh;
+    }
+
+    &__controls {
+      bottom: 16px;
+    }
+  }
+}

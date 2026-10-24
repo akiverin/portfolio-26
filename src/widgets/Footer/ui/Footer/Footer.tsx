@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
 import Text from 'shared/ui/Text';
 import styles from './Footer.module.scss';
-import Button from 'shared/ui/Button';
 import { ROUTES } from 'shared/configs/routes';
 import FadeIn from 'shared/ui/FadeIn';
+import { IconBrandTelegram } from '@tabler/icons-react';
+import FooterLink from './FooterLink';
 
 const Footer: React.FC = () => {
   return (
@@ -17,36 +18,26 @@ const Footer: React.FC = () => {
             <Text color="secondary" view="p-20" weight="medium">
               связаться
             </Text>
-            <Button href="mailto:kiverin03@yandex.ru" target="_blank" noPadding>
-              <Text view="p-20" weight="medium">
-                kiverin03@yandex.ru
-              </Text>
-            </Button>
-            <Button href="tel:89531370800" target="_blank" noPadding>
-              <Text view="p-20" weight="medium">
-                +7 (953) 137-08-00
-              </Text>
-            </Button>
-            <Button href="https://t.me/andkiv" target="_blank" noPadding>
-              <Text view="p-20" weight="medium">
-                Телеграм
-              </Text>
-            </Button>
+            <FooterLink href="mailto:kiverin03@yandex.ru">kiverin03@yandex.ru</FooterLink>
+            <FooterLink href="tel:+79531370800">+7 (953) 137-08-00</FooterLink>
+            <FooterLink
+              href="https://t.me/andkiv"
+              external
+              icon={<IconBrandTelegram size={20} stroke={1.6} aria-hidden="true" />}
+            >
+              Телеграм
+            </FooterLink>
           </div>
           <div className={styles.footer__infoBlock}>
             <Text color="secondary" view="p-20" weight="medium">
               мои площадки
             </Text>
-            <Button href="https://github.com/akiverin" target="_blank" noPadding>
-              <Text view="p-20" weight="medium">
-                Github
-              </Text>
-            </Button>
-            <Button href="https://www.behance.net/kiverin03fb9c" target="_blank" noPadding>
-              <Text view="p-20" weight="medium">
-                Behance
-              </Text>
-            </Button>
+            <FooterLink href="https://github.com/akiverin" external>
+              GitHub
+            </FooterLink>
+            <FooterLink href="https://www.behance.net/kiverin03fb9c" external>
+              Behance
+            </FooterLink>
           </div>
           <div className={styles.footer__infoBlock}>
             <Link to={ROUTES.TERMS} className={styles.footer__link}>

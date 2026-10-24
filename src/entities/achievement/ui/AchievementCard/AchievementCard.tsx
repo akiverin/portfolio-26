@@ -1,15 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './AchievementCard.module.scss';
 import classNames from 'classnames';
 import { Achievement } from 'entities/Achievement/model/types';
 import Text from 'shared/ui/Text';
-import Button from 'shared/ui/Button';
 import Badge, { ColorsBadgeT, IconsBadgeT } from 'shared/ui/Badge';
 import { ImageWithFallback } from 'shared/ui/ImageWithFallback';
+import { IconArrowUpRight, IconCalendarEvent, IconZoomIn } from '@tabler/icons-react';
+import { VideoWithFallback } from 'shared/ui/VideoWithFallback';
+import { getImageFit, getMediaUrl, ImageFit, isVideoMedia } from 'shared/lib/media';
+import MediaLightbox from 'shared/ui/MediaLightbox';
 
 const MONTHS_RU = [
-  'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-  'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря',
+  'января',
+  'февраля',
+  'марта',
+  'апреля',
+  'мая',
+  'июня',
+  'июля',
+  'августа',
+  'сентября',
+  'октября',
+  'ноября',
+  'декабря',
 ];
 
 const formatAchievementDate = (date: { seconds: number }): string => {
@@ -30,16 +43,75 @@ const AchievementCard: React.FC<AchievementCardProps> = ({
   showDate,
   fullDescription,
 }) => {
+  const mediaUrl = getMediaUrl(achievement.cover, 'achievements');
+  const isVideo = isVideoMedia(achievement.cover, achievement.coverType);
+  const [imageFit, setImageFit] = useState<ImageFit>(null);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+
+  useEffect(() => {
+    setImageFit(null);
+  }, [mediaUrl]);
+
+  const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
+    const { naturalHeight, naturalWidth } = event.currentTarget;
+    setImageFit(getImageFit(naturalWidth, naturalHeight));
+  };
+
   return (
-    <div className={classNames(styles.achievementCard, className)}>
-      <div className={styles.achievementCard__cover}>
-        <ImageWithFallback
-          src={`https://andkiv.com/assets/achievements/${achievement.cover}`}
-          className={styles.achievementCard__image}
-          alt={achievement.title}
-          loading="lazy"
-        />
+    <article className={classNames(styles.achievementCard, className)}>
+      <div
+        className={classNames(styles.achievementCard__cover, {
+          [styles['achievementCard__cover--framed']]: !isVideo && imageFit,
+          [styles['achievementCard__cover--portrait']]: !isVideo && imageFit === 'portrait',
+          [styles['achievementCard__cover--landscape']]: !isVideo && imageFit === 'landscape',
+        })}
+      >
+        {isVideo ? (
+          <VideoWithFallback
+            src={mediaUrl}
+            className={styles.achievementCard__image}
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
+        ) : (
+          <>
+            {imageFit && (
+              <img
+                src={mediaUrl}
+                className={styles.achievementCard__backdrop}
+                alt=""
+                aria-hidden="true"
+              />
+            )}
+            <ImageWithFallback
+              src={mediaUrl}
+              className={styles.achievementCard__image}
+              alt={achievement.title}
+              loading="lazy"
+              onLoad={handleImageLoad}
+              onError={() => setImageFit(null)}
+            />
+            <button
+              type="button"
+              className={styles.achievementCard__inspect}
+              onClick={() => setIsLightboxOpen(true)}
+              aria-label={`Открыть изображение достижения «${achievement.title}»`}
+            >
+              <IconZoomIn size={22} stroke={1.6} />
+            </button>
+          </>
+        )}
       </div>
+      {!isVideo && (
+        <MediaLightbox
+          isOpen={isLightboxOpen}
+          src={mediaUrl}
+          alt={achievement.title}
+          onClose={() => setIsLightboxOpen(false)}
+        />
+      )}
       {achievement.badges && (
         <div className={styles.achievementCard__badges}>
           {achievement.badges.map((badge) => (
@@ -54,14 +126,15 @@ const AchievementCard: React.FC<AchievementCardProps> = ({
       )}
 
       <div className={styles.achievementCard__info}>
-        <Text view="p-16" maxLines={fullDescription ? undefined : 4} tag="h3" weight="medium">
+        <Text view="p-18" maxLines={fullDescription ? undefined : 3} tag="h3" weight="medium">
           {achievement.title}
         </Text>
-        <Text view="p-14" maxLines={fullDescription ? undefined : 4} color="secondary">
+        <Text view="p-14" maxLines={fullDescription ? undefined : 3} color="secondary">
           {achievement.desc}
         </Text>
         {showDate && achievement.date && (
-          <Text view="p-12" color="secondary" className={styles.achievementCard__date}>
+          <Text tag="span" view="p-12" className={styles.achievementCard__date}>
+            <IconCalendarEvent size={14} stroke={1.5} />
             {formatAchievementDate(achievement.date)}
           </Text>
         )}
@@ -69,14 +142,15 @@ const AchievementCard: React.FC<AchievementCardProps> = ({
 
       <div className={styles.achievementCard__actions}>
         {achievement.link && (
-          <Button theme="accent" href={achievement.link} target="_blank">
-            <Text view="p-16" weight="medium">
-              Подробнее
+          <a href={achievement.link} target="_blank" rel="noopener noreferrer">
+            <Text tag="span" view="p-12" weight="medium">
+              О достижении
             </Text>
-          </Button>
+            <IconArrowUpRight size={17} stroke={1.6} />
+          </a>
         )}
       </div>
-    </div>
+    </article>
   );
 };
 

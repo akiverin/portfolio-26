@@ -1,6 +1,4 @@
-@use "colors" as *;
 @use "adaptive" as *;
-@use "mixins" as *;
 
 .achievements {
   margin-top: 180px;
@@ -9,189 +7,264 @@
     margin-top: 100px;
   }
 
-  &__info {
-    text-align: center;
+  &__shell {
     position: relative;
-    width: fit-content;
-    margin: 0 auto 80px;
+    overflow: hidden;
+    padding: clamp(28px, 5vw, 72px);
+    border: 1px solid rgb(255 255 255 / 8%);
+    border-radius: 32px;
+    background: #0a1016;
+    color: #f3f7f8;
+    isolation: isolate;
 
     @include smallerThanTablet {
-      margin-bottom: 40px;
+      padding: 28px 14px 20px;
+      border-radius: 24px;
     }
   }
 
-  &__titleSpan {
-    position: relative;
+  &__background {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
   }
 
-  &__desc {
+  &__radar {
     position: absolute;
-    top: -32px;
-    right: 0;
-    width: auto;
-    transform: rotate(2deg);
-    padding-right: 2px;
-  }
+    width: min(54vw, 820px);
+    aspect-ratio: 1;
+    top: -46%;
+    right: -14%;
+    border: 1px solid rgb(126 232 219 / 7%);
+    border-radius: 50%;
+    background:
+      radial-gradient(circle, transparent 24%, rgb(37 145 139 / 5%) 24.2%, transparent 24.7%),
+      radial-gradient(circle, transparent 48%, rgb(37 145 139 / 5%) 48.2%, transparent 48.7%),
+      conic-gradient(from 20deg, transparent, rgb(77 210 197 / 10%), transparent 18%);
+    animation: radar-spin 22s linear infinite;
 
-  &__decorate {
-    position: absolute;
-    top: 60%;
-    left: calc(100% - 0.7em);
-    width: 120px;
+    &::after {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      top: 30%;
+      left: 18%;
+      border-radius: 50%;
+      background: #35bcb1;
+      box-shadow: 0 0 20px rgb(53 188 177 / 55%);
+      content: "";
+    }
 
     @include smallerThanTablet {
-      width: 70px;
+      width: 120vw;
+      top: -20%;
+      right: -70%;
     }
   }
 
-  // ─── Light content area ──────────────────────────
-  &__content {
-    background-color: $project-bg;
-    border-radius: 24px;
-    padding: 32px;
+  &__header {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(280px, 1.15fr) minmax(280px, 0.85fr);
+    align-items: end;
+    gap: clamp(30px, 7vw, 110px);
+    margin-bottom: clamp(42px, 6vw, 78px);
+    padding-bottom: 30px;
+    border-bottom: 1px solid rgb(255 255 255 / 9%);
+
+    @include smallerThanTablet {
+      grid-template-columns: 1fr;
+      align-items: start;
+      gap: 24px;
+      margin-bottom: 32px;
+      padding: 0 8px 24px;
+    }
+  }
+
+  &__heading {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 13px;
 
-    @include smallerThanTablet {
-      padding: 24px 16px;
-      gap: 24px;
+    & h2 {
+      letter-spacing: -0.055em;
+      line-height: 0.85;
     }
   }
 
-  // ─── Controls (badges + sort) ──────────────────────
-  &__controls {
+  &__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #82e9dc;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+  }
+
+  &__intro {
     display: flex;
     align-items: flex-start;
-    justify-content: space-between;
-    gap: 16px;
+    flex-direction: column;
+    gap: 18px;
 
-    // Override CSS vars for light bg
-    --input-bg: #{$white};
-    --input-text: #{$black};
-    --input-placeholder: #999;
-
-    @include smallerThanTablet {
-      flex-direction: column;
-      gap: 12px;
+    & p {
+      max-width: 480px;
+      color: rgb(255 255 255 / 52%);
+      line-height: 1.55;
     }
-  }
-
-  &__badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    align-items: center;
-    flex: 1;
-    min-width: 0;
-  }
-
-  &__badgeBtn {
-    border: none;
-    background: none;
-    padding: 0;
-    opacity: 0.5;
-
-    @include transition(opacity);
-
-    &:hover {
-      opacity: 0.8;
-    }
-
-    &--active {
-      opacity: 1;
-    }
-  }
-
-  &__clearFilter {
-    border: none;
-    background: rgb(0 0 0 / 5%);
-    border-radius: 6px;
-    padding: 2px 10px;
-    height: 24px;
-
-    @include transition(background);
-
-    &:hover {
-      background: rgb(0 0 0 / 10%);
-    }
-  }
-
-  &__sort {
-    flex-shrink: 0;
-    min-width: 180px;
   }
 
   &__dateToggle {
     display: flex;
+    min-height: 36px;
     align-items: center;
     gap: 8px;
-    cursor: pointer;
-    user-select: none;
+    padding: 0 12px;
+    border: 1px solid rgb(255 255 255 / 9%);
+    border-radius: 999px;
+    background: rgb(255 255 255 / 4%);
+    color: rgb(255 255 255 / 60%);
+    font-size: 12px;
+    transition:
+      border-color 0.2s ease,
+      background 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease;
+
+    &:hover,
+    &[aria-pressed="true"] {
+      border-color: rgb(31 151 144 / 24%);
+      background: rgb(126 232 219 / 9%);
+      color: #90eee2;
+    }
   }
 
-  &__dateCheckbox {
-    width: 16px;
-    height: 16px;
-    accent-color: $brand;
-    cursor: pointer;
-  }
-
-  // ─── Card grid ───────────────────────────────────
   &__list {
+    position: relative;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-    gap: 36px;
-    justify-content: space-evenly;
-    min-height: 520px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(14px, 2vw, 26px);
+    perspective: 1000px;
 
-    @include smallerThanLaptop {
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
+    & > div {
+      min-width: 0;
     }
 
+    @include smallerThanLaptop {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include smallerThanTablet {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: clamp(34px, 5vw, 62px);
+    padding-top: 24px;
+    border-top: 1px solid rgb(255 255 255 / 9%);
+
     @include smallerThanPhone {
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 20px;
+      align-items: stretch;
+      flex-direction: column;
+    }
+  }
+
+  &__footerNote {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: rgb(255 255 255 / 42%);
+  }
+
+  &__pulse {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #33b8ad;
+    box-shadow: 0 0 0 4px rgb(51 184 173 / 10%);
+    animation: achievement-pulse 2.2s ease-in-out infinite;
+  }
+
+  &__allLink {
+    display: flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 0 20px;
+    border-radius: 999px;
+    background: #142329;
+    color: #f5f8f9;
+    font-size: 13px;
+    font-weight: 600;
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
+
+    & svg {
+      transition: transform 0.2s ease;
+    }
+
+    &:hover {
+      background: #197f7b;
+
+      & svg {
+        transform: translateX(2px);
+      }
     }
   }
 
   &__empty {
     grid-column: 1 / -1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 200px;
+    display: grid;
+    min-height: 260px;
+    color: rgb(255 255 255 / 44%);
+    gap: 12px;
+    place-content: center;
+    text-align: center;
   }
 
-  // ─── Pagination ──────────────────────────────────
-  &__pagination {
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  &__allBtn {
-    display: flex;
-    justify-content: center;
-    padding-top: 8px;
-  }
-
-  // ─── Skeleton card ─────────────────────────────────
   &__skeletonCard {
     display: flex;
+    min-height: 410px;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
+    padding: 8px;
+    border: 1px solid rgb(255 255 255 / 8%);
+    border-radius: 22px;
+    background: rgb(255 255 255 / 4%);
   }
 
   &__skeletonCover {
     width: 100%;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 16 / 10;
   }
 
   &__skeletonInfo {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding: 0 12px;
+    gap: 10px;
+    padding: 0 10px;
+  }
+}
+
+@keyframes radar-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes achievement-pulse {
+  50% {
+    box-shadow: 0 0 0 8px rgb(51 184 173 / 2%);
   }
 }

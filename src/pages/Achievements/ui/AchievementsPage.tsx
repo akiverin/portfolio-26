@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { motion } from 'framer-motion';
 import styles from './AchievementsPage.module.scss';
@@ -13,9 +13,10 @@ import { useDebounce } from 'shared/hooks/useDebounce';
 import { Meta } from 'shared/lib/meta';
 import FadeIn from 'shared/ui/FadeIn';
 import { AnimatedCheckbox } from 'shared/ui/AnimatedCheckbox';
-import { IconSearch } from '@tabler/icons-react';
+import Pagination from 'shared/ui/Pagination';
+import { IconAward, IconRosetteDiscountCheck, IconSearch } from '@tabler/icons-react';
 
-const SKELETON_COUNT = 10;
+const PAGE_SIZE = 6;
 
 const cardVariants = {
   hidden: { opacity: 0, y: 30, scale: 0.97 },
@@ -45,6 +46,8 @@ export const AchievementsPage: React.FC = observer(() => {
   const store = useLocalStore(() => new AchievementListStore({ pageSize: 100 }));
   const [showDates, setShowDates] = useState(true);
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const gridRef = useRef<HTMLDivElement>(null);
   const debouncedSearch = useDebounce(search, 300);
 
   useEffect(() => {
@@ -61,15 +64,39 @@ export const AchievementsPage: React.FC = observer(() => {
     );
   }, [store.achievements, debouncedSearch]);
 
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const visibleAchievements = useMemo(
+    () => filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+    [filtered, page],
+  );
+
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, store.sortValue]);
+
+  useEffect(() => {
+    if (page > pageCount) setPage(pageCount);
+  }, [page, pageCount]);
+
+  const handlePageChange = (nextPage: number) => {
+    setPage(nextPage);
+    requestAnimationFrame(() => {
+      gridRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  };
+
   return (
     <main className={styles.page}>
       <FadeIn>
         <div className={styles.page__header}>
+          <Text tag="span" view="p-12" className={styles.page__eyebrow}>
+            <IconRosetteDiscountCheck size={15} /> Recognition · Archive
+          </Text>
           <Text tag="h1" view="title" weight="black" uppercase>
             Достижения
           </Text>
           <Text view="p-16" color="secondary">
-            Все мои достижения и награды
+            Награды, публикации и профессиональные результаты — по шесть на странице.
           </Text>
         </div>
       </FadeIn>
@@ -102,7 +129,7 @@ export const AchievementsPage: React.FC = observer(() => {
           />
         </div>
 
-        <div className={styles.page__grid}>
+        <div className={styles.page__grid} ref={gridRef}>
           {store.meta === Meta.error && (
             <div className={styles.page__empty} role="alert">
               <Text view="p-16" color="accent">
@@ -111,22 +138,26 @@ export const AchievementsPage: React.FC = observer(() => {
             </div>
           )}
           {isLoading &&
-            Array.from({ length: SKELETON_COUNT }, (_, i) => (
+            Array.from({ length: PAGE_SIZE }, (_, i) => (
               <AchievementCardSkeleton key={i} />
             ))}
 
           {!isLoading &&
             filtered.length > 0 &&
-            filtered.map((achievement, i) => (
+            visibleAchievements.map((achievement, i) => (
               <motion.div
                 key={achievement.id}
                 variants={cardVariants}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: '-40px' }}
-                custom={i % 3}
+                custom={i}
               >
-                <AchievementCard achievement={achievement} showDate={showDates} fullDescription />
+                <AchievementCard
+                  achievement={achievement}
+                  showDate={showDates}
+                  fullDescription
+                />
               </motion.div>
             ))}
 
@@ -138,6 +169,20 @@ export const AchievementsPage: React.FC = observer(() => {
             </div>
           )}
         </div>
+
+        {!isLoading && filtered.length > 0 && (
+          <div className={styles.page__paginationRow}>
+            <Text tag="span" view="p-12" className={styles.page__resultCount}>
+              <IconAward size={15} stroke={1.5} /> {filtered.length} достижений
+            </Text>
+            <Pagination
+              page={page}
+              pageCount={pageCount}
+              onPageChange={handlePageChange}
+              className={styles.page__pagination}
+            />
+          </div>
+        )}
       </div>
     </main>
   );

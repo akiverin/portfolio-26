@@ -1,6 +1,9 @@
 @use "mixins" as *;
 
 .home {
+  background: #080d12;
+  color: #f3f7f8;
+
   &__wrapper {
     @include wrapper;
   }

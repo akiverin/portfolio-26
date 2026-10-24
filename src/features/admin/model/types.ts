@@ -19,11 +19,12 @@ export type AdminOption = {
 export type FieldDef = {
   key: string;
   label: string;
-  type: 'text' | 'number' | 'textarea' | 'url' | 'email' | 'select' | 'date' | 'multiselect';
+  type: 'text' | 'number' | 'textarea' | 'url' | 'email' | 'select' | 'date' | 'multiselect' | 'media';
   required?: boolean;
   placeholder?: string;
   options?: AdminOption[];
   asyncOptions?: string;
+  mediaEntity?: 'projects' | 'achievements';
 };
 
 export type SectionConfig = {

@@ -1,142 +1,133 @@
 import { motion } from 'framer-motion';
+import { IconArrowUpRight, IconRoute, IconSparkles } from '@tabler/icons-react';
 import styles from './AboutSection.module.scss';
 import Text from 'shared/ui/Text';
-import photo from 'assets/photo.jpg';
+import photo from 'assets/photo-optimized.jpg';
 import Student from 'shared/ui/icons/Student';
 import Code from 'shared/ui/icons/Code';
 import Briefcase from 'shared/ui/icons/Briefcase';
 import FadeIn from 'shared/ui/FadeIn';
 
-type TimelineEntry = {
+type JourneyEntry = {
   icon: React.ReactNode;
   period: string;
   title: string;
-  subtitle?: string;
+  subtitle: string;
 };
 
-const EDUCATION: TimelineEntry[] = [
+const EDUCATION: JourneyEntry[] = [
   {
     icon: <Student width={18} height={18} />,
-    period: '2015 – 2021',
+    period: '2015 — 2021',
     title: 'Лицей информационных технологий №28 г. Киров',
+    subtitle: 'Инженерно-технический профиль',
   },
   {
     icon: <Student width={18} height={18} />,
-    period: '2021 – 2025',
+    period: '2021 — 2025',
     title: 'Московский политехнический университет',
-    subtitle: 'Бакалавр с отличием: Информатика и вычислительная техника',
+    subtitle: 'Бакалавриат с отличием · Информатика и вычислительная техника',
   },
   {
     icon: <Code width={18} height={18} />,
     period: '2024',
     title: 'Московский политех и Иннополис',
-    subtitle: 'Профессиональная переподготовка: Нейросетевые технологии',
+    subtitle: 'Профессиональная переподготовка · Нейросетевые технологии',
   },
   {
     icon: <Student width={18} height={18} />,
-    period: '2025 – 2027',
+    period: '2025 — 2027',
     title: 'Московский политехнический университет',
-    subtitle: 'Магистратура: Информационные системы и технологии',
+    subtitle: 'Магистратура · Информационные системы и технологии',
   },
 ];
 
-const WORK: TimelineEntry[] = [
+const WORK: JourneyEntry[] = [
   {
     icon: <Code width={18} height={18} />,
-    period: 'с 2021 года',
+    period: '2021 — сейчас',
     title: 'Проектная практика',
-    subtitle: 'Веб-продукты, дизайн интерфейсов и мобильные приложения',
+    subtitle: 'Веб-продукты, интерфейсы и мобильные приложения — от идеи до запуска',
   },
   {
     icon: <Briefcase width={18} height={18} />,
-    period: 'ноябрь 2025 – сейчас',
-    title: 'ООО «Студия КТС»',
-    subtitle: 'Младший фронтенд разработчик',
+    period: '2025 — сейчас',
+    title: 'Студия КТС',
+    subtitle: 'Младший frontend-разработчик · Коммерческие веб-продукты',
   },
 ];
 
-const FOCUS_AREAS = ['Frontend', 'UI/UX', 'AI-инструменты', 'Исследования'] as const;
-
-const FACTS = [
-  { value: '4+', label: 'года в цифровых проектах' },
-  { value: '2', label: 'профильные квалификации' },
-  { value: '360°', label: 'от идеи до интерфейса' },
+const FOCUS_AREAS = [
+  { title: 'Frontend', caption: 'React · TypeScript · архитектура' },
+  { title: 'Product design', caption: 'UX-сценарии · UI-системы' },
+  { title: 'AI workflows', caption: 'Инструменты · автоматизация' },
+  { title: 'Research', caption: 'Гипотезы · данные · выводы' },
 ] as const;
 
-const timelineItemVariants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: (i: number) => ({
+const stepVariants = {
+  hidden: { opacity: 0, y: 24, filter: 'blur(5px)' },
+  visible: (index: number) => ({
     opacity: 1,
-    x: 0,
+    y: 0,
+    filter: 'blur(0px)',
     transition: {
-      duration: 0.4,
-      delay: i * 0.1,
-      ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
+      type: 'spring' as const,
+      damping: 24,
+      stiffness: 115,
+      delay: index * 0.07,
     },
   }),
 };
 
-const TimelineItem: React.FC<{ entry: TimelineEntry; isLast?: boolean; index: number }> = ({
-  entry,
-  isLast = false,
-  index,
-}) => (
-  <motion.div
-    className={styles.timeline__item}
-    variants={timelineItemVariants}
+const EducationStep: React.FC<{ entry: JourneyEntry; index: number }> = ({ entry, index }) => (
+  <motion.article
+    className={styles.education__step}
+    variants={stepVariants}
     initial="hidden"
     whileInView="visible"
     viewport={{ once: true, margin: '-40px' }}
     custom={index}
-    whileHover={{ x: 4 }}
-    transition={{ duration: 0.2, ease: 'easeOut' }}
   >
-    <div className={styles.timeline__marker}>
-      <div className={styles.timeline__icon}>{entry.icon}</div>
-      {!isLast && <div className={styles.timeline__line} />}
-    </div>
-    <div className={styles.timeline__content}>
-      <Text tag="span" view="p-12" color="accent" weight="medium" noWrap>
+    <div className={styles.education__stepTop}>
+      <Text tag="span" view="p-12" className={styles.education__stepIndex}>
+        {String(index + 1).padStart(2, '0')}
+      </Text>
+      <Text tag="span" view="p-12" className={styles.education__period}>
         {entry.period}
       </Text>
-      <Text tag="p" view="p-16" weight="medium">
+    </div>
+    <div className={styles.education__icon}>{entry.icon}</div>
+    <div className={styles.education__copy}>
+      <Text tag="h4" view="p-18" weight="bold">
         {entry.title}
       </Text>
-      {entry.subtitle && (
-        <Text tag="p" view="p-14" color="secondary">
-          {entry.subtitle}
-        </Text>
-      )}
+      <Text tag="p" view="p-12">
+        {entry.subtitle}
+      </Text>
     </div>
-  </motion.div>
+  </motion.article>
 );
 
 const AboutSection: React.FC = () => {
   return (
     <section className={styles.about} id="about">
-      <FadeIn>
-        <div className={styles.about__header}>
-          <Text
-            font="caveat"
-            view="p-24"
-            weight="medium"
-            color="secondary"
-            className={styles.about__subtitle}
-          >
-            немного о себе
-          </Text>
-          <Text tag="h2" view="title" weight="black" uppercase>
-            Обо мне
-          </Text>
-        </div>
-      </FadeIn>
-
       <div className={styles.about__container}>
+        <FadeIn>
+          <div className={styles.about__header}>
+            <Text tag="span" view="p-12" className={styles.about__headerIndex}>
+              01 · Profile
+            </Text>
+            <Text tag="h2" view="title" weight="black" uppercase>
+              Обо мне
+            </Text>
+          </div>
+        </FadeIn>
+
         <div className={styles.about__top}>
           <FadeIn direction="left" delay={0.1} className={styles.about__profileColumn}>
             <motion.div
               className={styles.about__profileCard}
-              whileHover={{ y: -6, rotate: -0.4 }}
+              whileHover={{ rotate: -0.4 }}
               transition={{ type: 'spring', stiffness: 260, damping: 20 }}
             >
               <div className={styles.about__photoWrap}>
@@ -168,97 +159,154 @@ const AboutSection: React.FC = () => {
 
           <FadeIn direction="right" delay={0.16} className={styles.about__introColumn}>
             <div className={styles.about__intro}>
-              <div className={styles.about__introLead}>
-                <span className={styles.about__kicker}>Коротко обо мне</span>
-                <Text tag="h3" view="p-32" weight="bold" className={styles.about__statement}>
-                  Соединяю разработку, дизайн и исследовательский подход.
+              <div className={styles.about__introTopline}>
+                <Text tag="span" view="p-12" className={styles.about__kicker}>
+                  <IconSparkles size={14} stroke={1.6} /> Разработка × дизайн
+                </Text>
+                <Text tag="span" view="p-12" className={styles.about__availability}>
+                  Открыт новым задачам
                 </Text>
               </div>
+
+              <Text tag="h3" view="p-32" weight="bold" className={styles.about__statement}>
+                Проектирую интерфейсы, где логика ощущается так же хорошо, как визуальный слой.
+              </Text>
 
               <div className={styles.about__bio}>
-                <Text tag="p" view="p-16">
-                  Я frontend-разработчик и дизайнер интерфейсов. Проектирую корпоративные продукты,
-                  сайты и мобильные приложения — от структуры и прототипа до аккуратной реализации.
+                <Text tag="span" view="p-12" className={styles.about__bioIndex}>
+                  A/01
                 </Text>
-                <Text tag="p" view="p-16" color="secondary">
-                  Окончил Московский Политех с красным дипломом и изучал нейросетевые технологии.
-                  Научный опыт помогает проверять идеи, а не просто украшать их.
+                <Text tag="p" view="p-16">
+                  Создаю сайты, корпоративные продукты и мобильные интерфейсы — исследую задачу,
+                  нахожу ясную структуру и довожу решение до аккуратной реализации. Техническое
+                  образование помогает смотреть на продукт как на систему, а дизайн — делать эту
+                  систему понятной человеку.
                 </Text>
               </div>
 
-              <ul className={styles.about__focusList} aria-label="Основные направления">
+              <div className={styles.about__focusGrid} aria-label="Основные компетенции">
                 {FOCUS_AREAS.map((area, index) => (
-                  <motion.li
-                    key={area}
+                  <motion.div
+                    key={area.title}
                     className={styles.about__focusItem}
-                    initial={{ opacity: 0, y: 8 }}
+                    initial={{ opacity: 0, y: 12 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.24 + index * 0.06 }}
+                    transition={{ delay: 0.18 + index * 0.06 }}
                   >
-                    {area}
-                  </motion.li>
-                ))}
-              </ul>
-
-              <div className={styles.about__facts}>
-                {FACTS.map((fact) => (
-                  <div key={fact.value} className={styles.about__fact}>
-                    <Text tag="span" view="p-24" weight="bold">
-                      {fact.value}
+                    <Text tag="span" view="p-12" className={styles.about__focusIndex}>
+                      0{index + 1}
                     </Text>
-                    <Text tag="span" view="p-12" color="secondary">
-                      {fact.label}
-                    </Text>
-                  </div>
+                    <div>
+                      <Text tag="h4" view="p-16" weight="bold">
+                        {area.title}
+                      </Text>
+                      <Text tag="span" view="p-12">
+                        {area.caption}
+                      </Text>
+                    </div>
+                    <IconArrowUpRight size={16} stroke={1.5} />
+                  </motion.div>
                 ))}
               </div>
             </div>
           </FadeIn>
         </div>
 
-        <div className={styles.about__bottom}>
-          <FadeIn delay={0.1} className={styles.about__timelineColumn}>
-            <div className={styles.about__block}>
-              <div className={styles.about__blockHeader}>
-                <span className={styles.about__blockIndex}>01</span>
-                <Text tag="h3" view="p-24" weight="bold">
-                  Образование
-                </Text>
-              </div>
-              <div className={styles.timeline}>
-                {EDUCATION.map((entry, i) => (
-                  <TimelineItem
-                    key={entry.period}
-                    entry={entry}
-                    isLast={i === EDUCATION.length - 1}
-                    index={i}
-                  />
-                ))}
-              </div>
+        <div className={styles.about__journey}>
+          <div className={styles.about__journeyHeader}>
+            <div>
+              <Text tag="span" view="p-12" className={styles.about__kicker}>
+                <IconRoute size={15} stroke={1.6} /> Траектория
+              </Text>
+              <Text tag="h3" view="p-28" weight="bold">
+                Образование и опыт
+              </Text>
             </div>
-          </FadeIn>
+            <Text tag="p" view="p-14">
+              Последовательный путь от технической базы к продуктовой разработке.
+            </Text>
+          </div>
 
-          <FadeIn delay={0.2} className={styles.about__timelineColumn}>
-            <div className={styles.about__block}>
-              <div className={styles.about__blockHeader}>
-                <span className={styles.about__blockIndex}>02</span>
-                <Text tag="h3" view="p-24" weight="bold">
-                  Опыт
-                </Text>
+          <div className={styles.about__journeyGrid}>
+            <FadeIn delay={0.08} className={styles.about__educationPanel}>
+              <div className={styles.about__panelHeader}>
+                <span className={styles.about__panelIcon}>
+                  <Student width={18} height={18} />
+                </span>
+                <div>
+                  <Text tag="h3" view="p-20" weight="bold">
+                    Образование
+                  </Text>
+                  <Text tag="span" view="p-12">
+                    4 последовательных этапа
+                  </Text>
+                </div>
               </div>
-              <div className={styles.timeline}>
-                {WORK.map((entry, i) => (
-                  <TimelineItem
-                    key={entry.period}
+
+              <div className={styles.education}>
+                {EDUCATION.map((entry, index) => (
+                  <EducationStep
+                    key={`${entry.period}-${entry.title}`}
                     entry={entry}
-                    isLast={i === WORK.length - 1}
-                    index={i}
+                    index={index}
                   />
                 ))}
               </div>
-            </div>
-          </FadeIn>
+            </FadeIn>
+
+            <FadeIn delay={0.16} className={styles.about__experiencePanel}>
+              <div className={styles.about__panelHeader}>
+                <span className={styles.about__panelIcon}>
+                  <Briefcase width={18} height={18} />
+                </span>
+                <div>
+                  <Text tag="h3" view="p-20" weight="bold">
+                    Практика
+                  </Text>
+                  <Text tag="span" view="p-12">
+                    Проекты и коммерческий опыт
+                  </Text>
+                </div>
+              </div>
+
+              <div className={styles.experience}>
+                {WORK.map((entry, index) => (
+                  <motion.article
+                    key={`${entry.period}-${entry.title}`}
+                    className={styles.experience__item}
+                    variants={stepVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: '-40px' }}
+                    custom={index}
+                  >
+                    <div className={styles.experience__topline}>
+                      <Text tag="span" view="p-12">
+                        {entry.period}
+                      </Text>
+                      {index === WORK.length - 1 && (
+                        <Text tag="span" view="p-12">
+                          Current
+                        </Text>
+                      )}
+                    </div>
+                    <div className={styles.experience__content}>
+                      <span className={styles.experience__icon}>{entry.icon}</span>
+                      <div>
+                        <Text tag="h4" view="p-18" weight="bold">
+                          {entry.title}
+                        </Text>
+                        <Text tag="p" view="p-12">
+                          {entry.subtitle}
+                        </Text>
+                      </div>
+                    </div>
+                  </motion.article>
+                ))}
+              </div>
+            </FadeIn>
+          </div>
         </div>
       </div>
     </section>

@@ -3,14 +3,12 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from 'shared/api/firebase';
 import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
-import { IconPlus, IconTrash, IconSun, IconMoon } from '@tabler/icons-react';
 import classNames from 'classnames';
 import styles from './AdminPage.module.scss';
 import AdminSidebar from './AdminSidebar';
 import AdminTable from 'features/admin/ui/AdminTable';
 import EditModal from 'features/admin/ui/EditModal';
 import ConfirmModal from 'features/admin/ui/ConfirmModal';
-import { ExportDropdown } from 'features/admin/ui/ExportDropdown';
 import { exportAchievements, ExportAchievement } from 'shared/lib/exportAchievements';
 import { ADMIN_SECTIONS } from './sections';
 import { AdminCollectionStore } from 'features/admin/model/AdminCollectionStore';
@@ -19,6 +17,9 @@ import { useNotification } from 'shared/ui/Notifications';
 import { ROUTES } from 'shared/configs/routes';
 import { Meta } from 'shared/lib/meta';
 import { AdminOption } from 'features/admin/model/types';
+import AdminHeader from './AdminHeader';
+import { deleteMedia, isManagedMediaUrl, MediaEntity, uploadMedia } from 'shared/api/mediaApi';
+import type { MediaChange } from 'features/admin/ui/EditModal/EditModal';
 
 const AdminPage: React.FC = observer(() => {
   const navigate = useNavigate();
@@ -36,9 +37,9 @@ const AdminPage: React.FC = observer(() => {
 
   const [darkMode, setDarkMode] = useState(() => {
     try {
-      return localStorage.getItem('admin-dark-mode') === 'true';
+      return localStorage.getItem('admin-dark-mode') !== 'false';
     } catch {
-      return false;
+      return true;
     }
   });
 
@@ -80,7 +81,11 @@ const AdminPage: React.FC = observer(() => {
       navigate(ROUTES.AUTH, { replace: true });
       return;
     }
-    if (userStore.isInitialized && userStore.currentUser && userStore.currentUser.role !== 'admin') {
+    if (
+      userStore.isInitialized &&
+      userStore.currentUser &&
+      userStore.currentUser.role !== 'admin'
+    ) {
       navigate(ROUTES.HOME, { replace: true });
     }
   }, [userStore.isInitialized, userStore.isAuth, userStore.currentUser, navigate]);
@@ -96,7 +101,9 @@ const AdminPage: React.FC = observer(() => {
       const next = !prev;
       try {
         localStorage.setItem('admin-sidebar-collapsed', String(next));
-      } catch { /* ignore */ }
+      } catch {
+        /* ignore */
+      }
       return next;
     });
   }, []);
@@ -106,7 +113,9 @@ const AdminPage: React.FC = observer(() => {
       const next = !prev;
       try {
         localStorage.setItem('admin-dark-mode', String(next));
-      } catch { /* ignore */ }
+      } catch {
+        /* ignore */
+      }
       return next;
     });
   }, []);
@@ -128,20 +137,59 @@ const AdminPage: React.FC = observer(() => {
     [store, notify],
   );
 
+  const handleUploadMedia = useCallback(
+    async (entity: MediaEntity, file: File) => {
+      const token = await userStore.getIdToken();
+      if (!token) throw new Error('Войдите в аккаунт администратора повторно.');
+      return uploadMedia(entity, file, token);
+    },
+    [userStore],
+  );
+
+  const handleDeleteMedia = useCallback(
+    async (url: string) => {
+      const token = await userStore.getIdToken();
+      if (!token) throw new Error('Войдите в аккаунт администратора повторно.');
+      await deleteMedia(url, token);
+    },
+    [userStore],
+  );
+
+  const removeReplacedMedia = useCallback(
+    async (data: Record<string, unknown>, mediaChanges: MediaChange[]) => {
+      const currentUrls = new Set(
+        Object.values(data).filter((value): value is string => typeof value === 'string'),
+      );
+      const urls = [...new Set(
+        mediaChanges
+          .map((change) => change.previousUrl)
+          .filter((url): url is string => Boolean(url && !currentUrls.has(url) && isManagedMediaUrl(url))),
+      )];
+
+      const results = await Promise.allSettled(urls.map((url) => handleDeleteMedia(url)));
+      if (results.some((result) => result.status === 'rejected')) {
+        notify('Запись сохранена, но один из старых медиафайлов не удалось удалить', 'error');
+      }
+    },
+    [handleDeleteMedia, notify],
+  );
+
   const handleSaveEdit = useCallback(
-    async (data: Record<string, unknown>) => {
+    async (data: Record<string, unknown>, mediaChanges: MediaChange[]) => {
       try {
         if (store.editingId) {
           await store.update(store.editingId, data);
+          await removeReplacedMedia(data, mediaChanges);
           if (activeSection === 'badges') await fetchBadgeOptions();
           store.closeEdit();
           notify('Запись обновлена', 'success');
         }
-      } catch {
+      } catch (error) {
         notify('Ошибка при сохранении', 'error');
+        throw error;
       }
     },
-    [store, notify, activeSection, fetchBadgeOptions],
+    [store, notify, activeSection, fetchBadgeOptions, removeReplacedMedia],
   );
 
   const handleSaveCreate = useCallback(
@@ -151,8 +199,9 @@ const AdminPage: React.FC = observer(() => {
         if (activeSection === 'badges') await fetchBadgeOptions();
         store.closeCreate();
         notify('Запись создана', 'success');
-      } catch {
+      } catch (error) {
         notify('Ошибка при создании', 'error');
+        throw error;
       }
     },
     [store, notify, activeSection, fetchBadgeOptions],
@@ -161,23 +210,39 @@ const AdminPage: React.FC = observer(() => {
   const handleConfirmDelete = useCallback(async () => {
     if (!store.deleteId) return;
     try {
+      const item = store.items.find((candidate) => candidate.id === store.deleteId);
       await store.remove(store.deleteId);
+      if (isManagedMediaUrl(item?.cover)) {
+        try {
+          await handleDeleteMedia(item.cover);
+        } catch {
+          notify('Запись удалена, но файл обложки удалить не удалось', 'error');
+        }
+      }
       store.closeDelete();
       notify('Запись удалена', 'success');
     } catch {
       notify('Ошибка при удалении', 'error');
     }
-  }, [store, notify]);
+  }, [store, notify, handleDeleteMedia]);
 
   const handleConfirmBulkDelete = useCallback(async () => {
     try {
       const count = store.selectedIds.length;
+      const mediaUrls = store.items
+        .filter((item) => store.selectedIds.includes(item.id))
+        .map((item) => item.cover)
+        .filter(isManagedMediaUrl);
       await store.removeBulk();
+      const results = await Promise.allSettled(mediaUrls.map((url) => handleDeleteMedia(url)));
+      if (results.some((result) => result.status === 'rejected')) {
+        notify('Записи удалены, но часть медиафайлов удалить не удалось', 'error');
+      }
       notify(`Удалено записей: ${count}`, 'success');
     } catch {
       notify('Ошибка при удалении', 'error');
     }
-  }, [store, notify]);
+  }, [store, notify, handleDeleteMedia]);
 
   const handleExport = useCallback(
     async (range: 'year' | '2years' | 'all', format: 'csv' | 'excel' | 'txt' | 'zip') => {
@@ -199,7 +264,11 @@ const AdminPage: React.FC = observer(() => {
   if (!userStore.isInitialized) {
     return (
       <div
-        className={classNames(styles.admin, darkMode && styles['admin--dark'], styles.admin__loading)}
+        className={classNames(
+          styles.admin,
+          darkMode && styles['admin--dark'],
+          styles.admin__loading,
+        )}
       >
         <div className={styles.admin__spinner} />
       </div>
@@ -220,46 +289,18 @@ const AdminPage: React.FC = observer(() => {
       />
 
       <main className={styles.admin__main}>
-        <div className={styles.admin__header}>
-          <div>
-            <h1 className={styles.admin__title}>{section.label}</h1>
-            <p className={styles.admin__subtitle}>
-              Управление данными коллекции «{section.collection}»
-            </p>
-          </div>
-          <div className={styles.admin__headerActions}>
-            {store.hasSelection && (
-              <button
-                type="button"
-                className={styles.admin__bulkDeleteBtn}
-                onClick={() => store.openBulkDelete()}
-              >
-                <IconTrash size={16} stroke={1.5} />
-                Удалить ({store.selectedIds.length})
-              </button>
-            )}
-            {activeSection === 'achievements' && (
-              <ExportDropdown onExport={handleExport} loading={store.meta === Meta.loading} />
-            )}
-            <button
-              type="button"
-              className={styles.admin__themeBtn}
-              onClick={handleToggleTheme}
-              aria-label={darkMode ? 'Светлая тема' : 'Тёмная тема'}
-              title={darkMode ? 'Светлая тема' : 'Тёмная тема'}
-            >
-              {darkMode ? <IconSun size={18} stroke={1.5} /> : <IconMoon size={18} stroke={1.5} />}
-            </button>
-            <button
-              type="button"
-              className={styles.admin__addBtn}
-              onClick={() => store.openCreate()}
-            >
-              <IconPlus size={16} stroke={2} />
-              Добавить
-            </button>
-          </div>
-        </div>
+        <AdminHeader
+          title={section.label}
+          collection={section.collection}
+          activeSection={activeSection}
+          selectedCount={store.selectedIds.length}
+          loading={store.meta === Meta.loading}
+          darkMode={darkMode}
+          onBulkDelete={() => store.openBulkDelete()}
+          onExport={handleExport}
+          onToggleTheme={handleToggleTheme}
+          onCreate={() => store.openCreate()}
+        />
 
         <AdminTable
           columns={section.columns}
@@ -291,6 +332,8 @@ const AdminPage: React.FC = observer(() => {
         asyncOptions={asyncOptions}
         darkMode={darkMode}
         onSave={handleSaveEdit}
+        onUploadMedia={handleUploadMedia}
+        onDeleteMedia={handleDeleteMedia}
         onClose={() => store.closeEdit()}
       />
 
@@ -302,6 +345,8 @@ const AdminPage: React.FC = observer(() => {
         asyncOptions={asyncOptions}
         darkMode={darkMode}
         onSave={handleSaveCreate}
+        onUploadMedia={handleUploadMedia}
+        onDeleteMedia={handleDeleteMedia}
         onClose={() => store.closeCreate()}
       />
 

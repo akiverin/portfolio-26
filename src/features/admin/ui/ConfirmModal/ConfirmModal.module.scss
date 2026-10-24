@@ -34,14 +34,13 @@
   }
 
   &__title {
-    font-size: 18px;
-    font-weight: 600;
-    margin: 0 0 8px;
+    margin: 0 auto 8px;
     color: var(--admin-text);
   }
 
   &__message {
-    font-size: 14px;
+    width: 100%;
+    justify-content: center;
     color: var(--admin-text-secondary);
     margin: 0 0 28px;
     line-height: 1.5;
@@ -61,7 +60,9 @@
     font-size: 14px;
     font-weight: 500;
     border: none;
-    transition: background 0.15s ease, color 0.15s ease;
+    transition:
+      background 0.15s ease,
+      color 0.15s ease;
     flex: 1;
   }
 

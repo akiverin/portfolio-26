@@ -10,6 +10,7 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
   fallbackClassName,
   className,
   alt,
+  onError,
   ...props
 }) => {
   const [error, setError] = useState(false);
@@ -27,7 +28,10 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
       {...props}
       alt={alt}
       className={className}
-      onError={() => setError(true)}
+      onError={(event) => {
+        setError(true);
+        onError?.(event);
+      }}
     />
   );
 };

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /auth
+Disallow: /register
+Disallow: /profile
+
+Sitemap: https://andkiv.com/sitemap.xml

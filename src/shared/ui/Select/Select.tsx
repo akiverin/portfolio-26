@@ -4,6 +4,7 @@ import styles from './Select.module.scss';
 import classNames from 'classnames';
 import Text from 'shared/ui/Text';
 import ArrowDownIcon from 'shared/ui/icons/ArrowDownIcon';
+import { IconCheck } from '@tabler/icons-react';
 
 export type SelectOption = {
   value: string;
@@ -160,7 +161,7 @@ const Select: React.FC<SelectProps> = ({
                         animate={{ scale: 1 }}
                         transition={{ type: 'spring', damping: 20, stiffness: 300 }}
                       >
-                        ✓
+                        <IconCheck size={16} stroke={2} />
                       </motion.span>
                     )}
                   </button>

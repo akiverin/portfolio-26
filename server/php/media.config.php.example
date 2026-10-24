@@ -1,0 +1,20 @@
+<?php
+
+// Copy this file to /etc/andkiv/media.php on the server and replace the values.
+return [
+    // Same public values used by the Vite application. They are used only to
+    // validate Firebase ID tokens and read the caller's own Firestore profile.
+    'firebase_web_api_key' => 'VITE_FIREBASE_API_KEY_VALUE',
+    'firebase_project_id' => 'VITE_FIREBASE_PROJECT_ID_VALUE',
+
+    // Keep uploaded files outside the deployed Vite build.
+    'storage_path' => '/var/www/andkiv-media',
+    'public_base_url' => 'https://andkiv.com/media',
+    'allowed_origins' => [
+        'https://andkiv.com',
+        'https://www.andkiv.com',
+        'https://andkiv.ru',
+        'https://www.andkiv.ru',
+        'http://localhost:5173',
+    ],
+];

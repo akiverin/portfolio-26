@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './Pagination.module.scss';
 import classNames from 'classnames';
 import Text from 'shared/ui/Text';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
 export type PaginationProps = {
   page: number;
@@ -52,9 +53,7 @@ const Pagination: React.FC<PaginationProps> = ({ page, pageCount, onPageChange, 
         onClick={() => onPageChange(page - 1)}
         aria-label="Предыдущая страница"
       >
-        <Text view="p-16" weight="medium">
-          ‹
-        </Text>
+        <IconChevronLeft size={17} stroke={1.7} />
       </button>
 
       {pages.map((item) =>
@@ -71,6 +70,8 @@ const Pagination: React.FC<PaginationProps> = ({ page, pageCount, onPageChange, 
               [styles['pagination__page--active']]: item.value === page,
             })}
             onClick={() => onPageChange(item.value)}
+            aria-label={`Страница ${item.value}`}
+            aria-current={item.value === page ? 'page' : undefined}
           >
             <Text view="p-14" weight={item.value === page ? 'bold' : 'medium'}>
               {item.value}
@@ -85,9 +86,7 @@ const Pagination: React.FC<PaginationProps> = ({ page, pageCount, onPageChange, 
         onClick={() => onPageChange(page + 1)}
         aria-label="Следующая страница"
       >
-        <Text view="p-16" weight="medium">
-          ›
-        </Text>
+        <IconChevronRight size={17} stroke={1.7} />
       </button>
     </div>
   );

@@ -53,27 +53,6 @@ const ContactSection: React.FC = () => {
   return (
     <section className={styles.contact} id="contact">
       <motion.div
-        className={styles.contact__header}
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-80px' }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-      >
-        <Text
-          font="caveat"
-          view="p-24"
-          weight="medium"
-          color="secondary"
-          className={styles.contact__subtitle}
-        >
-          напишите мне
-        </Text>
-        <Text tag="h2" view="title" weight="black" uppercase>
-          Связаться
-        </Text>
-      </motion.div>
-
-      <motion.div
         className={styles.contact__container}
         variants={sectionVariants}
         initial="hidden"
@@ -83,14 +62,28 @@ const ContactSection: React.FC = () => {
         <div className={styles.contact__background} aria-hidden="true">
           <div className={styles.contact__mesh} />
           <div className={styles.contact__orbit} />
-          <span className={styles.contact__backgroundWord}>LET'S TALK</span>
         </div>
+
+        <motion.div
+          className={styles.contact__header}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
+          <Text tag="span" view="p-14" className={styles.contact__sectionIndex}>
+            05 · Contact
+          </Text>
+          <Text tag="h2" view="title" weight="black" uppercase>
+            Связаться
+          </Text>
+        </motion.div>
 
         <motion.div className={styles.contact__intro} variants={itemVariants}>
           <div className={styles.contact__introTop}>
-            <span className={styles.contact__eyebrow}>
+            <Text tag="span" view="p-14" className={styles.contact__eyebrow}>
               <IconSparkles size={15} /> Новая задача начинается здесь
-            </span>
+            </Text>
             <Text tag="h3" view="p-32" weight="bold" className={styles.contact__introTitle}>
               Давайте создадим продукт, который хочется использовать.
             </Text>
@@ -108,7 +101,7 @@ const ContactSection: React.FC = () => {
               <Text tag="span" view="p-12" weight="medium">
                 Обычно отвечаю в течение дня
               </Text>
-              <Text tag="span" view="p-10" className={styles.contact__responseMeta}>
+              <Text tag="span" view="p-14" className={styles.contact__responseMeta}>
                 Будни · 10:00–20:00 МСК
               </Text>
             </div>
@@ -129,7 +122,9 @@ const ContactSection: React.FC = () => {
                   <Icon size={19} stroke={1.5} />
                 </span>
                 <span className={styles.contact__socialCopy}>
-                  <small>{type}</small>
+                  <Text tag="span" view="p-12" className={styles.contact__socialType}>
+                    {type}
+                  </Text>
                   <Text tag="span" view="p-14" weight="medium">
                     {label}
                   </Text>
@@ -140,8 +135,12 @@ const ContactSection: React.FC = () => {
           </div>
 
           <div className={styles.contact__signature} aria-hidden="true">
-            <span>AK</span>
-            <span>Portfolio · 2026</span>
+            <Text tag="span" view="p-12" weight="bold">
+              AK
+            </Text>
+            <Text tag="span" view="p-12">
+              Portfolio · 2026
+            </Text>
           </div>
         </motion.div>
 

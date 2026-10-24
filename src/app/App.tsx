@@ -6,13 +6,15 @@ import Footer from 'widgets/Footer/ui/Footer';
 import { ScrollToTop } from 'shared/ui/ScrollToTop';
 import styles from './App.module.scss';
 import { ROUTES } from 'shared/configs/routes';
+import { usePageSeo } from 'shared/hooks/usePageSeo';
 
 export const App: React.FC = () => {
   const { pathname } = useLocation();
   const isAdmin = pathname.startsWith(ROUTES.ADMIN);
   const isAuth = pathname === ROUTES.AUTH || pathname === ROUTES.REGISTER;
+  usePageSeo(pathname);
 
-  if (isAdmin) {
+  if (isAdmin || isAuth) {
     return (
       <>
         <ScrollToTop />
@@ -28,7 +30,7 @@ export const App: React.FC = () => {
       <div className={styles.app__content}>
         <AppRouter />
       </div>
-      {!isAuth && <Footer />}
+      <Footer />
     </div>
   );
 };

@@ -11,9 +11,10 @@ export class ProfileFormStore implements ILocalStore {
   meta: Meta = Meta.initial;
   successMessage = '';
 
-  errors: Record<'displayName' | 'email', string> = {
+  errors: Record<'displayName' | 'email' | 'photoURL', string> = {
     displayName: '',
     email: '',
+    photoURL: '',
   };
 
   constructor() {
@@ -21,10 +22,10 @@ export class ProfileFormStore implements ILocalStore {
   }
 
   get isDirty(): boolean {
-    return this._original !== null && (
-      this.displayName !== this._original.displayName ||
-      this.email !== this._original.email ||
-      this.photoURL !== (this._original.photoURL ?? '')
+    return (
+      this._original !== null &&
+      (this.displayName !== this._original.displayName ||
+        this.photoURL !== (this._original.photoURL ?? ''))
     );
   }
 
@@ -40,26 +41,25 @@ export class ProfileFormStore implements ILocalStore {
         email: user.email ?? '',
         photoURL: user.photoURL ?? '',
       };
-      this.errors = { displayName: '', email: '' };
+      this.errors = { displayName: '', email: '', photoURL: '' };
       this.successMessage = '';
     });
   }
 
   setField(field: 'displayName' | 'email' | 'photoURL', value: string): void {
     this[field] = value;
-    if (field in this.errors) {
-      this.errors[field as 'displayName' | 'email'] = '';
-    }
+    this.errors[field] = '';
     this.successMessage = '';
   }
 
   validateAll(): boolean {
     const e1 = validateDisplayName(this.displayName);
     const e2 = validateEmail(this.email);
+    const e3 = this.validatePhotoURL(this.photoURL);
     runInAction(() => {
-      this.errors = { displayName: e1, email: e2 };
+      this.errors = { displayName: e1, email: e2, photoURL: e3 };
     });
-    return !e1 && !e2;
+    return !e1 && !e2 && !e3;
   }
 
   setMeta(meta: Meta): void {
@@ -68,6 +68,26 @@ export class ProfileFormStore implements ILocalStore {
 
   setSuccessMessage(msg: string): void {
     this.successMessage = msg;
+  }
+
+  resetChanges(): void {
+    if (!this._original) return;
+    this.displayName = this._original.displayName;
+    this.email = this._original.email;
+    this.photoURL = this._original.photoURL ?? '';
+    this.errors = { displayName: '', email: '', photoURL: '' };
+    this.successMessage = '';
+    this.meta = Meta.initial;
+  }
+
+  commitChanges(message: string): void {
+    this._original = {
+      displayName: this.displayName,
+      email: this.email,
+      photoURL: this.photoURL || null,
+    };
+    this.successMessage = message;
+    this.meta = Meta.success;
   }
 
   getPatch(): Partial<User> {
@@ -79,6 +99,19 @@ export class ProfileFormStore implements ILocalStore {
       patch.photoURL = this.photoURL || null;
     }
     return patch;
+  }
+
+  private validatePhotoURL(value: string): string {
+    if (!value) return '';
+
+    try {
+      const url = new URL(value);
+      return url.protocol === 'http:' || url.protocol === 'https:'
+        ? ''
+        : 'Используйте ссылку с http:// или https://';
+    } catch {
+      return 'Введите корректную ссылку на изображение';
+    }
   }
 
   destroy(): void {

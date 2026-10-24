@@ -1,121 +1,179 @@
 @use "mixins" as *;
 @use "adaptive" as *;
-@use "colors" as *;
 
 .page {
   @include wrapper;
 
-  padding-top: 120px;
-  padding-bottom: 80px;
   min-height: 100vh;
+  padding-top: 150px;
+  padding-bottom: 100px;
 
   @include smallerThanTablet {
-    padding-top: 90px;
-    padding-bottom: 40px;
+    padding-top: 100px;
+    padding-bottom: 56px;
   }
 
   &__header {
-    text-align: center;
-    margin-bottom: 48px;
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    max-width: 840px;
     align-items: center;
+    flex-direction: column;
+    gap: 14px;
+    margin: 0 auto 52px;
+    text-align: center;
 
-    @include smallerThanTablet {
-      margin-bottom: 24px;
+    & h1 {
+      letter-spacing: -0.055em;
+      line-height: 0.9;
+    }
+
+    & > p {
+      max-width: 600px;
+      color: #707b80;
+      line-height: 1.5;
     }
   }
 
-  &__content {
-    background-color: $project-bg;
-    border-radius: 24px;
-    padding: 32px;
+  &__eyebrow {
     display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #188d87;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+  }
+
+  &__content {
+    position: relative;
+    display: flex;
+    overflow: hidden;
     flex-direction: column;
     gap: 32px;
+    padding: clamp(20px, 4vw, 52px);
+    border: 1px solid rgb(255 255 255 / 8%);
+    border-radius: 30px;
+    background:
+      radial-gradient(circle at 100% 0%, rgb(65 190 180 / 12%), transparent 26%),
+      #0a1116;
+    color: #f4f7f8;
 
     @include smallerThanTablet {
-      padding: 20px 12px;
-      gap: 20px;
-      border-radius: 16px;
+      gap: 22px;
+      padding: 16px 12px 22px;
+      border-radius: 22px;
     }
   }
 
   &__controls {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: 16px;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgb(255 255 255 / 8%);
 
-    --input-bg: #{$white};
-    --input-text: #{$black};
-    --input-placeholder: #999;
+    --input-bg: rgb(255 255 255 / 7%);
+    --input-text: #f4f7f8;
+    --input-placeholder: rgb(255 255 255 / 36%);
 
     @include smallerThanTablet {
-      flex-direction: column;
       align-items: stretch;
-      gap: 12px;
+      flex-direction: column;
+      padding: 0 4px 20px;
     }
   }
 
   &__search {
-    flex: 1;
-    max-width: 360px;
-
-    @include smallerThanTablet {
-      max-width: 100%;
-    }
+    width: min(100%, 390px);
   }
 
   &__sort {
-    flex-shrink: 0;
-    min-width: 200px;
+    width: 220px;
 
     @include smallerThanTablet {
-      min-width: 100%;
+      width: 100%;
     }
   }
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
-    gap: 40px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(14px, 2vw, 26px);
+    scroll-margin-top: 110px;
+
+    & > div {
+      min-width: 0;
+    }
 
     @include smallerThanLaptop {
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     @include smallerThanTablet {
       grid-template-columns: 1fr;
-      gap: 24px;
     }
   }
 
   &__empty {
     grid-column: 1 / -1;
+    display: grid;
+    min-height: 260px;
+    color: rgb(255 255 255 / 50%);
+    place-items: center;
+    text-align: center;
+  }
+
+  &__paginationRow {
     display: flex;
-    justify-content: center;
     align-items: center;
-    min-height: 200px;
+    justify-content: space-between;
+    gap: 20px;
+    padding-top: 24px;
+    border-top: 1px solid rgb(255 255 255 / 8%);
+
+    @include smallerThanPhone {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+
+  &__resultCount {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgb(255 255 255 / 40%);
+    font-size: 12px;
+  }
+
+  &__pagination {
+    --pagination-bg: rgb(255 255 255 / 7%);
+    --pagination-text: rgb(255 255 255 / 64%);
+    --pagination-border: rgb(255 255 255 / 8%);
+    --pagination-active-bg: #86ecdf;
+    --pagination-active-text: #102126;
   }
 
   &__skeletonCard {
     display: flex;
+    min-height: 390px;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
+    padding: 8px;
+    border: 1px solid rgb(255 255 255 / 8%);
+    border-radius: 22px;
   }
 
   &__skeletonCover {
     width: 100%;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 16 / 10;
   }
 
   &__skeletonInfo {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding: 0 12px;
+    gap: 9px;
+    padding: 0 10px;
   }
 }

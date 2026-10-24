@@ -10,24 +10,24 @@
     $badge-bg padding-box,
     $badge-border border-box;
   color: $badge-text;
-  padding: 0 8px;
+  padding: 0 10px;
   display: flex;
   align-items: center;
-  height: 24px;
+  height: 28px;
   gap: 6px;
   box-sizing: border-box;
-  border-radius: 6px;
-  border: 0.4px solid transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
   box-shadow: $badge-shadow-up, $badge-shadow-down;
 
   &__title {
     color: inherit;
-    padding-bottom: 2px;
-    display: ruby;
+    display: inline-flex;
   }
 
   &__icon {
     flex-shrink: 0;
+    filter: drop-shadow(0 0 5px currentcolor);
   }
 
   &--c-purple {
