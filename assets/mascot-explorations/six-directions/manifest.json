@@ -1,0 +1,170 @@
+{
+  "title": "andkiv — шесть направлений персонажа",
+  "date": "2026-10-24",
+  "branch": "codex/kiv-mascot-assets",
+  "baseCommit": "300b196",
+  "status": "concepts-awaiting-selection",
+  "generationTool": "built-in image_gen",
+  "constraints": [
+    "Без очков",
+    "Без человеческого образа и причёски",
+    "Нечеловеческий персонаж",
+    "Крупные формы",
+    "Выразительные глаза",
+    "Простая будущая анимация"
+  ],
+  "note": "Палитры являются целевыми значениями из промптов; сгенерированные растровые изображения могут содержать оттенки и градиенты. SVG, логотип и финальные иконки подготавливаются для выбранного направления.",
+  "concepts": [
+    {
+      "id": "01-bino",
+      "number": 1,
+      "name": "Бино",
+      "caption": "Чернильный × кислотная груша",
+      "character": "Боб",
+      "description": "Чернильный боб на кислотно-грушевой подложке.",
+      "targetPalette": [
+        "#D9F45A",
+        "#17251F",
+        "#FFF8E7"
+      ],
+      "source": "concepts/01-bino.png",
+      "exports": [
+        "png/01-bino/16.png",
+        "png/01-bino/32.png",
+        "png/01-bino/48.png",
+        "png/01-bino/64.png",
+        "png/01-bino/128.png",
+        "png/01-bino/256.png",
+        "png/01-bino/512.png",
+        "png/01-bino/1024.png"
+      ],
+      "animationIdea": "Мягкое покачивание корпуса, моргание и перевод взгляда. Векторная конструкция: корпус, белки глаз, зрачки."
+    },
+    {
+      "id": "02-manta",
+      "number": 2,
+      "name": "Манта",
+      "caption": "Тёмно-синий × коралл",
+      "character": "Скат",
+      "description": "Мягкий тёмно-синий скат на коралловой подложке.",
+      "targetPalette": [
+        "#FF8E7A",
+        "#233049",
+        "#FFF5DD"
+      ],
+      "source": "concepts/02-manta.png",
+      "exports": [
+        "png/02-manta/16.png",
+        "png/02-manta/32.png",
+        "png/02-manta/48.png",
+        "png/02-manta/64.png",
+        "png/02-manta/128.png",
+        "png/02-manta/256.png",
+        "png/02-manta/512.png",
+        "png/02-manta/1024.png"
+      ],
+      "animationIdea": "Плавный взмах крыльями, движение хвоста и моргание. При векторизации крылья и хвост нужно выделить в отдельные группы."
+    },
+    {
+      "id": "03-piko",
+      "number": 3,
+      "name": "Пико",
+      "caption": "Ультрамарин × сливочный",
+      "character": "Птенец",
+      "description": "Ультрамариновый птенец на сливочно-жёлтой подложке.",
+      "targetPalette": [
+        "#FFE08A",
+        "#3155EC",
+        "#FFF9E9"
+      ],
+      "source": "concepts/03-piko.png",
+      "exports": [
+        "png/03-piko/16.png",
+        "png/03-piko/32.png",
+        "png/03-piko/48.png",
+        "png/03-piko/64.png",
+        "png/03-piko/128.png",
+        "png/03-piko/256.png",
+        "png/03-piko/512.png",
+        "png/03-piko/1024.png"
+      ],
+      "animationIdea": "Короткий наклон корпуса, подпрыгивание, моргание и лёгкое движение крыльев. Клюв остаётся неподвижной опорной формой."
+    },
+    {
+      "id": "04-nori",
+      "number": 4,
+      "name": "Нори",
+      "caption": "Песочный × бутылочно-зелёный",
+      "character": "Фенек",
+      "description": "Песочный фенек на глубокой бутылочно-зелёной подложке.",
+      "targetPalette": [
+        "#183E38",
+        "#F6D9AA",
+        "#7C4937"
+      ],
+      "source": "concepts/04-nori.png",
+      "exports": [
+        "png/04-nori/16.png",
+        "png/04-nori/32.png",
+        "png/04-nori/48.png",
+        "png/04-nori/64.png",
+        "png/04-nori/128.png",
+        "png/04-nori/256.png",
+        "png/04-nori/512.png",
+        "png/04-nori/1024.png"
+      ],
+      "animationIdea": "Поворот головы, покачивание ушей и моргание. Для анимации уши отделяются от общей формы головы."
+    },
+    {
+      "id": "05-lumi",
+      "number": 5,
+      "name": "Люми",
+      "caption": "Кремовый × фиолетовый",
+      "character": "Мотылёк",
+      "description": "Кремовый мотылёк на насыщенной фиолетовой подложке.",
+      "targetPalette": [
+        "#6139E8",
+        "#FFF4D0",
+        "#F5B44C"
+      ],
+      "source": "concepts/05-lumi.png",
+      "exports": [
+        "png/05-lumi/16.png",
+        "png/05-lumi/32.png",
+        "png/05-lumi/48.png",
+        "png/05-lumi/64.png",
+        "png/05-lumi/128.png",
+        "png/05-lumi/256.png",
+        "png/05-lumi/512.png",
+        "png/05-lumi/1024.png"
+      ],
+      "animationIdea": "Независимые взмахи четырьмя крыльями и лёгкое движение усиков. Корпус и голова остаются спокойными."
+    },
+    {
+      "id": "06-plim",
+      "number": 6,
+      "name": "Плим",
+      "caption": "Мятный × малиновый",
+      "character": "Медуза",
+      "description": "Мятная медуза на малиново-розовой подложке.",
+      "targetPalette": [
+        "#EB5D9B",
+        "#BFEFE1",
+        "#233F42"
+      ],
+      "source": "concepts/06-plim.png",
+      "exports": [
+        "png/06-plim/16.png",
+        "png/06-plim/32.png",
+        "png/06-plim/48.png",
+        "png/06-plim/64.png",
+        "png/06-plim/128.png",
+        "png/06-plim/256.png",
+        "png/06-plim/512.png",
+        "png/06-plim/1024.png"
+      ],
+      "animationIdea": "Плавное зависание, мягкое сжатие корпуса и моргание. Для первой анимации достаточно корпуса и двух глаз."
+    }
+  ]
+}
+

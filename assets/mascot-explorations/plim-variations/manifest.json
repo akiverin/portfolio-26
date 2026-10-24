@@ -1,0 +1,144 @@
+{
+  "title": "Плим: пять близких вариаций",
+  "subtitle": "Исходный образ и пять новых цветовых решений",
+  "date": "2026-10-24",
+  "branch": "codex/kiv-mascot-assets",
+  "generationTool": "built-in image_gen",
+  "reference": {
+    "id": "00-reference",
+    "number": 0,
+    "name": "Исходный",
+    "caption": "Выбранный образ: мята × малина",
+    "summary": "Выбранный образ: мята и малина",
+    "palette": [
+      "#EB5D9B",
+      "#BFEFE1",
+      "#233F42"
+    ],
+    "source": "00-reference.png"
+  },
+  "note": "Это растровые концепты. SVG и логотип разрабатываются для выбранного варианта. HEX-цвета — целевые значения из промптов.",
+  "concepts": [
+    {
+      "id": "01-sorbet",
+      "name": "Сорбет",
+      "caption": "Мята × малина · округлый",
+      "palette": [
+        "#ED5A9B",
+        "#BDEFE0",
+        "#203D42"
+      ],
+      "summary": "Мятный персонаж на малиновом фоне; компактнее и округлее исходного.",
+      "detail": "VARIATION 01 — SORBET.\nRetain the beloved original MINT ON RASPBERRY pairing: luminous rich raspberry-pink tile #ED5A9B, pale cool mint character #BDEFE0, very dark petrol eyes #203D42.\nShape change: the dome is slightly rounder and more compact than reference, with a gentle 5-degree right tilt and an even smoother left shoulder. Remove the small awkward shelf protruding at lower left of the reference. Base has exactly three generously rounded short lobes, center only a little longer, separated by broad soft U valleys. Two parallel dark capsule eyes, the left one about 10% taller, positioned close enough to feel adorable. Preserve the asymmetrical friendly character, not perfectly rigid symmetry. This is a refined sibling of the exact original, not a recolor alone.",
+      "number": 1,
+      "source": "concepts/01-sorbet.png",
+      "exports": [
+        "png/01-sorbet/16.png",
+        "png/01-sorbet/32.png",
+        "png/01-sorbet/48.png",
+        "png/01-sorbet/64.png",
+        "png/01-sorbet/128.png",
+        "png/01-sorbet/256.png",
+        "png/01-sorbet/512.png",
+        "png/01-sorbet/1024.png"
+      ]
+    },
+    {
+      "id": "02-cobalt",
+      "name": "Кобальт",
+      "caption": "Сливочный × кобальт · широкий",
+      "palette": [
+        "#3155EF",
+        "#FFF0BE",
+        "#26314A"
+      ],
+      "summary": "Сливочный персонаж на кобальте; широкий низкий купол.",
+      "detail": "VARIATION 02 — COBALT.\nColor palette: rich saturated electric COBALT BLUE tile #3155EF with a delicate slightly brighter top edge; very light warm BUTTERCREAM character #FFF0BE, dark deep midnight-blue eyes #26314A.\nShape change: make the same jelly-creature slightly wider and lower, with a very broad softly rounded dome, three short pillowy hanging lobes spaced a little farther apart. Shape should suggest a soft bouncing marshmallow, never a bird, robot or person. Almost upright with a subtle jaunty lean to the left. Two slightly shorter widely spaced dark capsule eyes, both simple solid shapes. Strong beautiful blue/butter contrast, minimal and warm, with the same cute identity.",
+      "number": 2,
+      "source": "concepts/02-cobalt.png",
+      "exports": [
+        "png/02-cobalt/16.png",
+        "png/02-cobalt/32.png",
+        "png/02-cobalt/48.png",
+        "png/02-cobalt/64.png",
+        "png/02-cobalt/128.png",
+        "png/02-cobalt/256.png",
+        "png/02-cobalt/512.png",
+        "png/02-cobalt/1024.png"
+      ]
+    },
+    {
+      "id": "03-lagoon",
+      "name": "Лагуна",
+      "caption": "Лаванда × петроль · вытянутый",
+      "palette": [
+        "#123F42",
+        "#D5C4F6",
+        "#293D48"
+      ],
+      "summary": "Лавандовый персонаж на тёмном петрольном фоне; вытянутый силуэт.",
+      "detail": "VARIATION 03 — LAGOON.\nColor palette: deep sophisticated PETROL / DARK LAGOON tile #123F42, softly luminous pale LAVENDER character #D5C4F6, very dark cool ink eyes #293D48. Gentle teal rim light on tile only.\nShape change: the same three-lobed jelly creature is a little taller and narrower than the reference, like a buoyant soft bell. Its central lower lobe is noticeably longer but still broad and rounded, two outer lobes short and soft. Subtle tilt to the right, enough to feel floating, no rotation beyond 8 degrees. Two close dark capsule eyes set slightly higher in the dome, left eye a little taller. Keep contour simple and full, not pointy, no additional tentacles. Dreamy and calm, high contrast elegant premium app identity.",
+      "number": 3,
+      "source": "concepts/03-lagoon.png",
+      "exports": [
+        "png/03-lagoon/16.png",
+        "png/03-lagoon/32.png",
+        "png/03-lagoon/48.png",
+        "png/03-lagoon/64.png",
+        "png/03-lagoon/128.png",
+        "png/03-lagoon/256.png",
+        "png/03-lagoon/512.png",
+        "png/03-lagoon/1024.png"
+      ]
+    },
+    {
+      "id": "04-volt",
+      "name": "Лайм",
+      "caption": "Чернильный × лайм · компактный",
+      "palette": [
+        "#DDF36A",
+        "#252236",
+        "#FFF8DC"
+      ],
+      "summary": "Тёмный персонаж на лаймовой подложке; плотный собранный силуэт.",
+      "detail": "VARIATION 04 — LIME / VOLT.\nColor palette: vibrant warm ACID LIME tile #DDF36A, deep INK AUBERGINE near-black creature #252236. IMPORTANT: for legibility invert the eye color in this variation only: two solid warm IVORY pill-shaped eyes #FFF8DC, no pupils. Keep the exact pill eye geometry and do NOT make white cartoon eyeballs with pupils.\nShape change: same jelly-creature in a slightly more compact stout silhouette, large smooth dome, three short rounded hanging lobes of similar length with the middle just a little longer, rounded outer shoulder corners. A little cheeky through a slight asymmetry of the two eye heights, no angular features or spikes. One unified graphic silhouette, powerful at favicon size. This is the selected soft jelly spirit in a confident dark inversion, not the rejected black ink gremlin.",
+      "number": 4,
+      "source": "concepts/04-volt.png",
+      "exports": [
+        "png/04-volt/16.png",
+        "png/04-volt/32.png",
+        "png/04-volt/48.png",
+        "png/04-volt/64.png",
+        "png/04-volt/128.png",
+        "png/04-volt/256.png",
+        "png/04-volt/512.png",
+        "png/04-volt/1024.png"
+      ]
+    },
+    {
+      "id": "05-apricot",
+      "name": "Персик",
+      "caption": "Персик × слива · мягкий наклон",
+      "palette": [
+        "#452D49",
+        "#FFC69F",
+        "#4B3145"
+      ],
+      "summary": "Персиковый персонаж на тёмно-сливовом фоне; мягкий наклон и длиннее центральный отросток.",
+      "detail": "VARIATION 05 — APRICOT.\nColor palette: deep muted BLACKBERRY / AUBERGINE tile #452D49, softly glowing warm APRICOT PEACH creature #FFC69F, dark warm PLUM pill eyes #4B3145. Restrained slightly warmer tile highlight in upper left.\nShape change: same simple domed three-lobed jelly-creature, gently leaning left as if drifting, dome slightly pear-shaped with the widest point low in the body; lower central lobe broad and longer, both side lobes round and slightly swept in the opposite direction of the body lean. Preserve a single smooth contour without extra shoulder shelf. Two elongated solid dark capsule eyes, evenly spaced with one a little lower for a shy curious expression. Warm inviting premium mascot, no smile or cheeks or any extra face marks.",
+      "number": 5,
+      "source": "concepts/05-apricot.png",
+      "exports": [
+        "png/05-apricot/16.png",
+        "png/05-apricot/32.png",
+        "png/05-apricot/48.png",
+        "png/05-apricot/64.png",
+        "png/05-apricot/128.png",
+        "png/05-apricot/256.png",
+        "png/05-apricot/512.png",
+        "png/05-apricot/1024.png"
+      ]
+    }
+  ]
+}
+

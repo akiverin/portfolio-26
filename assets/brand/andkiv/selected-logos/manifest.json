@@ -1,0 +1,162 @@
+{
+  "brand": "andkiv",
+  "selectedOriginalDirections": [
+    1,
+    3,
+    6
+  ],
+  "newDirection": 7,
+  "logos": [
+    {
+      "id": "01-companion",
+      "number": 1,
+      "displayName": "СПУТНИК",
+      "caption": "Исходный вариант 01",
+      "source": "../svg/logos/01-companion-<theme>.svg",
+      "files": {
+        "light": {
+          "svg": "01-companion/light.svg",
+          "png": "01-companion/light.png"
+        },
+        "dark": {
+          "svg": "01-companion/dark.svg",
+          "png": "01-companion/dark.png"
+        },
+        "mono": {
+          "svg": "01-companion/mono.svg",
+          "png": "01-companion/mono.png"
+        }
+      }
+    },
+    {
+      "id": "03-playful-i",
+      "number": 3,
+      "displayName": "ЖИВОЙ i",
+      "caption": "Исходный вариант 03",
+      "source": "../svg/logos/03-playful-i-<theme>.svg",
+      "files": {
+        "light": {
+          "svg": "03-playful-i/light.svg",
+          "png": "03-playful-i/light.png"
+        },
+        "dark": {
+          "svg": "03-playful-i/dark.svg",
+          "png": "03-playful-i/dark.png"
+        },
+        "mono": {
+          "svg": "03-playful-i/mono.svg",
+          "png": "03-playful-i/mono.png"
+        }
+      }
+    },
+    {
+      "id": "06-capsule",
+      "number": 6,
+      "displayName": "КАПСУЛА",
+      "caption": "Исходный вариант 06",
+      "source": "../svg/logos/06-capsule-<theme>.svg",
+      "files": {
+        "light": {
+          "svg": "06-capsule/light.svg",
+          "png": "06-capsule/light.png"
+        },
+        "dark": {
+          "svg": "06-capsule/dark.svg",
+          "png": "06-capsule/dark.png"
+        },
+        "mono": {
+          "svg": "06-capsule/mono.svg",
+          "png": "06-capsule/mono.png"
+        }
+      }
+    },
+    {
+      "id": "07-companion-black",
+      "number": 7,
+      "displayName": "СПУТНИК BLACK",
+      "caption": "Знак 01 + надпись 03 · обычная точка над i",
+      "derivedFrom": [
+        1,
+        3
+      ],
+      "wordmark": {
+        "font": "Pretendard Black",
+        "size": 192,
+        "tracking": -5,
+        "standardIDot": true
+      },
+      "files": {
+        "light": {
+          "svg": "07-companion-black/light.svg",
+          "png": "07-companion-black/light.png"
+        },
+        "dark": {
+          "svg": "07-companion-black/dark.svg",
+          "png": "07-companion-black/dark.png"
+        },
+        "mono": {
+          "svg": "07-companion-black/mono.svg",
+          "png": "07-companion-black/mono.png"
+        }
+      }
+    }
+  ],
+  "validation": {
+    "svgFiles": 12,
+    "pngFiles": 12,
+    "preservedOriginals": true,
+    "newWordmarkMatches03": true,
+    "newSymbolMatches01": true,
+    "standardIDot": true
+  },
+  "checksums": [
+    {
+      "file": "01-companion/light.svg",
+      "sha256": "b129140c01e14002f8f7203e72fab6864046dca47d51fc01f35fb9968e01b104"
+    },
+    {
+      "file": "01-companion/dark.svg",
+      "sha256": "eecb4c77b141207ee781409885f72c87e7a6085b1ad56699162daa7052eb41b6"
+    },
+    {
+      "file": "01-companion/mono.svg",
+      "sha256": "b36687ea95bbf9205435df48c877c63597a7fb5ee698ce6092a2d904f2b452d9"
+    },
+    {
+      "file": "03-playful-i/light.svg",
+      "sha256": "efdb5dc8a0d6bd8e067839a01ff1ba05779a630146ef9fa1a44cb4757b2b79f1"
+    },
+    {
+      "file": "03-playful-i/dark.svg",
+      "sha256": "2c66bb0ca21b8b36fa93244e7c20080e386f165cb01a11946bbe97f77ebb95ee"
+    },
+    {
+      "file": "03-playful-i/mono.svg",
+      "sha256": "7ad3f0d6cdefe6ec43b5a1b2c0d37ea59ee7d89e4dcca451f0dfb70a1ec1cba1"
+    },
+    {
+      "file": "06-capsule/light.svg",
+      "sha256": "9fc659a2e8e4c92d1309a657a7a401bcf3a0d4eb1bd84a451ddbeda33351948c"
+    },
+    {
+      "file": "06-capsule/dark.svg",
+      "sha256": "3b7866c9d9fce0ca0a6255744c9fa3d52506db0f3d76a34171b3df429d8ffe36"
+    },
+    {
+      "file": "06-capsule/mono.svg",
+      "sha256": "dd1c5b39c78c08a45b7c0b10f12b1e969f8199a9d70fc4f1b30ed5d71d536196"
+    },
+    {
+      "file": "07-companion-black/light.svg",
+      "sha256": "92cf92879c69f2d040bd0918e33075b42e9bc1170d2feda024b28c9bac614bf8"
+    },
+    {
+      "file": "07-companion-black/dark.svg",
+      "sha256": "5db454f167684b60095d009b340a6692b7919c532ddd96626d06332b17b3123b"
+    },
+    {
+      "file": "07-companion-black/mono.svg",
+      "sha256": "167c04df0b3e42da79197c6387cfa9e138497b57542e9f98b87150afaed28e3a"
+    }
+  ]
+}

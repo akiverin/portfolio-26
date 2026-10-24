@@ -1,0 +1,14 @@
+{
+  "svgFiles": 30,
+  "embeddedRasters": 0,
+  "textNodes": 0,
+  "externalFontReferences": 0,
+  "duplicateIds": 0,
+  "pngIcons": 84,
+  "icoFiles": 7,
+  "logoDirections": 6,
+  "logoVersions": 18,
+  "silhouetteIntersectionOverUnion": 0.994609,
+  "bodyCubicSegments": 17,
+  "note": "IoU compares the thresholded selected raster silhouette, including eye cutouts, with the rendered canonical monochrome SVG."
+}

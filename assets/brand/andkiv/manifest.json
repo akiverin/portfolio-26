@@ -1,0 +1,216 @@
+{
+  "brand": "andkiv",
+  "date": "2026-10-24",
+  "branch": "codex/kiv-mascot-assets",
+  "mascotName": null,
+  "geometry": "source/geometry.json",
+  "bodyCubicSegments": 17,
+  "fontSources": {
+    "bold": "src/shared/styles/fonts/Pretendard/Pretendard-Bold.woff2",
+    "black": "src/shared/styles/fonts/Pretendard/Pretendard-Black.woff2",
+    "medium": "src/shared/styles/fonts/Pretendard/Pretendard-Medium.woff2",
+    "hand": "src/shared/styles/fonts/Caveat/Caveat-Bold.ttf"
+  },
+  "logos": [
+    {
+      "id": "01-companion",
+      "number": 1,
+      "name": "Спутник",
+      "description": "Персонаж рядом с andkiv. Основной вариант для шапки сайта.",
+      "files": {
+        "light": "svg/logos/01-companion-light.svg",
+        "dark": "svg/logos/01-companion-dark.svg",
+        "mono": "svg/logos/01-companion-mono.svg"
+      }
+    },
+    {
+      "id": "02-editorial",
+      "number": 2,
+      "name": "Редакционный",
+      "description": "Крупный ANDKIV, небольшая фигура и подпись DESIGN / CODE / MOTION.",
+      "files": {
+        "light": "svg/logos/02-editorial-light.svg",
+        "dark": "svg/logos/02-editorial-dark.svg",
+        "mono": "svg/logos/02-editorial-mono.svg"
+      }
+    },
+    {
+      "id": "03-playful-i",
+      "number": 3,
+      "name": "Живой i",
+      "description": "Персонаж заменяет точку над i. Выразительная версия для крупного размещения.",
+      "files": {
+        "light": "svg/logos/03-playful-i-light.svg",
+        "dark": "svg/logos/03-playful-i-dark.svg",
+        "mono": "svg/logos/03-playful-i-mono.svg"
+      }
+    },
+    {
+      "id": "04-stacked",
+      "number": 4,
+      "name": "Эмблема",
+      "description": "Персонаж над подписью. Компактная вертикальная композиция.",
+      "files": {
+        "light": "svg/logos/04-stacked-light.svg",
+        "dark": "svg/logos/04-stacked-dark.svg",
+        "mono": "svg/logos/04-stacked-mono.svg"
+      }
+    },
+    {
+      "id": "05-signature",
+      "number": 5,
+      "name": "Подпись",
+      "description": "Контурный персонаж и рукописный andkiv на основе Caveat.",
+      "files": {
+        "light": "svg/logos/05-signature-light.svg",
+        "dark": "svg/logos/05-signature-dark.svg",
+        "mono": "svg/logos/05-signature-mono.svg"
+      }
+    },
+    {
+      "id": "06-capsule",
+      "number": 6,
+      "name": "Капсула",
+      "description": "Контрастная плашка с персонажем и плотной надписью.",
+      "files": {
+        "light": "svg/logos/06-capsule-light.svg",
+        "dark": "svg/logos/06-capsule-dark.svg",
+        "mono": "svg/logos/06-capsule-mono.svg"
+      }
+    }
+  ],
+  "icons": [
+    {
+      "svg": "svg/icons/00-peach.svg",
+      "pngFolder": "png/icons/00-peach",
+      "sizes": [
+        16,
+        24,
+        32,
+        48,
+        64,
+        96,
+        128,
+        180,
+        192,
+        256,
+        512,
+        1024
+      ]
+    },
+    {
+      "svg": "svg/icons/01-chrome-pop.svg",
+      "pngFolder": "png/icons/01-chrome-pop",
+      "sizes": [
+        16,
+        24,
+        32,
+        48,
+        64,
+        96,
+        128,
+        180,
+        192,
+        256,
+        512,
+        1024
+      ]
+    },
+    {
+      "svg": "svg/icons/02-neon-bloom.svg",
+      "pngFolder": "png/icons/02-neon-bloom",
+      "sizes": [
+        16,
+        24,
+        32,
+        48,
+        64,
+        96,
+        128,
+        180,
+        192,
+        256,
+        512,
+        1024
+      ]
+    },
+    {
+      "svg": "svg/icons/03-pastel-graphic.svg",
+      "pngFolder": "png/icons/03-pastel-graphic",
+      "sizes": [
+        16,
+        24,
+        32,
+        48,
+        64,
+        96,
+        128,
+        180,
+        192,
+        256,
+        512,
+        1024
+      ]
+    },
+    {
+      "svg": "svg/icons/04-petal-gradient.svg",
+      "pngFolder": "png/icons/04-petal-gradient",
+      "sizes": [
+        16,
+        24,
+        32,
+        48,
+        64,
+        96,
+        128,
+        180,
+        192,
+        256,
+        512,
+        1024
+      ]
+    },
+    {
+      "svg": "svg/icons/05-ink-sketch.svg",
+      "pngFolder": "png/icons/05-ink-sketch",
+      "sizes": [
+        16,
+        24,
+        32,
+        48,
+        64,
+        96,
+        128,
+        180,
+        192,
+        256,
+        512,
+        1024
+      ]
+    },
+    {
+      "svg": "svg/icons/06-liquid-glass.svg",
+      "pngFolder": "png/icons/06-liquid-glass",
+      "sizes": [
+        16,
+        24,
+        32,
+        48,
+        64,
+        96,
+        128,
+        180,
+        192,
+        256,
+        512,
+        1024
+      ]
+    }
+  ],
+  "notes": [
+    "All SVGs are native vector paths with no embedded images or external fonts.",
+    "Lettering is outlined; font choices come from the existing portfolio project.",
+    "Gradient, neon and glass SVGs are vector interpretations of the generated renders.",
+    "No live site assets have been replaced."
+  ]
+}
