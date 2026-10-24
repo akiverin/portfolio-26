@@ -10,6 +10,7 @@ import './app/styles/globals.scss';
 import { App } from './app/App';
 import { StoreProvider } from 'shared/stores/StoreContext';
 import { NotificationProvider } from 'shared/ui/Notifications';
+import DesignUpdateAnnouncement from 'features/announcements';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -18,6 +19,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <StoreProvider>
           <NotificationProvider>
             <App />
+            <DesignUpdateAnnouncement />
           </NotificationProvider>
         </StoreProvider>
       </MantineProvider>

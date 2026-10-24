@@ -103,7 +103,7 @@ const AccountShell = observer(({ children }: AccountShellProps) => {
           className={classNames(styles.shell__link, active && styles['shell__link--active'])}
           onClick={(event) => handleCurrentLink(event, to)}
         >
-          <Icon size={22} weight={active ? 'fill' : 'regular'} aria-hidden="true" />
+          <Icon size={19} weight={active ? 'fill' : 'regular'} aria-hidden="true" />
         </Link>
       </Tooltip>
     );
@@ -127,7 +127,7 @@ const AccountShell = observer(({ children }: AccountShellProps) => {
               className={classNames(styles.shell__link, styles.shell__brand)}
               onClick={(event) => handleCurrentLink(event, ROUTES.HOME)}
             >
-              <img src={mascot} width={28} height={28} alt="" />
+              <img src={mascot} width={25} height={25} alt="" />
             </Link>
           </Tooltip>
 
@@ -164,14 +164,14 @@ const AccountShell = observer(({ children }: AccountShellProps) => {
                   {photoURL && photoURL !== failedAvatar ? (
                     <img
                       src={photoURL}
-                      width={28}
-                      height={28}
+                      width={26}
+                      height={26}
                       alt=""
                       referrerPolicy="no-referrer"
                       onError={() => setFailedAvatar(photoURL)}
                     />
                   ) : (
-                    <UserIcon size={18} weight="bold" aria-hidden="true" />
+                    <UserIcon size={16} weight="bold" aria-hidden="true" />
                   )}
                 </span>
               </Link>

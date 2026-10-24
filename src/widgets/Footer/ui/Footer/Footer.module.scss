@@ -24,6 +24,11 @@
   }
 
   &__copyright {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+
     @include smallerThanTablet {
       order: 10;
     }
@@ -34,6 +39,11 @@
     flex-direction: column;
     gap: 6px;
     align-items: start;
+  }
+
+  &__version {
+    color: rgb(255 255 255 / 38%);
+    font-variant-numeric: tabular-nums;
   }
 
   &__link {

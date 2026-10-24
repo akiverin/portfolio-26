@@ -1,6 +1,8 @@
+@use "sizes" as *;
+
 .shell {
   --shell-inset: 0px;
-  --shell-rail: 62px;
+  --shell-rail: #{$account-sidebar-width};
   --shell-border: 6px;
   --shell-radius: 0px;
   --shell-content-radius: 32px;
@@ -101,8 +103,8 @@
 
   &__avatar {
     display: grid;
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
     overflow: hidden;
     border: 1px solid rgb(255 255 255 / 14%);
     border-radius: 50%;
