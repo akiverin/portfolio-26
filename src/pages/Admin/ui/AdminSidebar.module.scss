@@ -1,7 +1,7 @@
 .sidebar {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: var(--page-viewport-height, 100vh);
   background: var(--admin-sidebar-bg);
   border-right: 1px solid var(--admin-sidebar-border);
   overflow: hidden;

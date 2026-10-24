@@ -22,12 +22,16 @@ import { RootStore } from 'shared/stores/RootStore';
 import { User as FirebaseUser } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
 import { ILocalStore } from 'shared/types/ILocalStore';
+import { hasStoredAuthSession, writeAuthSessionHint } from '../lib/authSession';
 
 export class UserStore extends BaseStore implements ILocalStore {
   readonly root: RootStore;
   currentUser: User | null = null;
   isInitialized: boolean = false;
   private _unsubscribeAuth: (() => void) | null = null;
+  private _authListenerRevision = 0;
+  private readonly _hadStoredSession = hasStoredAuthSession(auth.app);
+  private _pendingBootstrap: { uid: string; promise: Promise<void> } | null = null;
 
   constructor(root: RootStore) {
     super();
@@ -41,6 +45,7 @@ export class UserStore extends BaseStore implements ILocalStore {
         error: observable,
         isAuth: computed,
         isAdmin: computed,
+        isRestoringSession: computed,
       },
       { autoBind: true },
     );
@@ -54,8 +59,16 @@ export class UserStore extends BaseStore implements ILocalStore {
     return this.currentUser?.role === 'admin';
   }
 
+  get isRestoringSession(): boolean {
+    return !this.isInitialized && this._hadStoredSession;
+  }
+
   initAuthListener(): void {
+    this._unsubscribeAuth?.();
+    const revision = ++this._authListenerRevision;
     this._unsubscribeAuth = auth.onAuthStateChanged(async (firebaseUser) => {
+      if (revision !== this._authListenerRevision) return;
+      writeAuthSessionHint(auth.app, Boolean(firebaseUser));
       if (!firebaseUser) {
         runInAction(() => {
           this.currentUser = null;
@@ -70,14 +83,27 @@ export class UserStore extends BaseStore implements ILocalStore {
       } catch (e) {
         console.error('Error in bootstrapUser:', e);
       } finally {
-        runInAction(() => {
-          this.isInitialized = true;
-        });
+        if (revision === this._authListenerRevision && auth.currentUser?.uid === firebaseUser.uid) {
+          runInAction(() => {
+            this.isInitialized = true;
+          });
+        }
       }
     });
   }
 
-  private async _bootstrapUser(firebaseUser: FirebaseUser): Promise<void> {
+  private _bootstrapUser(firebaseUser: FirebaseUser): Promise<void> {
+    if (this.currentUser?.id === firebaseUser.uid) return Promise.resolve();
+    if (this._pendingBootstrap?.uid === firebaseUser.uid) return this._pendingBootstrap.promise;
+
+    const promise = this._loadUser(firebaseUser).finally(() => {
+      if (this._pendingBootstrap?.promise === promise) this._pendingBootstrap = null;
+    });
+    this._pendingBootstrap = { uid: firebaseUser.uid, promise };
+    return promise;
+  }
+
+  private async _loadUser(firebaseUser: FirebaseUser): Promise<void> {
     try {
       // ensureUserDoc now returns the profile directly — no extra getDoc needed
       const profile = await ensureUserDoc(firebaseUser.uid, {
@@ -85,25 +111,31 @@ export class UserStore extends BaseStore implements ILocalStore {
         displayName: firebaseUser.displayName || undefined,
         photoURL: firebaseUser.photoURL || null,
       });
+      if (auth.currentUser?.uid !== firebaseUser.uid) return;
+      if (!profile) throw new Error('Не удалось загрузить профиль');
 
       runInAction(() => {
         this.currentUser = profile;
         this.setSuccess();
       });
     } catch (e) {
-      console.error('Error in bootstrapUser:', e);
+      if (auth.currentUser?.uid !== firebaseUser.uid) return;
       this.setError(e);
+      throw e;
     }
   }
 
   destroy(): void {
+    this._authListenerRevision += 1;
     this._unsubscribeAuth?.();
+    this._unsubscribeAuth = null;
   }
 
   async signIn(email: string, password: string) {
     this.setLoading();
     try {
       const user = await signInWithEmail(email, password);
+      await this._bootstrapUser(user);
       this.setSuccess();
       return user;
     } catch (e) {
@@ -116,6 +148,7 @@ export class UserStore extends BaseStore implements ILocalStore {
     this.setLoading();
     try {
       const user = await signUpWithEmail(email, password, displayName);
+      await this._bootstrapUser(user);
       this.setSuccess();
       return user;
     } catch (e) {
@@ -128,6 +161,7 @@ export class UserStore extends BaseStore implements ILocalStore {
     this.setLoading();
     try {
       await signOutFirebase();
+      writeAuthSessionHint(auth.app, false);
       runInAction(() => (this.currentUser = null));
       this.reset();
     } catch (e) {
@@ -186,6 +220,7 @@ export class UserStore extends BaseStore implements ILocalStore {
       const uid = this.currentUser.id;
       await deleteUserProfileFromFirestore(uid);
       await deleteAccountFromFirebase();
+      writeAuthSessionHint(auth.app, false);
       runInAction(() => {
         this.currentUser = null;
       });

@@ -5,9 +5,9 @@
   @include wrapper;
 
   position: relative;
-  min-height: 100svh;
+  min-height: var(--page-viewport-height, 100svh);
   overflow: hidden;
-  padding-block: 132px 96px;
+  padding-block: var(--page-top-padding, 132px) 96px;
   background:
     radial-gradient(circle at 10% 8%, rgb(66 189 218 / 10%), transparent 28%),
     radial-gradient(circle at 94% 88%, rgb(112 79 218 / 8%), transparent 30%), #0e0e0e;
@@ -30,7 +30,7 @@
   --admin-text-on-danger: #fff;
 
   @include smallerThanTablet {
-    padding-block: 104px 56px;
+    padding-block: var(--page-top-padding-mobile, 104px) 56px;
   }
 
   &__grid {

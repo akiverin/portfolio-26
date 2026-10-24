@@ -4,7 +4,7 @@
 .hero {
   position: relative;
   display: flex;
-  height: 100svh;
+  height: var(--page-viewport-height, 100svh);
   min-height: 720px;
   overflow: hidden;
   flex-direction: column;
@@ -14,6 +14,7 @@
   border-radius: 0 0 32px 32px;
   background: #080d12;
   color: $white;
+  container-type: inline-size;
   isolation: isolate;
 
   @include smallerThanLaptop {
@@ -178,11 +179,11 @@
   }
 
   &__topline {
-    padding-top: 58px;
+    padding-top: var(--hero-top-padding, 58px);
     color: rgb(255 255 255 / 72%);
 
     @include smallerThanTablet {
-      padding-top: 48px;
+      padding-top: var(--hero-top-padding-mobile, 48px);
     }
   }
 
@@ -334,6 +335,12 @@
 
     & svg {
       animation: scroll-nudge 1.8s ease-in-out infinite;
+    }
+  }
+
+  @container (width <= 440px) {
+    & .hero__location {
+      display: none;
     }
   }
 }

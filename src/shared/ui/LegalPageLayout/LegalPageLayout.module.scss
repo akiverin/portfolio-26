@@ -5,13 +5,13 @@
   @include wrapper;
 
   position: relative;
-  min-height: 100vh;
-  padding-block: 128px 88px;
+  min-height: var(--page-viewport-height, 100vh);
+  padding-block: var(--page-top-padding, 128px) 88px;
   background: radial-gradient(circle at 80% 4%, rgb(66 189 218 / 8%), transparent 28%), #0e0e0e;
   color: #f3f7f8;
 
   @include smallerThanTablet {
-    padding-block: 96px 48px;
+    padding-block: var(--page-top-padding-mobile, 96px) 48px;
   }
 
   &__container {

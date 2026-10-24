@@ -31,12 +31,12 @@
 
 .letter {
   display: inline-block;
-  font-size: clamp(64px, 10.7vw, 205px);
+  font-size: clamp(64px, var(--hero-letter-size, 10.7vw), 205px);
   transform-origin: center bottom;
   will-change: transform, opacity, filter;
 
   @include smallerThanTablet {
-    font-size: clamp(56px, 16vw, 118px);
+    font-size: clamp(var(--hero-min-letter-size, 56px), var(--hero-letter-size-mobile, 16vw), 118px);
   }
 }
 

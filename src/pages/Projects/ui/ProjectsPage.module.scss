@@ -4,12 +4,12 @@
 .page {
   @include wrapper;
 
-  min-height: 100vh;
-  padding-top: 150px;
+  min-height: var(--page-viewport-height, 100vh);
+  padding-top: var(--page-top-padding, 150px);
   padding-bottom: 100px;
 
   @include smallerThanTablet {
-    padding-top: 100px;
+    padding-top: var(--page-top-padding-mobile, 100px);
     padding-bottom: 56px;
   }
 

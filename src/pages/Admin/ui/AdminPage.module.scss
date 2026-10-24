@@ -29,7 +29,7 @@
   --admin-date-icon-filter: none;
 
   display: flex;
-  min-height: 100vh;
+  min-height: var(--page-viewport-height, 100vh);
   background: var(--admin-bg);
   color: var(--admin-text);
   font-family: Pretendard, sans-serif;
@@ -69,7 +69,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    min-height: var(--page-viewport-height, 100vh);
     background: var(--admin-bg);
   }
 
