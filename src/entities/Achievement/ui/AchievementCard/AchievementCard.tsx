@@ -1,12 +1,11 @@
-import ActionButton from 'shared/ui/ActionButton';
+import ActionButton, { ActionLink } from 'shared/ui/ActionButton';
 import React, { useEffect, useState } from 'react';
 import styles from './AchievementCard.module.scss';
 import classNames from 'classnames';
 import { Achievement } from 'entities/Achievement/model/types';
 import Text from 'shared/ui/Text';
-import Badge, { ColorsBadgeT, IconsBadgeT } from 'shared/ui/Badge';
 import { ImageWithFallback } from 'shared/ui/ImageWithFallback';
-import { IconArrowUpRight, IconCalendarEvent, IconZoomIn } from '@tabler/icons-react';
+import { IconZoomIn } from '@tabler/icons-react';
 import { VideoWithFallback } from 'shared/ui/VideoWithFallback';
 import { getImageFit, getMediaUrl, ImageFit, isVideoMedia } from 'shared/lib/media';
 import MediaLightbox from 'shared/ui/MediaLightbox';
@@ -78,14 +77,6 @@ const AchievementCard: React.FC<AchievementCardProps> = ({
           />
         ) : (
           <>
-            {imageFit && (
-              <img
-                src={mediaUrl}
-                className={styles.achievementCard__backdrop}
-                alt=""
-                aria-hidden="true"
-              />
-            )}
             <ImageWithFallback
               src={mediaUrl}
               className={styles.achievementCard__image}
@@ -96,6 +87,7 @@ const AchievementCard: React.FC<AchievementCardProps> = ({
             />
             <ActionButton
               variant="icon"
+              surface="dark"
               size="sm"
               type="button"
               className={styles.achievementCard__inspect}
@@ -115,21 +107,15 @@ const AchievementCard: React.FC<AchievementCardProps> = ({
           onClose={() => setIsLightboxOpen(false)}
         />
       )}
-      {achievement.badges && (
-        <div className={styles.achievementCard__badges}>
-          {achievement.badges.map((badge) => (
-            <Badge
-              key={badge.id}
-              icon={badge.icon as IconsBadgeT}
-              title={badge.title}
-              color={badge.color as ColorsBadgeT}
-            />
-          ))}
-        </div>
-      )}
-
       <div className={styles.achievementCard__info}>
-        <Text view="p-18" maxLines={fullDescription ? undefined : 3} tag="h3" weight="medium">
+        {achievement.badges && achievement.badges.length > 0 && (
+          <div className={styles.achievementCard__badges}>
+            {achievement.badges.map((badge) => (
+              <span key={badge.id}>{badge.title}</span>
+            ))}
+          </div>
+        )}
+        <Text view="p-24" maxLines={fullDescription ? undefined : 3} tag="h3" weight="bold">
           {achievement.title}
         </Text>
         <Text view="p-14" maxLines={fullDescription ? undefined : 3} color="secondary">
@@ -137,7 +123,6 @@ const AchievementCard: React.FC<AchievementCardProps> = ({
         </Text>
         {showDate && achievement.date && (
           <Text tag="span" view="p-12" className={styles.achievementCard__date}>
-            <IconCalendarEvent size={14} stroke={1.5} />
             {formatAchievementDate(achievement.date)}
           </Text>
         )}
@@ -145,12 +130,9 @@ const AchievementCard: React.FC<AchievementCardProps> = ({
 
       <div className={styles.achievementCard__actions}>
         {achievement.link && (
-          <a href={achievement.link} target="_blank" rel="noopener noreferrer">
-            <Text tag="span" view="p-12" weight="medium">
-              О достижении
-            </Text>
-            <IconArrowUpRight size={17} stroke={1.6} />
-          </a>
+          <ActionLink href={achievement.link} variant="text" size="sm" chevron target="_blank">
+            Подробнее
+          </ActionLink>
         )}
       </div>
     </article>

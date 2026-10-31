@@ -1,0 +1,168 @@
+// Browser-only fixtures exercise actual components without account writes or message delivery.
+import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
+import { mkdir, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+import { homedir } from 'node:os';
+const require = createRequire(import.meta.url);
+const { chromium } = require(path.join(homedir(), '.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright'));
+const output = '/tmp/portfolio-light-content-qa';
+await mkdir(output, { recursive: true });
+const browser = await chromium.launch({ executablePath: path.join(homedir(), 'Library/Caches/ms-playwright/chromium-1243/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing'), headless: true });
+const report = { checks: [], errors: [] };
+const check = name => { report.checks.push(name); console.log(name); };
+try {
+ const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
+ page.setDefaultTimeout(12000);
+ page.on('pageerror', error => report.errors.push(error.message));
+ await page.route('https://ui-fixture.invalid/**', route => route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600"><rect width="960" height="600" fill="#e8e8e8"/><text x="64" y="310" font-size="68" fill="#1d1d1d">Project preview</text></svg>' }));
+ await page.goto('http://127.0.0.1:5173/'); await page.locator('h1').waitFor();
+ assert.match(await page.locator('h1').innerText(), /Создаю сайты/);
+ const header = await page.locator('header').first().evaluate(e => ({ nav: getComputedStyle(e.querySelector('nav')).backgroundColor, blur: getComputedStyle(e.querySelector('nav')).backdropFilter }));
+ assert.equal(header.nav, 'rgba(0, 0, 0, 0)'); assert.match(header.blur, /blur/);
+ check('Clear Hero copy; header uses blur without dark fill');
+ await page.evaluate(async () => {
+   const loaded = performance.getEntriesByType('resource').map(e => e.name);
+   const moduleUrl = part => loaded.find(u => u.includes(part));
+   const reactModule = await import(moduleUrl('/deps/react.js'));
+   const React = reactModule.default || reactModule;
+   const clientModule = await import(moduleUrl('/deps/react-dom_client.js'));
+   const { createRoot } = clientModule.default || clientModule;
+   const { MemoryRouter } = await import(moduleUrl('/deps/react-router-dom.js'));
+   const { Meta } = await import(moduleUrl('/src/shared/lib/meta.ts'));
+   const { ProjectListStore } = await import(moduleUrl('/src/entities/Project/stores/ProjectListStore.ts'));
+   const { AchievementListStore } = await import(moduleUrl('/src/entities/Achievement/stores/AchievementListStore.ts'));
+   const { GrantListStore } = await import(moduleUrl('/src/entities/Grant/stores/GrantListStore.ts'));
+   const date = { seconds: 1767225600, nanoseconds: 0 };
+   ProjectListStore.prototype.fetchAllProjects = function () { this.projects = Array.from({length: 8}, (_, i) => ({ id: String(i), title: 'Проект ' + (i + 1), desc: 'Описание проекта', date, coverType: 'image', cover: 'https://ui-fixture.invalid/preview.svg', link: 'https://ui-fixture.invalid/site', github: 'https://ui-fixture.invalid/code', behance: 'https://ui-fixture.invalid/design' })); this.meta = Meta.success; return Promise.resolve(); };
+   AchievementListStore.prototype.fetchAchievements = function () { this._achievements = Array.from({length: 6}, (_, i) => ({ id: String(i), title: 'Достижение ' + (i + 1), desc: 'Описание результата', date, cover: 'https://ui-fixture.invalid/preview.svg', link: 'https://ui-fixture.invalid/achievement', badges: [{id: 'badge', title: 'Исследования', icon: 'star'}] })); this.meta = Meta.success; return Promise.resolve(); };
+   GrantListStore.prototype.fetchAllGrants = function () { this.grants = ['govScience', 'polytech', 'moscow', 'alfa'].map((icon, i) => ({id: String(i), title: 'Стипендия ' + (i + 1), desc: 'Название организации', icon, sum: 120000 + i * 10000, startDate: date, endDate: {seconds: 1798761600, nanoseconds: 0} })); this.meta = Meta.success; return Promise.resolve(); };
+   const { HomePage } = await import(moduleUrl('/src/pages/Home/ui/HomePage.tsx'));
+   const { default: Pagination } = await import('/src/shared/ui/Pagination/Pagination.tsx');
+   const { default: Footer } = await import('/src/widgets/Footer/ui/Footer/Footer.tsx');
+   function PaginationExample() { const [page, setPage] = React.useState(1); return React.createElement(Pagination, {page, pageCount: 12, onPageChange: setPage}); }
+   document.getElementById('root').remove();
+   const fixture = document.createElement('div'); fixture.id = 'qa-root'; document.body.append(fixture);
+   createRoot(fixture).render(React.createElement(MemoryRouter, {}, React.createElement(HomePage), React.createElement(Footer), React.createElement('div', {id:'pagination-example', style:{padding:'24px 20px'}}, React.createElement(PaginationExample))));
+ });
+ await page.locator('#projects article').first().waitFor();
+ const sections = await page.locator('main section:not([data-hero])').evaluateAll(es => es.map(e => ({ name: e.id || e.getAttribute('aria-labelledby'), color: getComputedStyle(e).backgroundColor })));
+ assert(sections.every(s => s.color === (s.name === 'contact' ? 'rgba(0, 0, 0, 0)' : 'rgb(255, 255, 255)')), JSON.stringify(sections));
+ const links = page.locator('#projects article').first().locator('a'); assert.equal(await links.count(), 3);
+ assert(await links.evaluateAll(es => es.every(e => ['primary', 'text'].includes(e.dataset.variant) && e.target === '_blank' && e.rel.includes('noopener') && !e.querySelector('svg'))));
+ check('White content sections and transparent contact over footer; project links use safe external URLs');
+ const dateToggle = page.getByRole('checkbox', { name: 'Показывать даты', exact: true });
+ await dateToggle.check(); assert.equal(await page.locator('[class*="achievementCard__date"]').count(), 6);
+ await dateToggle.uncheck(); assert.equal(await page.locator('[class*="achievementCard__date"]').count(), 0);
+ await dateToggle.focus(); await page.keyboard.press('Space'); assert(await dateToggle.isChecked());
+ assert.equal(await page.locator('#achievements [class*="badge"] svg').count(), 0);
+ check('Native date checkbox click/Space actually controls achievement dates; text-only badges');
+ const grantSection = page.locator('section[aria-labelledby="grants-title"]');
+ assert.equal(await grantSection.locator('[class*="iconBox"] svg').count(), 3);
+ await grantSection.getByRole('button', { name: /Показать все/ }).click();
+ assert.equal(await grantSection.locator('[class*="iconBox"] svg').count(), 4);
+ check('All four database icon values render their matching organization marks; expand works');
+ await page.getByRole('button', { name: 'Отправить', exact: true }).click();
+ assert.equal(await page.locator('#contact [aria-invalid="true"]').count(), 3);
+ const name = page.getByLabel('Имя', { exact: true }); await name.fill('Тест'); await name.focus();
+ const field = await name.evaluate(e => {const s = getComputedStyle(e.parentElement); return {height: e.parentElement.getBoundingClientRect().height, outline: s.outlineStyle, radius: s.borderRadius};});
+ assert.equal(field.height, 52); assert.equal(field.outline, 'solid'); assert.equal(field.radius, '12px');
+ assert.equal(await name.getAttribute('aria-invalid'), 'false');
+ check('Contact validation, 52px outlined fields and visible focus; no valid message submitted');
+ const sort = page.getByRole('combobox', { name: 'Сортировка стипендий и грантов' });
+ await sort.selectOption('sum-desc'); assert.equal(await sort.inputValue(), 'sum-desc');
+ assert.equal(await grantSection.locator('h3').first().innerText(), 'Стипендия 4');
+ check('Native select changes actual grant ordering');
+ const projectType = page.getByRole('group', { name: 'Тип проекта', exact: true });
+ await projectType.getByRole('radio', { name: 'Сайт', exact: true }).focus();
+ await page.keyboard.press('ArrowRight');
+ assert(await projectType.getByRole('radio', { name: 'Приложение', exact: true }).isChecked());
+ const portrait = await page.locator('#about img').evaluate(e => ({url: e.currentSrc, filter: getComputedStyle(e).filter, loaded: e.complete && e.naturalWidth === 940}));
+ assert(portrait.url.includes('andrey-sunset')); assert.equal(portrait.filter, 'none'); assert(portrait.loaded);
+ check('Color portrait loaded; contact uses shared segmented selection with arrow-key navigation');
+ const about = page.locator('#about');
+ assert.equal(await about.getByText('Moscow, RU', {exact:true}).count(), 0);
+ assert(await about.getByRole('heading', {name:'Frontend-разработчик', exact:true}).isVisible());
+ for (const role of ['UI/UX дизайнер', 'Full-stack разработчик', 'Начинающий аналитик']) assert(await about.getByText(role, {exact:true}).isVisible());
+ const captionPosition = await about.locator('[class*=photoCaption]').evaluate(e => ({text:e.textContent, offset:e.getBoundingClientRect().top - e.parentElement.getBoundingClientRect().top}));
+ assert.equal(captionPosition.text, 'Frontend developer, Moscow'); assert(captionPosition.offset < 40);
+ const journey = about.getByRole('group', {name:'Образование и опыт', exact:true});
+ await journey.getByRole('radio', {name:'Опыт',exact:true}).check();
+ assert.equal(await about.getByRole('list', {name:'Опыт работы',exact:true}).locator('li').count(), 2);
+ await journey.getByRole('radio', {name:'Образование',exact:true}).check();
+ assert.equal(await about.getByRole('list', {name:'Образование',exact:true}).locator('li').count(), 4);
+ check('Exact About role copy, caption above the photo, compact education/experience selection preserves all six entries');
+ const pager = page.locator('#pagination-example');
+ assert(await pager.getByRole('button', { name: 'Предыдущая страница' }).isDisabled());
+ await pager.getByRole('button', { name: 'Следующая страница' }).click();
+ assert.equal(await pager.locator('[aria-current="page"]').innerText(), '2');
+ await pager.getByRole('button', { name: 'Страница 12', exact: true }).click();
+ assert(await pager.getByRole('button', { name: 'Следующая страница' }).isDisabled());
+ check('Pagination current state, next/previous boundaries and direct page selection');
+ for (const width of [1440, 768, 390, 320]) {
+   await page.setViewportSize({width, height:1000});
+   assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Overflow ' + width);
+   assert(await page.locator('h1').evaluate(e => e.scrollWidth <= e.clientWidth), 'Hero title overflow ' + width);
+   assert(await projectType.locator('label span').evaluateAll(es => es.every(e => e.scrollWidth <= e.clientWidth)), 'Segmented text clipping ' + width);
+   if (width <= 1023) {
+     const expand = grantSection.getByRole('button', {name:/Свернуть|Показать все/});
+     if(await expand.getAttribute('aria-expanded') === 'true') await expand.click();
+     const cards = grantSection.locator('#grants-list');
+     assert(await cards.evaluate(e => e.scrollWidth > e.clientWidth), 'Horizontal grant cards ' + width);
+     await cards.evaluate(e => {e.scrollLeft = 220;});
+     assert(await cards.evaluate(e => e.scrollLeft > 0));
+     await grantSection.scrollIntoViewIfNeeded();
+     await page.screenshot({path:path.join(output, `grants-collapsed-${width}.png`)});
+     await expand.click(); assert.equal(await cards.locator('[class*=iconBox] svg').count(), 4);
+   }
+   for (const id of ['about', 'projects', 'achievements', 'contact']) {
+     await page.locator('#'+id).scrollIntoViewIfNeeded(); await page.waitForTimeout(300);
+     await page.screenshot({path: path.join(output, `${id}-${width}.png`)});
+   }
+   await pager.scrollIntoViewIfNeeded();
+   if(width < 480) { assert.equal(await pager.locator('ol li:visible').count(), 1); assert.equal(await pager.locator('[class*="mobileTotal"]').innerText(), 'из 12'); }
+ }
+ check('1440/768/390/320px sections, forms and mobile pagination fit without clipping');
+ await page.evaluate(async () => {
+   const loaded = performance.getEntriesByType('resource').map(e => e.name);
+   const reactModule = await import(loaded.find(u => u.includes('/deps/react.js')));
+   const React = reactModule.default || reactModule;
+   const clientModule = await import(loaded.find(u => u.includes('/deps/react-dom_client.js')));
+   const { createRoot } = clientModule.default || clientModule;
+   const { MemoryRouter } = await import(loaded.find(u => u.includes('/deps/react-router-dom.js')));
+   const { runInAction } = await import(loaded.find(u => u.includes('/deps/mobx.js')));
+   const { Meta } = await import(loaded.find(u => u.includes('/src/shared/lib/meta.ts')));
+   const { ContactFormStore } = await import(loaded.find(u => u.includes('/src/features/contact/model/ContactFormStore.ts')));
+   const { default: ContactForm } = await import(loaded.find(u => u.includes('/src/features/contact/ui/ContactForm/ContactForm.tsx')));
+   ContactFormStore.prototype.submit = async function () {
+     this.meta = Meta.loading;
+     await new Promise(resolve => { window.finishFakeSubmission = resolve; });
+     runInAction(() => { this.meta = Meta.success; });
+   };
+   document.getElementById('qa-root').remove();
+   const root = document.createElement('div'); root.id = 'qa-lifecycle'; root.style.cssText = 'max-width:560px;margin:40px auto;padding:20px'; document.body.append(root);
+   createRoot(root).render(React.createElement(MemoryRouter, {}, React.createElement(ContactForm)));
+ });
+ const form = page.locator('#qa-lifecycle form');
+ await form.getByLabel('Имя', {exact:true}).fill('Локальный тест');
+ await form.getByLabel('Email', {exact:true}).fill('test@example.invalid');
+ await form.getByLabel('О проекте', {exact:true}).fill('Только локальная проверка состояния формы.');
+ const submit = form.locator('button[type="submit"]');
+ await submit.click(); assert.equal(await submit.getAttribute('aria-busy'), 'true');
+ assert.equal(await form.locator('input:disabled, textarea:disabled').count(), 7);
+ await page.evaluate(() => window.finishFakeSubmission());
+ await page.locator('#qa-lifecycle [role="status"]').waitFor();
+ assert.match(await page.locator('#qa-lifecycle [role="status"]').innerText(), /Сообщение отправлено/);
+ await page.getByRole('button', {name:'Новое сообщение', exact:true}).click();
+ assert(await page.locator('#qa-lifecycle form').isVisible());
+ check('Simulated submission: all fields lock during loading, plain success view and reset; no network delivery');
+ const touch = await browser.newPage({viewport:{width:320,height:844}, isMobile:true, hasTouch:true});
+ await touch.goto('http://127.0.0.1:5173/');
+ const compact = touch.getByRole('group', {name:'Тип проекта', exact:true});
+ await compact.scrollIntoViewIfNeeded();
+ assert(await compact.locator('label span').evaluateAll(es => es.every(e => e.getBoundingClientRect().height >= 44 && e.scrollWidth <= e.clientWidth)));
+ await touch.close();
+ check('Compact segmented touch targets remain at least 44px at 320px width');
+ assert.equal(report.errors.length, 0, report.errors.join('\n'));
+} catch(error) {report.failure = error.stack; process.exitCode = 1;}
+finally {await writeFile(path.join(output, 'report.json'), JSON.stringify(report,null,2)); console.log(JSON.stringify(report)); await browser.close();}

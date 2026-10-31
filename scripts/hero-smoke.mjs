@@ -106,7 +106,7 @@ try {
     check('pause-control-clickable-with-announcement');
     await firstNotice.click();await page.waitForTimeout(300);
   }
-  assert.match(await page.getByRole('heading', { level: 1 }).innerText(), /Сложное внутри/);
+  assert.match(await page.getByRole('heading', { level: 1 }).innerText(), /Создаю сайты/);
   await layout(page, 'desktop-1440');
   const heroCanvas = page.locator('section').filter({ has: page.locator('h1') }).locator('canvas');
   assert.equal(await heroCanvas.count(), 1, 'Hero must contain one canvas');
@@ -263,7 +263,7 @@ try {
     const production=await browser.newPage({viewport:{width:1440,height:1000}});await instrument(production);
     await production.goto(process.env.HERO_PRODUCTION_URL,{waitUntil:'domcontentloaded'});
     await production.locator('[data-ascii-landscape][data-renderer="webgl"]').waitFor();await production.waitForTimeout(1800);
-    assert.match(await production.getByRole('heading',{level:1}).innerText(),/Сложное внутри/);
+    assert.match(await production.getByRole('heading',{level:1}).innerText(),/Создаю сайты/);
     await production.getByRole('button',{name:'Остановить анимацию фона'}).click();await production.locator('[data-ascii-landscape][data-motion="paused"]').waitFor();
     await production.getByRole('button',{name:'Включить анимацию фона'}).click();await production.locator('[data-ascii-landscape][data-animating="true"]').waitFor();
     await layout(production,'production-build-desktop');check('production-build-webgl-pause-resume',{url:process.env.HERO_PRODUCTION_URL});await production.close();

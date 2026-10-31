@@ -2,7 +2,6 @@ import { ActionLink } from 'shared/ui/ActionButton';
 import { useEffect, useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 import { motion } from 'framer-motion';
-import { IconCode } from '@tabler/icons-react';
 import styles from './ProjectsSection.module.scss';
 import Text from 'shared/ui/Text';
 import { ProjectListStore } from 'entities/Project/stores/ProjectListStore';
@@ -32,12 +31,11 @@ const containerVariants = {
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 44, scale: 0.97, filter: 'blur(7px)' },
+  hidden: { opacity: 0, y: 44, scale: 0.97 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    filter: 'blur(0px)',
     transition: {
       type: 'spring' as const,
       damping: 24,
@@ -59,11 +57,6 @@ const ProjectsSection: React.FC = observer(() => {
   return (
     <section className={styles.projects} id="projects">
       <div className={styles.projects__shell}>
-        <div className={styles.projects__background} aria-hidden="true">
-          <div className={styles.projects__glow} />
-          <div className={styles.projects__gridPattern} />
-        </div>
-
         <motion.header
           className={styles.projects__header}
           initial={{ opacity: 0, y: 28 }}
@@ -72,17 +65,8 @@ const ProjectsSection: React.FC = observer(() => {
           transition={{ duration: 0.65, ease: [0.2, 0.7, 0.2, 1] }}
         >
           <div className={styles.projects__heading}>
-            <Text tag="span" view="p-14" className={styles.projects__eyebrow}>
-              02 · Selected work
-            </Text>
             <Text tag="h2" view="title" weight="black" uppercase>
               Проекты
-            </Text>
-          </div>
-          <div className={styles.projects__intro}>
-            <Text tag="p" view="p-16">
-              От продуктовой логики до последнего пикселя — проекты, где дизайн работает вместе с
-              кодом.
             </Text>
           </div>
         </motion.header>
@@ -96,7 +80,6 @@ const ProjectsSection: React.FC = observer(() => {
         >
           {store.meta === Meta.error && (
             <div className={styles.projects__empty} role="alert">
-              <IconCode size={28} stroke={1.3} />
               <Text view="p-14">Не удалось загрузить проекты</Text>
             </div>
           )}

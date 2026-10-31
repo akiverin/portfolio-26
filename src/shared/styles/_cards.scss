@@ -1,0 +1,101 @@
+/* Editorial card surfaces shared by projects and achievements. */
+@mixin editorial-card($image) {
+  display: flex;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  flex-direction: column;
+  border-radius: 24px;
+  background: #f5f5f5;
+  color: #1d1d1d;
+
+  &__cover {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #ededed;
+  }
+
+  &__#{$image} {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  &__cover--framed &__#{$image} {
+    object-fit: contain;
+  }
+
+  &__inspect[data-design][data-variant] {
+    --control-soft: #fff;
+    --control-text: #1d1d1d;
+    --control-soft-hover: #f5f5f5;
+    --action-border: rgb(0 0 0 / 12%);
+
+    position: absolute;
+    z-index: 2;
+    top: 16px;
+    right: 16px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  &:hover &__inspect,
+  &:focus-within &__inspect {
+    opacity: 1;
+  }
+
+  &__info {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 12px;
+    padding: 28px 28px 24px;
+  }
+
+  &__info h3 {
+    font-size: 25px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+  }
+
+  &__info > p {
+    color: #6e6e6e;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    margin-top: auto;
+    padding: 0 28px 28px;
+  }
+
+  @media (hover: none) {
+    &__inspect[data-design][data-variant] {
+      opacity: 1;
+    }
+  }
+
+  @media (width <= 767px) {
+    &__info {
+      padding: 24px 24px 20px;
+    }
+
+    &__info h3 {
+      font-size: 24px;
+    }
+
+    &__actions {
+      padding: 0 24px 24px;
+    }
+  }
+}

@@ -7,14 +7,16 @@ import Select from 'shared/ui/Select';
 import Input from 'shared/ui/Input';
 import Skeleton from 'shared/ui/Skeleton';
 import AchievementCard from 'entities/Achievement/ui/AchievementCard';
-import { AchievementListStore, SORT_OPTIONS } from 'entities/Achievement/stores/AchievementListStore';
+import {
+  AchievementListStore,
+  SORT_OPTIONS,
+} from 'entities/Achievement/stores/AchievementListStore';
 import { useLocalStore } from 'shared/hooks/useLocalStore';
 import { useDebounce } from 'shared/hooks/useDebounce';
 import { Meta } from 'shared/lib/meta';
 import FadeIn from 'shared/ui/FadeIn';
 import { AnimatedCheckbox } from 'shared/ui/AnimatedCheckbox';
 import Pagination from 'shared/ui/Pagination';
-import { IconAward, IconRosetteDiscountCheck, IconSearch } from '@tabler/icons-react';
 
 const PAGE_SIZE = 6;
 
@@ -89,14 +91,8 @@ export const AchievementsPage: React.FC = observer(() => {
     <main className={styles.page}>
       <FadeIn>
         <div className={styles.page__header}>
-          <Text tag="span" view="p-12" className={styles.page__eyebrow}>
-            <IconRosetteDiscountCheck size={15} /> Recognition · Archive
-          </Text>
           <Text tag="h1" view="title" weight="black" uppercase>
             Достижения
-          </Text>
-          <Text view="p-16" color="secondary">
-            Награды, публикации и профессиональные результаты — по шесть на странице.
           </Text>
         </div>
       </FadeIn>
@@ -109,7 +105,6 @@ export const AchievementsPage: React.FC = observer(() => {
               onChange={setSearch}
               placeholder="Поиск достижений..."
               aria-label="Поиск достижений"
-              afterSlot={<IconSearch size={18} stroke={1.5} />}
             />
           </div>
           <AnimatedCheckbox
@@ -122,6 +117,7 @@ export const AchievementsPage: React.FC = observer(() => {
             }
           />
           <Select
+            aria-label="Сортировка достижений"
             value={store.sortValue}
             options={SORT_OPTIONS}
             onChange={(v) => store.setSortValue(v)}
@@ -138,9 +134,7 @@ export const AchievementsPage: React.FC = observer(() => {
             </div>
           )}
           {isLoading &&
-            Array.from({ length: PAGE_SIZE }, (_, i) => (
-              <AchievementCardSkeleton key={i} />
-            ))}
+            Array.from({ length: PAGE_SIZE }, (_, i) => <AchievementCardSkeleton key={i} />)}
 
           {!isLoading &&
             filtered.length > 0 &&
@@ -153,11 +147,7 @@ export const AchievementsPage: React.FC = observer(() => {
                 viewport={{ once: true, margin: '-40px' }}
                 custom={i}
               >
-                <AchievementCard
-                  achievement={achievement}
-                  showDate={showDates}
-                  fullDescription
-                />
+                <AchievementCard achievement={achievement} showDate={showDates} fullDescription />
               </motion.div>
             ))}
 
@@ -173,7 +163,7 @@ export const AchievementsPage: React.FC = observer(() => {
         {!isLoading && filtered.length > 0 && (
           <div className={styles.page__paginationRow}>
             <Text tag="span" view="p-12" className={styles.page__resultCount}>
-              <IconAward size={15} stroke={1.5} /> {filtered.length} достижений
+              {filtered.length} достижений
             </Text>
             <Pagination
               page={page}

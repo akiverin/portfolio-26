@@ -8,6 +8,21 @@
   border-radius: 980px;
   background: var(--control-soft);
 
+  &[data-full-width] {
+    width: 100%;
+  }
+
+  &[data-compact] .segmented__option {
+    flex: 1 1 auto;
+  }
+
+  &[data-compact] .segmented__option span {
+    min-height: 38px;
+    padding: 8px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
   &:disabled {
     opacity: 0.4;
   }
@@ -62,7 +77,8 @@
   }
 
   @media (pointer: coarse) {
-    &__option span {
+    &__option span,
+    &[data-compact] .segmented__option span {
       min-height: 44px;
     }
   }

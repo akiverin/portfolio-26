@@ -1,9 +1,8 @@
+import { AnimatedCheckbox } from 'shared/ui/AnimatedCheckbox';
 import { ActionLink } from 'shared/ui/ActionButton';
-import ActionButton from 'shared/ui/ActionButton';
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { motion } from 'framer-motion';
-import { IconAward } from '@tabler/icons-react';
 import styles from './AchievementsSection.module.scss';
 import Text from 'shared/ui/Text';
 import { AchievementListStore } from 'entities/Achievement/stores/AchievementListStore';
@@ -31,12 +30,11 @@ const containerVariants = {
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 38, rotateX: 7, filter: 'blur(6px)' },
+  hidden: { opacity: 0, y: 38, rotateX: 7 },
   visible: {
     opacity: 1,
     y: 0,
     rotateX: 0,
-    filter: 'blur(0px)',
     transition: { type: 'spring' as const, damping: 24, stiffness: 110 },
   },
 };
@@ -54,10 +52,6 @@ const AchievementsSection: React.FC = observer(() => {
   return (
     <section className={styles.achievements} id="achievements">
       <div className={styles.achievements__shell}>
-        <div className={styles.achievements__background} aria-hidden="true">
-          <div className={styles.achievements__radar} />
-        </div>
-
         <motion.header
           className={styles.achievements__header}
           initial={{ opacity: 0, y: 28 }}
@@ -66,30 +60,13 @@ const AchievementsSection: React.FC = observer(() => {
           transition={{ duration: 0.65, ease: [0.2, 0.7, 0.2, 1] }}
         >
           <div className={styles.achievements__heading}>
-            <Text tag="span" view="p-14" className={styles.achievements__eyebrow}>
-              03 · Recognition
-            </Text>
             <Text tag="h2" view="title" weight="black" uppercase>
               Достижения
             </Text>
           </div>
 
           <div className={styles.achievements__intro}>
-            <Text tag="p" view="p-16">
-              Награды, публикации и профессиональные результаты — коротко и по существу.
-            </Text>
-            <ActionButton
-              variant="text"
-              size="sm"
-              type="button"
-              className={styles.achievements__dateToggle}
-              onClick={() => setShowDates((value) => !value)}
-              aria-pressed={showDates}
-            >
-              <Text tag="span" view="p-12" weight="medium">
-                {showDates ? 'Скрыть даты' : 'Показать даты'}
-              </Text>
-            </ActionButton>
+            <AnimatedCheckbox checked={showDates} onChange={setShowDates} label="Показывать даты" />
           </div>
         </motion.header>
 
@@ -102,7 +79,6 @@ const AchievementsSection: React.FC = observer(() => {
         >
           {store.meta === Meta.error && (
             <div className={styles.achievements__empty} role="alert">
-              <IconAward size={28} stroke={1.3} />
               <Text view="p-14">Не удалось загрузить достижения</Text>
             </div>
           )}
@@ -121,7 +97,6 @@ const AchievementsSection: React.FC = observer(() => {
 
           {!isLoading && store.meta !== Meta.error && store.achievements.length === 0 && (
             <div className={styles.achievements__empty}>
-              <IconAward size={28} stroke={1.3} />
               <Text view="p-14">Достижения скоро появятся</Text>
             </div>
           )}
@@ -134,12 +109,6 @@ const AchievementsSection: React.FC = observer(() => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <div className={styles.achievements__footerNote}>
-              <span className={styles.achievements__pulse} />
-              <Text tag="span" view="p-12">
-                Архив обновляется
-              </Text>
-            </div>
             <ActionLink
               variant="text"
               chevron

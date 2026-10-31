@@ -1,7 +1,7 @@
 import ActionButton from 'shared/ui/ActionButton';
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IconDownload, IconChevronDown } from '@tabler/icons-react';
+import { IconChevronDown } from '@tabler/icons-react';
 import styles from './ExportDropdown.module.scss';
 
 type TimeRange = 'year' | '2years' | 'all';
@@ -48,7 +48,6 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({ onExport, loading }) =>
         onClick={() => setOpen(!open)}
         disabled={loading}
       >
-        <IconDownload size={16} stroke={1.5} />
         Экспорт
         <IconChevronDown size={14} stroke={2} />
       </ActionButton>

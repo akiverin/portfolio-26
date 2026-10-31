@@ -1,6 +1,6 @@
 import ActionButton from 'shared/ui/ActionButton';
 import React from 'react';
-import { IconMoon, IconPlus, IconSun, IconTrash } from '@tabler/icons-react';
+import { IconMoon, IconSun } from '@tabler/icons-react';
 import { ExportDropdown } from 'features/admin/ui/ExportDropdown';
 import Text from 'shared/ui/Text';
 import styles from './AdminPage.module.scss';
@@ -53,7 +53,6 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
           className={styles.admin__bulkDeleteBtn}
           onClick={onBulkDelete}
         >
-          <IconTrash size={16} stroke={1.5} aria-hidden="true" />
           <Text tag="span" view="p-14" weight="medium">
             Удалить ({selectedCount})
           </Text>
@@ -78,7 +77,6 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
         className={styles.admin__addBtn}
         onClick={onCreate}
       >
-        <IconPlus size={16} stroke={2} aria-hidden="true" />
         <Text tag="span" view="p-14" weight="medium">
           Добавить
         </Text>

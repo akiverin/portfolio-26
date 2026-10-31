@@ -1,8 +1,6 @@
-import ActionButton from 'shared/ui/ActionButton';
 import React from 'react';
 import styles from './Pagination.module.scss';
 import classNames from 'classnames';
-import Text from 'shared/ui/Text';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
 export type PaginationProps = {
@@ -47,55 +45,50 @@ const Pagination: React.FC<PaginationProps> = ({ page, pageCount, onPageChange, 
   const pages = getPageNumbers(page, pageCount);
 
   return (
-    <div className={classNames(styles.pagination, className)}>
-      <ActionButton
-        variant="icon"
-        size="sm"
+    <nav className={classNames(styles.pagination, className)} aria-label="Навигация по страницам">
+      <button
+        type="button"
         className={styles.pagination__arrow}
         disabled={page <= 1}
         onClick={() => onPageChange(page - 1)}
         aria-label="Предыдущая страница"
       >
-        <IconChevronLeft size={17} stroke={1.7} />
-      </ActionButton>
-
-      {pages.map((item) =>
-        item.type === 'dots' ? (
-          <span key={item.key} className={styles.pagination__dots}>
-            <Text view="p-14" color="secondary">
+        <IconChevronLeft size={18} stroke={1.7} aria-hidden="true" />
+      </button>
+      <ol className={styles.pagination__pages}>
+        {pages.map((item) =>
+          item.type === 'dots' ? (
+            <li key={item.key} className={styles.pagination__dots} aria-hidden="true">
               …
-            </Text>
-          </span>
-        ) : (
-          <ActionButton
-            variant="secondary"
-            size="sm"
-            key={item.value}
-            className={classNames(styles.pagination__page, {
-              [styles['pagination__page--active']]: item.value === page,
-            })}
-            onClick={() => onPageChange(item.value)}
-            aria-label={`Страница ${item.value}`}
-            aria-current={item.value === page ? 'page' : undefined}
-          >
-            <Text view="p-14" weight={item.value === page ? 'bold' : 'medium'}>
-              {item.value}
-            </Text>
-          </ActionButton>
-        ),
-      )}
-
-      <ActionButton
-        variant="icon"
-        size="sm"
+            </li>
+          ) : (
+            <li key={item.value} data-current={item.value === page || undefined}>
+              <button
+                type="button"
+                className={styles.pagination__page}
+                onClick={() => onPageChange(item.value)}
+                aria-label={`Страница ${item.value}`}
+                aria-current={item.value === page ? 'page' : undefined}
+              >
+                {item.value}
+              </button>
+            </li>
+          ),
+        )}
+      </ol>
+      <span className={styles.pagination__mobileTotal} aria-hidden="true">
+        из {pageCount}
+      </span>
+      <button
+        type="button"
         className={styles.pagination__arrow}
         disabled={page >= pageCount}
         onClick={() => onPageChange(page + 1)}
         aria-label="Следующая страница"
       >
-        <IconChevronRight size={17} stroke={1.7} />
-      </ActionButton>
-    </div>
+        <IconChevronRight size={18} stroke={1.7} aria-hidden="true" />
+      </button>
+    </nav>
   );
 };
 

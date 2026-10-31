@@ -7,6 +7,10 @@
   --control-text: #1d1d1d;
   --control-soft: rgb(0 0 0 / 6%);
   --control-soft-hover: rgb(0 0 0 / 12%);
+  --field-bg: #fff;
+  --field-text: #1d1d1d;
+  --field-border: #868686;
+  --field-placeholder: #6e6e6e;
   --admin-bg: #fafafa;
   --admin-sidebar-bg: #fff;
   --admin-sidebar-border: #e8e8e8;
@@ -45,12 +49,18 @@
   &--dark {
     color-scheme: dark;
 
+    --text: #f5f5f5;
+    --text-muted: #a1a1a1;
     --control-fill: #f5f5f5;
     --control-on-fill: #1d1d1d;
     --control-fill-hover: #fff;
     --control-text: #f5f5f5;
     --control-soft: rgb(255 255 255 / 10%);
     --control-soft-hover: rgb(255 255 255 / 18%);
+    --field-bg: #161616;
+    --field-text: #f5f5f5;
+    --field-border: #868686;
+    --field-placeholder: #a1a1a1;
     --admin-bg: #0e0e0e;
     --admin-sidebar-bg: #141414;
     --admin-sidebar-border: rgb(255, 255, 255, 6%);

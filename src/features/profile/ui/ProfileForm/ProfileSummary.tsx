@@ -1,11 +1,5 @@
 import { ActionLink } from 'shared/ui/ActionButton';
 import React, { useEffect, useState } from 'react';
-import {
-  IconArrowUpRight,
-  IconCalendarEvent,
-  IconCamera,
-  IconShieldCheck,
-} from '@tabler/icons-react';
 import { ROUTES } from 'shared/configs/routes';
 import Text from 'shared/ui/Text';
 import styles from './ProfileForm.module.scss';
@@ -57,9 +51,6 @@ const ProfileSummary: React.FC<ProfileSummaryProps> = ({
             {getInitials(displayName, email)}
           </Text>
         )}
-        <span className={styles.profile__avatarIcon} aria-hidden="true">
-          <IconCamera size={16} stroke={1.6} />
-        </span>
       </div>
 
       <div className={styles.profile__identity}>
@@ -72,7 +63,6 @@ const ProfileSummary: React.FC<ProfileSummaryProps> = ({
       </div>
 
       <div className={styles.profile__role}>
-        <IconShieldCheck size={18} stroke={1.6} aria-hidden="true" />
         <Text tag="span" view="p-14" weight="medium">
           {roleLabel}
         </Text>
@@ -80,9 +70,6 @@ const ProfileSummary: React.FC<ProfileSummaryProps> = ({
 
       {createdDate && (
         <div className={styles.profile__metaRow}>
-          <span className={styles.profile__metaIcon} aria-hidden="true">
-            <IconCalendarEvent size={18} stroke={1.5} />
-          </span>
           <div>
             <Text view="p-14" className={styles.profile__metaLabel}>
               Аккаунт создан
@@ -95,11 +82,15 @@ const ProfileSummary: React.FC<ProfileSummaryProps> = ({
       )}
 
       {role === 'admin' && (
-        <ActionLink variant="secondary" href={ROUTES.ADMIN} className={styles.profile__adminLink}>
+        <ActionLink
+          variant="text"
+          chevron
+          href={ROUTES.ADMIN}
+          className={styles.profile__adminLink}
+        >
           <Text tag="span" view="p-14" weight="medium">
             Открыть админ-панель
           </Text>
-          <IconArrowUpRight size={18} stroke={1.6} aria-hidden="true" />
         </ActionLink>
       )}
     </aside>

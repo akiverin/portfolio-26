@@ -1,3 +1,4 @@
+import mascot from 'assets/brand/mascot-blue.svg';
 import { useLocation } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import Announcement from 'shared/ui/Announcement';
@@ -20,6 +21,9 @@ const DesignUpdateAnnouncement = observer(() => {
     <Announcement
       open={visible}
       message={DESIGN_UPDATE_ANNOUNCEMENT.message}
+      title={DESIGN_UPDATE_ANNOUNCEMENT.title}
+      badge={DESIGN_UPDATE_ANNOUNCEMENT.badge}
+      icon={<img src={mascot} alt="" width={26} height={26} />}
       onClose={close}
       reserveSidebarSpace={userStore.isAuth}
     />

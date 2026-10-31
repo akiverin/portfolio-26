@@ -2,8 +2,6 @@ import { ActionLink } from 'shared/ui/ActionButton';
 import ActionButton from 'shared/ui/ActionButton';
 import { useRef, useState } from 'react';
 import { useReducedMotion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { ArrowDownIcon } from '@phosphor-icons/react/dist/csr/ArrowDown';
 import { PauseIcon } from '@phosphor-icons/react/dist/csr/Pause';
 import { PlayIcon } from '@phosphor-icons/react/dist/csr/Play';
 import { ANCHORS } from 'shared/configs/routes';
@@ -35,13 +33,10 @@ const HeroSection: React.FC = () => {
           <img src={logo} alt="andkiv" width={142} height={40} data-brand-variant="07" />
         </span>
         <div className={styles.hero__topTools}>
-          <span className={styles.hero__availability}>
-            <span className={styles.hero__availabilityDot} aria-hidden="true" />
-            Открыт интересным проектам
-          </span>
           {!reducedMotion && (
             <ActionButton
               variant="icon"
+              surface="dark"
               size="sm"
               type="button"
               className={styles.hero__motionToggle}
@@ -60,14 +55,12 @@ const HeroSection: React.FC = () => {
         </div>
       </div>
       <div className={styles.hero__content}>
-        <p className={styles.hero__eyebrow}>Дизайн с характером. Разработка со смыслом.</p>
         <h1 id="hero-title" className={styles.hero__title}>
-          <span>Сложное внутри.</span>
-          <span>Понятное снаружи.</span>
+          <span>Создаю сайты</span>
+          <span>и веб-приложения.</span>
         </h1>
         <p className={styles.hero__description}>
-          Превращаю сложные задачи в ясные интерфейсы
-          <br className={styles.hero__desktopBreak} /> и продуманные веб-продукты.
+          Проектирую интерфейсы и пишу код на React и TypeScript.
         </p>
         <div className={styles.hero__actions}>
           <ActionLink
@@ -76,7 +69,7 @@ const HeroSection: React.FC = () => {
             href={ANCHORS.PROJECTS}
             className={styles.hero__primaryAction}
           >
-            Как это выглядит
+            Смотреть проекты
           </ActionLink>
           <ActionLink
             variant="text"
@@ -85,22 +78,17 @@ const HeroSection: React.FC = () => {
             href={ANCHORS.CONTACT}
             className={styles.hero__secondaryAction}
           >
-            Обсудить проект
+            Связаться
           </ActionLink>
         </div>
       </div>
       <div className={styles.hero__footer}>
         <div className={styles.hero__signature}>
           <span>Андрей Киверин</span>
-          <span className={styles.hero__signatureDivider} aria-hidden="true">
-            /
-          </span>
-          <span>Creative developer &amp; designer</span>
         </div>
-        <Link to={ANCHORS.ABOUT} className={styles.hero__scroll}>
-          <span>Чуть ближе</span>
-          <ArrowDownIcon size={17} aria-hidden="true" />
-        </Link>
+        <ActionLink href={ANCHORS.ABOUT} variant="text" surface="dark" size="sm" chevron>
+          Обо мне
+        </ActionLink>
       </div>
     </section>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, type Variants } from 'framer-motion';
+import { motion, useReducedMotion, type Variants } from 'framer-motion';
 
 type FadeInProps = {
   children: React.ReactNode;
@@ -27,13 +27,11 @@ const getVariants = (direction: string, distance: number): Variants => {
     hidden: {
       opacity: 0,
       ...offset,
-      filter: 'blur(4px)',
     },
     visible: {
       opacity: 1,
       x: 0,
       y: 0,
-      filter: 'blur(0px)',
     },
   };
 };
@@ -48,16 +46,17 @@ const FadeIn: React.FC<FadeInProps> = ({
   once = true,
   threshold = '-80px',
 }) => {
+  const reducedMotion = useReducedMotion();
   return (
     <motion.div
       className={className}
-      variants={getVariants(direction, distance)}
-      initial="hidden"
+      variants={getVariants(reducedMotion ? 'none' : direction, distance)}
+      initial={reducedMotion ? false : 'hidden'}
       whileInView="visible"
       viewport={{ once, margin: threshold }}
       transition={{
-        duration,
-        delay,
+        duration: reducedMotion ? 0 : duration,
+        delay: reducedMotion ? 0 : delay,
         ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
       }}
     >

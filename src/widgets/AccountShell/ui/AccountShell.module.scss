@@ -148,7 +148,8 @@
     flex-direction: column;
     overflow: auto;
     border-radius: var(--shell-content-radius);
-    background: #0c0c0c;
+    background: #fff;
+    color: #1d1d1d;
     isolation: isolate;
     overscroll-behavior: contain;
     scrollbar-color: #3a3a3a transparent;

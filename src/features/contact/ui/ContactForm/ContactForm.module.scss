@@ -1,250 +1,106 @@
-@use "colors" as *;
-@use "adaptive" as *;
-@use "sizes" as *;
-
 .contact {
-  &__form,
-  &__success {
-    position: relative;
-    display: flex;
-    width: 100%;
-    overflow: hidden;
-    flex-direction: column;
-    border: 1px solid rgb(255 255 255 / 9%);
-    border-radius: 26px;
-    background:
-      radial-gradient(circle at 100% 0%, rgb(165 165 165 / 13%), transparent 28%),
-      #171717;
-    box-shadow: 0 24px 70px rgb(0 0 0 / 28%);
-    color: #f6f6f6;
-
-    --input-bg: rgb(255 255 255 / 6%);
-    --input-text: #f6f6f6;
-    --input-placeholder: rgb(255 255 255 / 36%);
-    --input-bg-disabled: rgb(255 255 255 / 3%);
-    --input-text-disabled: rgb(255 255 255 / 28%);
-
-    @include smallerThanTablet {
-      border-radius: 20px;
-    }
-  }
-
   &__form {
-    gap: 26px;
-    padding: clamp(24px, 4vw, 42px);
-  }
-
-  &__formHeader {
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 20px;
-    padding-bottom: 22px;
-    border-bottom: 1px solid rgb(255 255 255 / 8%);
-  }
-
-  &__formIndex {
-    display: block;
-    margin-bottom: 8px;
-    color: rgb(255 255 255 / 42%);
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  &__formTitle {
-    letter-spacing: -0.02em;
-  }
-
-  &__formIcon {
-    flex: 0 0 auto;
-    color: #878787;
-    transform: rotate(-7deg);
-  }
-
-  &__projectFieldset {
     min-width: 0;
-    padding: 0;
-    border: 0;
-
-    & legend {
-      margin-bottom: 10px;
-    }
-  }
-
-  &__projectTypes {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 7px;
-
-    @include smallerThanPhone {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  &__projectType {
-    position: relative;
-    display: grid;
-    min-width: 0;
-    min-height: 48px;
-    padding: 0 12px;
-    border: 1px solid rgb(255 255 255 / 9%);
-    border-radius: 999px;
-    background: rgb(255 255 255 / 5%);
-    color: rgb(255 255 255 / 56%);
-    cursor: pointer;
-    place-items: center;
-    text-align: center;
-    transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
-
-    & input {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip-path: inset(50%);
-      white-space: nowrap;
-    }
-
-    &:hover {
-      border-color: rgb(165 165 165 / 36%);
-      background: rgb(204 204 204 / 7%);
-      color: #e0e0e0;
-    }
-
-    &:has(input:focus-visible) {
-      outline: 2px solid $brand;
-      outline-offset: 2px;
-    }
-
-    &--active {
-      border-color: rgb(210 210 210 / 42%);
-      background: #d7d7d7;
-      color: #1e1e1e;
-      box-shadow: 0 0 0 3px rgb(210 210 210 / 8%);
-    }
-  }
-
-  &__fields {
-    display: flex;
     flex-direction: column;
-    gap: $space-m;
+    gap: 24px;
+  }
+
+  &__projectChoice {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__label,
+  &__field > label,
+  &__messageLabel label {
+    font-size: 14px;
+    font-weight: 500;
   }
 
   &__row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: $space-m;
-
-    @include smallerThanTablet {
-      grid-template-columns: 1fr;
-    }
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
   }
 
   &__field {
     display: flex;
     min-width: 0;
     flex-direction: column;
-    gap: 7px;
+    gap: 10px;
+  }
 
-    & label {
-      color: rgb(255 255 255 / 60%);
-    }
-
-    & svg {
-      flex: 0 0 auto;
-      color: rgb(255 255 255 / 36%);
-    }
+  &__fieldError {
+    font-size: 12px;
+    line-height: 1.5;
   }
 
   &__messageLabel {
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     gap: 16px;
-
-    & span {
-      color: rgb(255 255 255 / 36%);
-      font-variant-numeric: tabular-nums;
-    }
   }
 
-  &__error {
-    padding: 11px 13px;
-    border: 1px solid rgb(106 106 106 / 16%);
-    border-radius: 10px;
-    background: rgb(106 106 106 / 7%);
-    color: #5b5b5b;
+  &__messageLabel > span {
+    color: #6e6e6e;
     font-size: 12px;
   }
 
-  &__actions {
-    display: grid;
-    grid-template-columns: minmax(180px, 0.7fr) 1fr;
-    align-items: center;
-    gap: 18px;
-    padding-top: 4px;
-
-    @include smallerThanPhone {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  &__submit {
-    width: 100%;
-    min-height: 50px;
-    border-radius: 14px;
-
-    & svg {
-      transition: transform 0.2s ease;
-    }
-
-    &:hover svg {
-      transform: translateX(2px);
-    }
-  }
-
-  &__legal {
-    color: rgb(255 255 255 / 38%);
-    line-height: 1.45;
-
-    & a {
-      color: #d7d7d7;
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-  }
-
-  &__success {
-    min-height: 570px;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 26px;
-    padding: clamp(32px, 6vw, 64px);
-  }
-
-  &__successCopy {
-    display: flex;
-    max-width: 390px;
-    flex-direction: column;
-    gap: 8px;
+  &__error {
+    padding: 16px;
+    border: 1px solid #868686;
+    border-radius: 12px;
+    font-size: 14px;
     line-height: 1.5;
   }
 
-  &__checkmark {
+  &__actions {
     display: flex;
-    width: 68px;
-    height: 68px;
-    align-items: center;
-    justify-content: center;
-    border-radius: 20px;
-    background: #242424;
-    box-shadow: 0 14px 28px rgb(36 36 36 / 18%);
-    color: #d2d2d2;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
   }
 
-  &__againButton {
-    min-height: 46px;
-    border: 1px solid rgb(255 255 255 / 10%);
+  &__legal {
+    max-width: 440px;
+    color: #6e6e6e;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  &__legal a {
+    text-decoration: underline;
+  }
+
+  &__success {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 32px;
+    border-radius: 20px;
+    background: #f5f5f5;
+  }
+
+  &__success h3 {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+
+  &__success p {
+    color: #6e6e6e;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  @media (width <= 767px) {
+    &__row {
+      grid-template-columns: 1fr;
+    }
   }
 }

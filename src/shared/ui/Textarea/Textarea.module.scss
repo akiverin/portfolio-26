@@ -1,48 +1,47 @@
-@use "colors.scss" as *;
-@use "sizes" as *;
-@use "mixins" as *;
+@use "fields" as *;
 
 .textarea-container {
-  box-sizing: border-box;
+  @include field-surface;
+
   display: flex;
   flex-direction: column;
-  background-color: var(--input-bg);
-  width: 100%;
-  padding: $space-s $space-0;
-  color: var(--input-text);
-  border-radius: $border-radius;
-  border: 1.5px solid transparent;
-
-  @include transition(border-color, box-shadow);
 
   & textarea {
-    box-sizing: border-box;
-    border: none;
-    outline: none;
-    font-family: var(--font-sans);
-    font-size: 16px;
-    line-height: 1.5;
     width: 100%;
-    min-height: 120px;
-    resize: vertical;
-    background-color: transparent;
+    min-width: 0;
+    min-height: 132px;
     padding: 0;
+    resize: vertical;
+    border: 0;
+    outline: none;
+    background: transparent;
     color: inherit;
+    font: inherit;
+    line-height: 1.5;
 
     &::placeholder {
-      color: var(--input-placeholder);
+      color: var(--field-placeholder);
+      opacity: 1;
+    }
+
+    &:disabled {
+      cursor: default;
     }
   }
 
-  &:has(textarea[disabled]) {
-    background-color: var(--input-bg-disabled);
-    color: var(--input-text-disabled);
+  &:focus-within {
+    border-color: var(--field-text);
+    outline: 2px solid var(--field-text);
+    outline-offset: 2px;
   }
 
-  &:has(textarea:focus) {
-    border-color: rgb(165 165 165 / 40%);
-    box-shadow: 0 0 0 3px rgb(165 165 165 / 8%);
-    background-color: var(--input-bg);
-    color: var(--input-text);
+  &:has(textarea[aria-invalid="true"]) {
+    border-color: var(--field-text);
+    box-shadow: inset 0 0 0 1px var(--field-text);
+  }
+
+  &:has(textarea:disabled) {
+    opacity: 0.45;
+    cursor: default;
   }
 }

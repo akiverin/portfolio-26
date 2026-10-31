@@ -1,10 +1,22 @@
-@use "mixins" as *;
-
 .home {
-  background: #0c0c0c;
-  color: #f6f6f6;
+  --footer-overlap: 220px;
+
+  position: relative;
+  z-index: 1;
+  margin-bottom: calc(-1 * var(--footer-overlap));
+  background: linear-gradient(#fff calc(100% - var(--footer-overlap)), transparent 0);
+  color: #1d1d1d;
 
   &__wrapper {
-    @include wrapper;
+    width: min(100% - 80px, 1200px);
+    margin: 0 auto;
+  }
+
+  @media (width <= 767px) {
+    --footer-overlap: 160px;
+
+    &__wrapper {
+      width: calc(100% - 40px);
+    }
   }
 }

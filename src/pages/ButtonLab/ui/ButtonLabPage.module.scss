@@ -1,6 +1,17 @@
 @use "adaptive" as *;
+@use "fields" as *;
 
 .lab {
+  --control-fill: #f5f5f5;
+  --control-on-fill: #1d1d1d;
+  --control-fill-hover: #fff;
+  --control-text: #f5f5f5;
+  --control-soft: rgb(255 255 255 / 10%);
+  --control-soft-hover: rgb(255 255 255 / 18%);
+  --field-bg: #161616;
+  --field-text: #f5f5f5;
+  --field-placeholder: #a1a1a1;
+
   min-height: 100svh;
   padding: 32px 24px 80px;
   background: #0d0d0d;
@@ -13,6 +24,9 @@
     --control-text: #1d1d1d;
     --control-soft: rgb(0 0 0 / 6%);
     --control-soft-hover: rgb(0 0 0 / 12%);
+    --field-bg: #fff;
+    --field-text: #1d1d1d;
+    --field-placeholder: #6e6e6e;
 
     color-scheme: light;
     background: #fff;
@@ -70,14 +84,7 @@
 
   & select,
   & input {
-    min-height: 44px;
-    max-width: 100%;
-    padding: 10px 14px;
-    border: 1px solid currentcolor;
-    border-radius: 10px;
-    background: transparent;
-    color: inherit;
-    font: inherit;
+    @include field-surface;
   }
 
   &__grid {

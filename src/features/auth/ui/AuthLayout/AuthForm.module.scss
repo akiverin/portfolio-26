@@ -19,7 +19,7 @@
   margin-bottom: 2px;
 
   & > :last-child {
-    color: rgb(255 255 255 / 48%);
+    color: rgb(0 0 0 / 48%);
   }
 }
 
@@ -36,7 +36,7 @@
   gap: 8px;
 
   & > label {
-    color: rgb(255 255 255 / 58%);
+    color: rgb(0 0 0 / 58%);
   }
 }
 
@@ -68,12 +68,12 @@
 }
 
 .link {
-  color: #c7c7c7;
+  color: #383838;
   transition: color 0.15s ease;
 
   &:hover,
   &:focus-visible {
-    color: #dfdfdf;
+    color: #202020;
   }
 }
 
@@ -85,27 +85,27 @@
   & span {
     height: 1px;
     flex: 1;
-    background: rgb(255 255 255 / 7%);
+    background: rgb(0 0 0 / 7%);
   }
 
   & p {
-    color: rgb(255 255 255 / 36%);
+    color: rgb(0 0 0 / 36%);
   }
 }
 
 .providerButton {
   min-height: 48px;
-  border: 1px solid rgb(255 255 255 / 8%);
+  border: 1px solid rgb(0 0 0 / 8%);
   border-radius: 12px;
   background-image: none;
-  background-color: rgb(255 255 255 / 4%);
+  background-color: rgb(0 0 0 / 4%);
   box-shadow: none;
 
   &:hover,
   &:active {
-    border-color: rgb(199 199 199 / 22%);
+    border-color: rgb(56 56 56 / 22%);
     background-image: none !important;
-    background-color: rgb(255 255 255 / 7%);
+    background-color: rgb(0 0 0 / 7%);
     box-shadow: none !important;
   }
 }
@@ -125,7 +125,7 @@
   line-height: 1.5;
 
   & p {
-    color: rgb(255 255 255 / 48%);
+    color: rgb(0 0 0 / 48%);
   }
 }
 
@@ -134,5 +134,5 @@
   height: 18px;
   flex-shrink: 0;
   margin-top: 2px;
-  accent-color: #a5a5a5;
+  accent-color: #5a5a5a;
 }

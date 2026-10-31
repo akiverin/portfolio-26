@@ -13,26 +13,8 @@
 
   @include transition(padding, background-color);
 
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    backdrop-filter: blur(20px);
-    background: transparent;
-
-    @include transition(background);
-
-    pointer-events: none;
-    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-  }
-
   &--scrolled {
     padding: 8px 0;
-
-    &::before {
-      background: rgb(14, 14, 14, 60%);
-      mask-image: none;
-    }
   }
 
   &__wrapper {
@@ -51,11 +33,11 @@
   &__nav {
     display: flex;
     align-items: center;
-    background: rgb(14, 14, 14, 65%);
-    border: 1px solid rgb(255, 255, 255, 12%);
+    background: transparent;
+    border: 1px solid transparent;
     border-radius: 100px;
     padding: 4px;
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(20px);
   }
 
   &__navList {
@@ -81,18 +63,18 @@
     padding: 8px 18px;
     border-radius: 100px;
     text-decoration: none;
-    color: $text-secondary;
+    color: #1d1d1d;
 
     @include transition(color, background);
 
     &:hover {
-      color: $white;
-      background: rgb(255, 255, 255, 6%);
+      color: #1d1d1d;
+      background: transparent;
     }
 
     &--active {
-      color: $white;
-      background: rgb(255, 255, 255, 10%);
+      color: #1d1d1d;
+      background: rgb(0 0 0 / 6%);
     }
   }
 
@@ -111,7 +93,7 @@
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: rgb(255, 255, 255, 10%);
+    background: rgb(0 0 0 / 6%);
     color: #ccc;
   }
 
@@ -130,7 +112,7 @@
     }
 
     &--active {
-      background: rgb(255, 255, 255, 10%);
+      background: rgb(0 0 0 / 6%);
     }
   }
 
@@ -154,7 +136,7 @@
     }
 
     &:hover {
-      background: rgb(255, 255, 255, 6%);
+      background: transparent;
     }
 
     span {
@@ -193,7 +175,7 @@
     inset: 0;
     top: 0;
     z-index: 99;
-    background: rgb(14, 14, 14, 75%);
+    background: rgb(255 255 255 / 94%);
     backdrop-filter: blur(24px);
     display: flex;
     flex-direction: column;
@@ -210,19 +192,19 @@
     padding: 16px 32px;
     border-radius: 16px;
     text-decoration: none;
-    color: $text-secondary;
+    color: #1d1d1d;
     width: 100%;
     max-width: 320px;
 
     @include transition(color, background);
 
     &:hover {
-      color: $white;
-      background: rgb(255, 255, 255, 6%);
+      color: #1d1d1d;
+      background: transparent;
     }
 
     &--active {
-      color: $white;
+      color: #1d1d1d;
       background: rgb(255, 255, 255, 8%);
     }
   }

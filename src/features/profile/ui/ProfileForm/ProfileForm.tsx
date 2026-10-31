@@ -2,7 +2,7 @@ import ActionButton from 'shared/ui/ActionButton';
 import React, { useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
-import { IconCheck, IconRefresh, IconUserEdit } from '@tabler/icons-react';
+import { IconCheck } from '@tabler/icons-react';
 import Text from 'shared/ui/Text';
 import Button from 'shared/ui/Button';
 import Input from 'shared/ui/Input';
@@ -109,9 +109,6 @@ const ProfileForm: React.FC = observer(() => {
       <div className={styles.profile__container}>
         <header className={styles.profile__pageHeader}>
           <div>
-            <Text tag="span" view="p-14" className={styles.profile__eyebrow}>
-              Личный кабинет
-            </Text>
             <Text id="profile-title" tag="h1" view="p-32" weight="medium">
               Профиль
             </Text>
@@ -133,9 +130,6 @@ const ProfileForm: React.FC = observer(() => {
           <div className={styles.profile__main}>
             <form onSubmit={handleSubmit} className={styles.profile__settingsCard}>
               <div className={styles.profile__cardHeader}>
-                <span className={styles.profile__cardIcon} aria-hidden="true">
-                  <IconUserEdit size={20} stroke={1.6} />
-                </span>
                 <div>
                   <Text tag="h2" view="p-20" weight="medium">
                     Данные профиля
@@ -210,7 +204,6 @@ const ProfileForm: React.FC = observer(() => {
                     className={styles.profile__resetButton}
                     onClick={() => form.resetChanges()}
                   >
-                    <IconRefresh size={17} stroke={1.6} aria-hidden="true" />
                     <Text tag="span" view="p-14" weight="medium">
                       Отменить изменения
                     </Text>

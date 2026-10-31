@@ -1,3 +1,5 @@
+@use "fields" as *;
+
 .table {
   width: 100%;
   display: flex;
@@ -169,15 +171,10 @@
   }
 
   &__inlineInput {
-    width: 100%;
-    padding: 4px 8px;
-    background: var(--admin-input-bg);
-    border: 1px solid var(--admin-checkbox-accent);
-    border-radius: 6px;
-    color: var(--admin-input-text);
-    font-family: var(--font-sans);
-    font-size: 14px;
-    outline: none;
+    @include field-surface;
+
+    min-height: 40px;
+    padding: 8px 12px;
   }
 
   &__actions {

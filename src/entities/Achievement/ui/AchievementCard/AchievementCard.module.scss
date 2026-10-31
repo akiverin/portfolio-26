@@ -1,229 +1,28 @@
-@use "adaptive" as *;
+@use "cards" as *;
 
 .achievementCard {
-  position: relative;
-  display: flex;
-  min-width: 0;
-  height: 100%;
-  overflow: hidden;
-  flex-direction: column;
-  padding: 8px 8px 16px;
-  border: 1px solid rgb(255 255 255 / 8%);
-  border-radius: 22px;
-  background: rgb(255 255 255 / 4%);
-  box-shadow: 0 10px 30px rgb(0 0 0 / 10%);
-  color: #f6f6f6;
-  transition:
-    border-color 0.35s ease,
-    box-shadow 0.35s ease,
-    transform 0.35s ease;
-
-  &:hover {
-    border-color: rgb(199 199 199 / 24%);
-    box-shadow: 0 24px 60px rgb(0 0 0 / 22%);
-
-    & .achievementCard__image {
-      filter: saturate(1);
-      transform: scale(1.035);
-    }
-
-    & .achievementCard__inspect {
-      opacity: 1;
-
-      svg {
-        transform: scale(1);
-      }
-    }
-  }
+  @include editorial-card("image");
 
   &__cover {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 10;
-    overflow: hidden;
-    border-radius: 16px;
-    background: #e4e4e4;
-
-    &--framed {
-      isolation: isolate;
-      background: #1f1f1f;
-    }
-
-    &--portrait {
-      &::after {
-        position: absolute;
-        z-index: 1;
-        inset: 0;
-        background: linear-gradient(
-          90deg,
-          rgb(9 9 9 / 18%),
-          transparent 28%,
-          transparent 72%,
-          rgb(9 9 9 / 18%)
-        );
-        content: "";
-        pointer-events: none;
-      }
-    }
-
-    &--landscape {
-      &::after {
-        position: absolute;
-        z-index: 1;
-        inset: 0;
-        background: linear-gradient(
-          0deg,
-          rgb(9 9 9 / 22%),
-          transparent 30%,
-          transparent 70%,
-          rgb(9 9 9 / 22%)
-        );
-        content: "";
-        pointer-events: none;
-      }
-    }
-  }
-
-  &__backdrop {
-    position: absolute;
-    z-index: 0;
-    inset: -18px;
-    display: block;
-    width: calc(100% + 36px);
-    height: calc(100% + 36px);
-    object-fit: cover;
-    object-position: center;
-    filter: blur(18px) saturate(1.12) brightness(0.72);
-    opacity: 0.82;
-    transform: scale(1.08);
-  }
-
-  &__image {
-    position: relative;
-    z-index: 2;
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center center;
-    filter: saturate(0.78);
-    transition:
-      filter 0.45s ease,
-      transform 0.65s cubic-bezier(0.2, 0.7, 0.2, 1);
-
-    .achievementCard__cover--framed & {
-      object-fit: contain;
-      filter: saturate(0.9);
-    }
-  }
-
-  &__inspect {
-    position: absolute;
-    z-index: 3;
-    top: 10px;
-    right: 10px;
-    display: grid;
-    width: 32px;
-    height: 32px;
-    cursor: zoom-in;
-    opacity: 0;
-    place-items: center;
-
-    svg {
-      width: 16px;
-      height: 16px;
-      transform: scale(0.82);
-    }
-
-    &:focus-visible {
-      opacity: 1;
-
-      svg {
-        transform: scale(1);
-      }
-    }
-
-    @media (hover: none) {
-      opacity: 1;
-
-      svg {
-        transform: scale(0.88);
-      }
-    }
-  }
-
-  &__info {
-    display: flex;
-    min-height: 142px;
-    flex-direction: column;
-    gap: 9px;
-    padding: 17px 10px 12px;
-
-    & h3 {
-      line-height: 1.25;
-      letter-spacing: -0.015em;
-    }
-
-    & > p {
-      color: rgb(255 255 255 / 48%);
-      line-height: 1.5;
-    }
-
-    @include smallerThanTablet {
-      min-height: 0;
-    }
+    aspect-ratio: 16 / 9;
   }
 
   &__date {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: auto;
-    padding-top: 3px;
-    color: rgb(255 255 255 / 40%);
+    padding-top: 8px;
+    color: #6e6e6e;
     font-size: 12px;
     font-variant-numeric: tabular-nums;
   }
 
-  &__actions {
-    display: flex;
-    align-items: center;
-    margin-top: auto;
-    padding: 0 10px;
-
-    & a {
-      display: flex;
-      width: 100%;
-      min-height: 38px;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 0 12px;
-      border-top: 1px solid rgb(255 255 255 / 8%);
-      color: rgb(255 255 255 / 62%);
-      transition: color 0.2s ease;
-
-      & svg {
-        transition: transform 0.2s ease;
-      }
-
-      &:hover {
-        color: #747474;
-
-        & svg {
-          transform: translateX(2px);
-        }
-      }
-    }
-  }
-
   &__badges {
     display: flex;
-    overflow-x: auto;
-    overflow-y: hidden;
-    gap: 6px;
-    margin-top: 11px;
-    padding: 0 10px 2px;
-    scrollbar-width: thin;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    color: #6e6e6e;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
 }

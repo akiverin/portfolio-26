@@ -1,268 +1,86 @@
-@use "adaptive" as *;
-@use "colors" as *;
-
 .contact {
-  position: relative;
-  margin-top: 180px;
-  padding-bottom: 120px;
+  padding: 128px 0 80px;
+  background: transparent;
+  color: #1d1d1d;
 
-  @include smallerThanTablet {
-    margin-top: 100px;
-    padding-bottom: 72px;
+  &__container {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 48px 88px;
   }
 
   &__header {
     grid-column: 1 / -1;
-    display: flex;
-    width: fit-content;
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 8px;
-
-    @include smallerThanTablet {
-      margin-bottom: 0;
-    }
   }
 
-  &__sectionIndex {
-    color: #d0d0d0;
-    letter-spacing: 0.11em;
-    text-transform: uppercase;
-  }
-
-  &__container {
-    position: relative;
-    display: grid;
-    overflow: hidden;
-    grid-template-columns: minmax(300px, 0.85fr) minmax(470px, 1.15fr);
-    gap: clamp(38px, 6vw, 90px);
-    align-items: center;
-    padding: clamp(28px, 5vw, 72px);
-    border: 1px solid rgb(255 255 255 / 8%);
-    border-radius: 32px;
-    background: #101010;
-    box-shadow: 0 35px 90px rgb(0 0 0 / 18%);
-    color: $white;
-    isolation: isolate;
-
-    @include smallerThanLaptop {
-      grid-template-columns: 1fr;
-      gap: 44px;
-    }
-
-    @include smallerThanTablet {
-      gap: 34px;
-      padding: 26px 14px 14px;
-      border-radius: 24px;
-    }
-  }
-
-  &__background {
-    position: absolute;
-    z-index: -1;
-    inset: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-
-  &__mesh {
-    position: absolute;
-    width: 720px;
-    height: 720px;
-    top: -360px;
-    left: -300px;
-    border-radius: 50%;
-    background:
-      radial-gradient(circle at 50% 50%, rgb(165 165 165 / 28%), transparent 56%),
-      radial-gradient(circle at 70% 65%, rgb(104 104 104 / 20%), transparent 48%);
-    filter: blur(30px);
-    animation: contact-mesh 10s ease-in-out infinite alternate;
-  }
-
-  &__orbit {
-    position: absolute;
-    width: 520px;
-    height: 520px;
-    right: -330px;
-    bottom: -300px;
-    border: 1px solid rgb(255 255 255 / 8%);
-    border-radius: 50%;
-
-    &::before,
-    &::after {
-      position: absolute;
-      border: 1px solid rgb(255 255 255 / 6%);
-      border-radius: 50%;
-      content: "";
-    }
-
-    &::before {
-      inset: 18%;
-    }
-
-    &::after {
-      inset: 36%;
-      border-color: rgb(165 165 165 / 16%);
-    }
-  }
-
-  &__intro,
-  &__introTop {
-    display: flex;
-    flex-direction: column;
-  }
-
-  &__intro {
-    position: relative;
-    z-index: 1;
-    gap: 28px;
-  }
-
-  &__introTop {
-    gap: 16px;
-  }
-
-  &__eyebrow {
-    display: flex;
-    width: fit-content;
-    align-items: center;
-    gap: 8px;
-    color: #d1d1d1;
-    font-size: 12px;
+  &__header h2 {
+    font-size: clamp(32px, 4.5vw, 52px);
     font-weight: 600;
-    letter-spacing: 0.04em;
-  }
-
-  &__introTitle {
-    max-width: 620px;
-    line-height: 1.14;
-    letter-spacing: -0.03em;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+    text-transform: none;
   }
 
   &__introText {
-    max-width: 530px;
-    color: rgb(255 255 255 / 58%);
-    line-height: 1.6;
+    max-width: 390px;
+    color: #6e6e6e;
+    font-size: 20px;
+    line-height: 1.5;
   }
 
   &__responseCard {
-    display: flex;
-    width: fit-content;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 14px 10px 10px;
-    border: 1px solid rgb(255 255 255 / 8%);
-    border-radius: 14px;
-    background: rgb(255 255 255 / 4%);
-    backdrop-filter: blur(10px);
-
-    & > div:last-child {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
+    margin-top: 28px;
+    font-size: 14px;
   }
 
-  &__responseIcon {
-    display: grid;
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    background: rgb(208 208 208 / 10%);
-    color: #d0d0d0;
-    place-items: center;
+  &__responseCard > div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
   }
 
   &__responseMeta {
-    color: rgb(255 255 255 / 36%);
+    color: #6e6e6e;
   }
 
   &__socials {
-    display: grid;
-    gap: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 40px;
   }
 
   &__socialLink {
-    display: grid;
-    grid-template-columns: 1fr;
-    align-items: center;
-    gap: 12px;
-    padding: 11px 12px;
-    border: 1px solid transparent;
-    border-radius: 14px;
-    color: rgb(255 255 255 / 78%);
-    transition:
-      border-color 0.2s ease,
-      background 0.2s ease;
-
-    &:hover {
-      border-color: rgb(255 255 255 / 8%);
-      background: rgb(255 255 255 / 4%);
-
-      & .contact__socialArrow {
-        color: #d1d1d1;
-        transform: translateX(2px);
-      }
-    }
-  }
-
-  &__socialIcon {
-    display: grid;
-    width: 38px;
-    height: 38px;
-    border: 1px solid rgb(255 255 255 / 8%);
-    border-radius: 11px;
-    background: rgb(255 255 255 / 4%);
-    color: #cdcdcd;
-    place-items: center;
+    width: fit-content;
+    color: #1d1d1d;
+    text-decoration: none;
   }
 
   &__socialCopy {
     display: flex;
-    min-width: 0;
     flex-direction: column;
-    gap: 1px;
-
-    & .contact__socialType {
-      color: rgb(255 255 255 / 34%);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
+    gap: 5px;
   }
 
-  &__socialArrow {
-    color: rgb(255 255 255 / 28%);
-    transition:
-      color 0.2s ease,
-      transform 0.2s ease;
-  }
-
-  &__signature {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 22px;
-    border-top: 1px solid rgb(255 255 255 / 7%);
-    color: rgb(255 255 255 / 28%);
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-
-    & span:first-child {
-      color: rgb(255 255 255 / 58%);
-      font-weight: 700;
-    }
+  &__socialType {
+    color: #6e6e6e;
   }
 
   &__formWrapper {
-    position: relative;
-    z-index: 1;
+    min-width: 0;
   }
-}
 
-@keyframes contact-mesh {
-  to {
-    transform: translate(80px, 60px) scale(1.12);
+  @media (width <= 767px) {
+    padding: 80px 0 64px;
+
+    &__container {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    &__socials {
+      flex-flow: row wrap;
+      gap: 24px 32px;
+    }
   }
 }

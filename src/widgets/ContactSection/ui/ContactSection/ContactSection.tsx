@@ -1,137 +1,47 @@
-import { motion } from 'framer-motion';
 import styles from './ContactSection.module.scss';
-import Text from 'shared/ui/Text';
 import ContactForm from 'features/contact/ui/ContactForm';
 
 const SOCIALS = [
-  {
-    href: 'mailto:kiverin03@yandex.ru',
-    type: 'Email',
-    label: 'kiverin03@yandex.ru',
-  },
-  {
-    href: 'https://t.me/andkiv',
-    type: 'Telegram',
-    label: '@andkiv',
-  },
-  {
-    href: 'tel:89531370800',
-    type: 'Телефон',
-    label: '+7 (953) 137-08-00',
-  },
+  { href: 'mailto:kiverin03@yandex.ru', type: 'Email', label: 'kiverin03@yandex.ru' },
+  { href: 'https://t.me/andkiv', type: 'Telegram', label: '@andkiv' },
+  { href: 'tel:+79531370800', type: 'Телефон', label: '+7 (953) 137-08-00' },
 ] as const;
 
-const sectionVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.12, delayChildren: 0.1 } as const,
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { type: 'spring' as const, damping: 25, stiffness: 120 },
-  },
-};
-
-const ContactSection: React.FC = () => {
-  return (
-    <section className={styles.contact} id="contact">
-      <motion.div
-        className={styles.contact__container}
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-60px' }}
-      >
-        <div className={styles.contact__background} aria-hidden="true">
-          <div className={styles.contact__mesh} />
-          <div className={styles.contact__orbit} />
+const ContactSection = () => (
+  <section className={styles.contact} id="contact" aria-labelledby="contact-title">
+    <div className={styles.contact__container}>
+      <header className={styles.contact__header}>
+        <h2 id="contact-title">Связаться</h2>
+      </header>
+      <div className={styles.contact__intro}>
+        <p className={styles.contact__introText}>Расскажите о проекте или задайте вопрос.</p>
+        <div className={styles.contact__responseCard}>
+          <div>
+            <span>Обычно отвечаю в течение дня</span>
+            <span className={styles.contact__responseMeta}>Будни · 10:00–20:00 МСК</span>
+          </div>
         </div>
-
-        <motion.div
-          className={styles.contact__header}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-        >
-          <Text tag="span" view="p-14" className={styles.contact__sectionIndex}>
-            05 · Contact
-          </Text>
-          <Text tag="h2" view="title" weight="black" uppercase>
-            Связаться
-          </Text>
-        </motion.div>
-
-        <motion.div className={styles.contact__intro} variants={itemVariants}>
-          <div className={styles.contact__introTop}>
-            <Text tag="span" view="p-14" className={styles.contact__eyebrow}>
-              Новая задача начинается здесь
-            </Text>
-            <Text tag="h3" view="p-32" weight="bold" className={styles.contact__introTitle}>
-              Давайте создадим продукт, который хочется использовать.
-            </Text>
-            <Text tag="p" view="p-16" className={styles.contact__introText}>
-              Расскажите об идее, задаче или продукте. Помогу найти ясную форму и превратить её в
-              работающий цифровой опыт.
-            </Text>
-          </div>
-
-          <div className={styles.contact__responseCard}>
-            <div>
-              <Text tag="span" view="p-12" weight="medium">
-                Обычно отвечаю в течение дня
-              </Text>
-              <Text tag="span" view="p-14" className={styles.contact__responseMeta}>
-                Будни · 10:00–20:00 МСК
-              </Text>
-            </div>
-          </div>
-
-          <div className={styles.contact__socials}>
-            {SOCIALS.map(({ href, type, label }) => (
-              <motion.a
-                key={href}
-                href={href}
-                target={href.startsWith('https') ? '_blank' : undefined}
-                rel={href.startsWith('https') ? 'noopener noreferrer' : undefined}
-                className={styles.contact__socialLink}
-                variants={itemVariants}
-                whileHover={{ x: 5 }}
-              >
-                <span className={styles.contact__socialCopy}>
-                  <Text tag="span" view="p-12" className={styles.contact__socialType}>
-                    {type}
-                  </Text>
-                  <Text tag="span" view="p-14" weight="medium">
-                    {label}
-                  </Text>
-                </span>
-              </motion.a>
-            ))}
-          </div>
-
-          <div className={styles.contact__signature} aria-hidden="true">
-            <Text tag="span" view="p-12" weight="bold">
-              AK
-            </Text>
-            <Text tag="span" view="p-12">
-              Portfolio · 2026
-            </Text>
-          </div>
-        </motion.div>
-
-        <motion.div className={styles.contact__formWrapper} variants={itemVariants}>
-          <ContactForm />
-        </motion.div>
-      </motion.div>
-    </section>
-  );
-};
-
+        <div className={styles.contact__socials}>
+          {SOCIALS.map(({ href, type, label }) => (
+            <a
+              key={href}
+              href={href}
+              target={href.startsWith('https') ? '_blank' : undefined}
+              rel={href.startsWith('https') ? 'noopener noreferrer' : undefined}
+              className={styles.contact__socialLink}
+            >
+              <span className={styles.contact__socialCopy}>
+                <span className={styles.contact__socialType}>{type}</span>
+                <span>{label}</span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+      <div className={styles.contact__formWrapper}>
+        <ContactForm />
+      </div>
+    </div>
+  </section>
+);
 export default ContactSection;

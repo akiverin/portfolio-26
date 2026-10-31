@@ -121,6 +121,7 @@ const MediaLightbox: React.FC<MediaLightboxProps> = ({ isOpen, src, alt, onClose
             </span>
             <ActionButton
               variant="icon"
+              surface="dark"
               size="sm"
               type="button"
               className={styles.lightbox__iconButton}
@@ -153,6 +154,7 @@ const MediaLightbox: React.FC<MediaLightboxProps> = ({ isOpen, src, alt, onClose
           <div className={styles.lightbox__controls}>
             <ActionButton
               variant="icon"
+              surface="dark"
               size="sm"
               type="button"
               className={styles.lightbox__iconButton}
@@ -164,6 +166,7 @@ const MediaLightbox: React.FC<MediaLightboxProps> = ({ isOpen, src, alt, onClose
             <output className={styles.lightbox__scale}>{Math.round(scale * 100)}%</output>
             <ActionButton
               variant="icon"
+              surface="dark"
               size="sm"
               type="button"
               className={styles.lightbox__iconButton}
@@ -174,6 +177,7 @@ const MediaLightbox: React.FC<MediaLightboxProps> = ({ isOpen, src, alt, onClose
             </ActionButton>
             <ActionButton
               variant="icon"
+              surface="dark"
               size="sm"
               type="button"
               className={styles.lightbox__iconButton}

@@ -1,14 +1,12 @@
-import ActionButton from 'shared/ui/ActionButton';
+import ActionButton, { ActionLink } from 'shared/ui/ActionButton';
 import React, { useEffect, useState } from 'react';
 import styles from './ProjectCard.module.scss';
 import classNames from 'classnames';
 import { Project } from 'entities/Project/model/types';
 import Text from 'shared/ui/Text';
-import Github from 'shared/ui/icons/Github';
-import Behance from 'shared/ui/icons/Behance';
 import { ImageWithFallback } from 'shared/ui/ImageWithFallback';
 import { VideoWithFallback } from 'shared/ui/VideoWithFallback';
-import { IconArrowUpRight, IconExternalLink, IconZoomIn } from '@tabler/icons-react';
+import { IconZoomIn } from '@tabler/icons-react';
 import { getImageFit, getMediaUrl, ImageFit, isVideoMedia } from 'shared/lib/media';
 import MediaLightbox from 'shared/ui/MediaLightbox';
 
@@ -44,14 +42,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
       >
         {!isVideo ? (
           <>
-            {imageFit && (
-              <img
-                src={mediaUrl}
-                className={styles.projectCard__backdrop}
-                alt=""
-                aria-hidden="true"
-              />
-            )}
             <ImageWithFallback
               src={mediaUrl}
               className={styles.projectCard__media}
@@ -62,6 +52,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
             />
             <ActionButton
               variant="icon"
+              surface="dark"
               size="sm"
               type="button"
               className={styles.projectCard__inspect}
@@ -92,7 +83,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
       )}
       <div className={styles.projectCard__info}>
         <div className={styles.projectCard__heading}>
-          <Text view="p-24" tag="h3" weight="medium">
+          <Text view="p-24" tag="h3" weight="bold" maxLines={2}>
             {project.title}
           </Text>
           <Text tag="span" view="p-12" className={styles.projectCard__year}>
@@ -105,32 +96,20 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
       </div>
 
       <div className={styles.projectCard__actions}>
-        {project.behance && (
-          <a href={project.behance} target="_blank" rel="noopener noreferrer">
-            <Behance height={16} width={16} />
-            <Text tag="span" view="p-14" weight="medium">
-              Behance
-            </Text>
-            <IconArrowUpRight size={15} stroke={1.6} />
-          </a>
+        {project.link && !project.disabled && (
+          <ActionLink href={project.link} variant="primary" size="sm" target="_blank">
+            Смотреть проект
+          </ActionLink>
         )}
         {project.github && (
-          <a href={project.github} target="_blank" rel="noopener noreferrer">
-            <Github width={16} height={16} />
-            <Text tag="span" view="p-14" weight="medium">
-              GitHub
-            </Text>
-            <IconArrowUpRight size={15} stroke={1.6} />
-          </a>
+          <ActionLink href={project.github} variant="text" size="sm" chevron target="_blank">
+            GitHub
+          </ActionLink>
         )}
-        {project.link && !project.disabled && (
-          <a href={project.link} target="_blank" rel="noopener noreferrer">
-            <IconExternalLink size={16} stroke={1.6} />
-            <Text tag="span" view="p-14" weight="medium">
-              Открыть
-            </Text>
-            <IconArrowUpRight size={15} stroke={1.6} />
-          </a>
+        {project.behance && (
+          <ActionLink href={project.behance} variant="text" size="sm" chevron target="_blank">
+            Behance
+          </ActionLink>
         )}
       </div>
     </article>

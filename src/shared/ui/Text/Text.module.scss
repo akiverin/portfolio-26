@@ -88,15 +88,15 @@
   }
 
   &--c-primary {
-    color: $text-primary;
+    color: var(--text);
   }
 
   &--c-secondary {
-    color: $text-secondary;
+    color: var(--text-muted);
   }
 
   &--c-accent {
-    color: $text-accent;
+    color: var(--text);
   }
 
   &--uppercase {

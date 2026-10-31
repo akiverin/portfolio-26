@@ -1,21 +1,12 @@
 import ActionButton from 'shared/ui/ActionButton';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { AnimatePresence, motion } from 'framer-motion';
-import {
-  IconArrowDown,
-  IconBuildingBank,
-  IconCalendarEvent,
-  IconCoins,
-  IconSparkles,
-} from '@tabler/icons-react';
-import styles from './GrantsSection.module.scss';
-import Text from 'shared/ui/Text';
-import { GrantListStore } from 'entities/Grant/stores/GrantListStore';
 import GovScience from 'shared/ui/icons/GovScience';
 import Polytech from 'shared/ui/icons/Polytech';
 import Moscow from 'shared/ui/icons/Moscow';
 import Alfa from 'shared/ui/icons/Alfa';
+import styles from './GrantsSection.module.scss';
+import { GrantListStore } from 'entities/Grant/stores/GrantListStore';
 import Skeleton from 'shared/ui/Skeleton';
 import Select from 'shared/ui/Select';
 import { useLocalStore } from 'shared/hooks/useLocalStore';
@@ -55,7 +46,7 @@ const MONTHS = [
 ] as const;
 
 const timestampToDate = (timestamp: { seconds: number; nanoseconds: number }): Date =>
-  new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1_000_000);
+  new Date(timestamp.seconds * 1000 + (timestamp.nanoseconds ?? 0) / 1_000_000);
 
 const formatMonthYear = (date: Date): string => `${MONTHS[date.getMonth()]} ${date.getFullYear()}`;
 
@@ -72,222 +63,126 @@ const getGrantMonthCount = (startDate: Date, endDate: Date): number => {
   return Math.max(1, months);
 };
 
-const GrantItemSkeleton: React.FC = () => (
-  <li className={styles.grants__item}>
-    <Skeleton width={44} height={44} borderRadius={12} />
-    <div className={styles.grants__skeletonCopy}>
-      <Skeleton width="64%" height={19} />
-      <Skeleton width="42%" height={13} />
-    </div>
-    <Skeleton width={110} height={18} />
+const GrantItemSkeleton = () => (
+  <li className={styles.grants__item} aria-hidden="true">
+    <Skeleton width={40} height={40} borderRadius={10} />
+    <Skeleton width="78%" height={18} />
+    <Skeleton width="90%" height={14} />
+    <Skeleton width="48%" height={24} />
   </li>
 );
 
-const GrantsSection: React.FC = observer(() => {
+const GrantsSection = observer(() => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [sort, setSort] = useState<GrantSort>('date-desc');
   const store = useLocalStore(() => new GrantListStore());
-
   useEffect(() => {
-    store.fetchAllGrants();
+    void store.fetchAllGrants();
   }, [store]);
-
   const isLoading = store.meta === Meta.initial || store.meta === Meta.loading;
-  const sortedGrants = useMemo(() => {
-    const grants = [...store.grants];
-    grants.sort((first, second) => {
-      if (sort === 'sum-desc') return Number(second.sum) - Number(first.sum);
-      if (sort === 'sum-asc') return Number(first.sum) - Number(second.sum);
-      const difference = first.startDate.seconds - second.startDate.seconds;
-      return sort === 'date-asc' ? difference : -difference;
-    });
-    return grants;
-  }, [store.grants, sort]);
-  const visibleGrants = isExpanded ? sortedGrants : sortedGrants.slice(0, COLLAPSED_COUNT);
-  const hiddenCount = Math.max(0, sortedGrants.length - COLLAPSED_COUNT);
-  const totalSupport = useMemo(
-    () => store.grants.reduce((total, grant) => total + Number(grant.sum || 0), 0),
-    [store.grants],
+  const sortedGrants = useMemo(
+    () =>
+      [...store.grants].sort((first, second) => {
+        if (sort === 'sum-desc') return Number(second.sum) - Number(first.sum);
+        if (sort === 'sum-asc') return Number(first.sum) - Number(second.sum);
+        const difference = first.startDate.seconds - second.startDate.seconds;
+        return sort === 'date-asc' ? difference : -difference;
+      }),
+    [store.grants, sort],
   );
+  const visibleGrants = isExpanded ? sortedGrants : sortedGrants.slice(0, COLLAPSED_COUNT);
+  const totalSupport = store.grants.reduce((total, grant) => total + (Number(grant.sum) || 0), 0);
 
   return (
     <section className={styles.grants} aria-labelledby="grants-title">
-      <div className={styles.grants__shell}>
-        <div className={styles.grants__background} aria-hidden="true">
-          <div className={styles.grants__halo} />
-          <div className={styles.grants__orbit} />
+      <header className={styles.grants__heading}>
+        <div>
+          <h2 id="grants-title">Стипендии и гранты</h2>
+          <p>Поддержка учёбы и исследований.</p>
         </div>
-
-        <motion.div
-          className={styles.grants__aside}
-          initial={{ opacity: 0, x: -28 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: '-70px' }}
-          transition={{ duration: 0.65, ease: [0.2, 0.7, 0.2, 1] }}
+        {!isLoading && store.meta !== Meta.error && store.grants.length > 0 && (
+          <div className={styles.grants__summary}>
+            <span>Общая поддержка</span>
+            <strong>{formatAmount(totalSupport)}</strong>
+          </div>
+        )}
+      </header>
+      <div className={styles.grants__archive}>
+        <div className={styles.grants__archiveHeader}>
+          <Select
+            aria-label="Сортировка стипендий и грантов"
+            value={sort}
+            options={SORT_OPTIONS}
+            onChange={(value) => setSort(value as GrantSort)}
+            className={styles.grants__sort}
+          />
+        </div>
+        <ul
+          className={styles.grants__content}
+          id="grants-list"
+          data-expanded={isExpanded || undefined}
         >
-          <div className={styles.grants__heading}>
-            <Text tag="span" view="p-14" className={styles.grants__eyebrow}>
-              <IconSparkles size={14} stroke={1.6} /> 04 · Academic support
-            </Text>
-            <Text id="grants-title" tag="h2" view="title" weight="black" uppercase>
-              Стипендии
-              <br />и гранты
-            </Text>
-            <Text tag="p" view="p-16">
-              Поддержка за академические, проектные и исследовательские результаты.
-            </Text>
-          </div>
-
-          <div className={styles.grants__asideNote}>
-            <IconBuildingBank size={17} stroke={1.5} />
-            <Text tag="span" view="p-14">
-              2022 — 2026 · Москва
-            </Text>
-          </div>
-        </motion.div>
-
-        <motion.div
-          className={styles.grants__archive}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-70px' }}
-          transition={{ duration: 0.65, delay: 0.08, ease: [0.2, 0.7, 0.2, 1] }}
-        >
-          <div className={styles.grants__archiveHeader}>
-            <Select
-              value={sort}
-              options={SORT_OPTIONS}
-              onChange={(value) => setSort(value as GrantSort)}
-              className={styles.grants__sort}
-            />
-          </div>
-
-          <ul className={styles.grants__content} id="grants-list">
-            {store.meta === Meta.error && (
-              <li className={styles.grants__empty} role="alert">
-                <Text view="p-14">Не удалось загрузить данные</Text>
-              </li>
-            )}
-
-            {isLoading &&
-              Array.from({ length: COLLAPSED_COUNT }, (_, index) => (
-                <GrantItemSkeleton key={index} />
-              ))}
-
-            <AnimatePresence initial={false}>
-              {!isLoading &&
-                visibleGrants.map((grant, index) => {
-                  const GrantIcon =
-                    grant.icon && grant.icon in GRANT_ICONS
-                      ? GRANT_ICONS[grant.icon as keyof typeof GRANT_ICONS]
-                      : null;
-                  const startDate = timestampToDate(grant.startDate);
-                  const endDate = timestampToDate(grant.endDate);
-                  const monthCount = getGrantMonthCount(startDate, endDate);
-                  const monthlyAmount = Math.round(Number(grant.sum) / monthCount);
-
-                  return (
-                    <motion.li
-                      key={grant.id}
-                      className={styles.grants__item}
-                      initial={{ opacity: 0, y: 18, filter: 'blur(5px)' }}
-                      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                      exit={{ opacity: 0, y: -10, height: 0 }}
-                      transition={{ duration: 0.38, delay: index * 0.045 }}
-                    >
-                      <div className={styles.grants__iconBox}>
-                        {GrantIcon ? <GrantIcon /> : <IconCoins size={20} stroke={1.4} />}
-                      </div>
-
-                      <div className={styles.grants__copy}>
-                        <Text tag="h3" view="p-18" weight="bold">
-                          {grant.title}
-                        </Text>
-                        <Text tag="p" view="p-14">
-                          {grant.desc}
-                        </Text>
-                      </div>
-
-                      <div className={styles.grants__meta}>
-                        <div className={styles.grants__amounts}>
-                          <Text
-                            tag="span"
-                            view="p-12"
-                            className={styles.grants__monthlyAmount}
-                            title={`В среднем за период: ${monthCount} мес.`}
-                          >
-                            {formatAmount(monthlyAmount)}/мес
-                          </Text>
-                          <Text
-                            tag="span"
-                            view="p-16"
-                            weight="bold"
-                            className={styles.grants__amount}
-                          >
-                            {formatAmount(grant.sum)}
-                          </Text>
-                        </div>
-                        <Text tag="span" view="p-12" className={styles.grants__period}>
-                          <IconCalendarEvent size={13} stroke={1.5} />
-                          {formatMonthYear(startDate)} — {formatMonthYear(endDate)}
-                        </Text>
-                      </div>
-                    </motion.li>
-                  );
-                })}
-            </AnimatePresence>
-          </ul>
-
-          {!isLoading && hiddenCount > 0 && (
+          {store.meta === Meta.error && (
+            <li className={styles.grants__empty} role="alert">
+              Не удалось загрузить данные
+            </li>
+          )}
+          {isLoading &&
+            Array.from({ length: COLLAPSED_COUNT }, (_, index) => (
+              <GrantItemSkeleton key={index} />
+            ))}
+          {!isLoading &&
+            visibleGrants.map((grant) => {
+              const GrantIcon =
+                grant.icon && grant.icon in GRANT_ICONS
+                  ? GRANT_ICONS[grant.icon as keyof typeof GRANT_ICONS]
+                  : null;
+              const start = timestampToDate(grant.startDate);
+              const end = timestampToDate(grant.endDate);
+              const months = getGrantMonthCount(start, end);
+              return (
+                <li key={grant.id} className={styles.grants__item}>
+                  <div className={styles.grants__cardHeader}>
+                    <div className={styles.grants__iconBox} aria-hidden="true">
+                      {GrantIcon ? <GrantIcon /> : null}
+                    </div>
+                    <span className={styles.grants__period}>
+                      {formatMonthYear(start)} — {formatMonthYear(end)}
+                    </span>
+                  </div>
+                  <div className={styles.grants__copy}>
+                    <h3>{grant.title}</h3>
+                    <p>{grant.desc}</p>
+                  </div>
+                  <div className={styles.grants__amounts}>
+                    <strong>{formatAmount(grant.sum)}</strong>
+                    <span title={`В среднем за период: ${months} мес.`}>
+                      {formatAmount(Math.round(Number(grant.sum) / months))}/мес
+                    </span>
+                  </div>
+                </li>
+              );
+            })}
+          {!isLoading && store.meta !== Meta.error && store.grants.length === 0 && (
+            <li className={styles.grants__empty}>Пока нет записей</li>
+          )}
+        </ul>
+        {!isLoading && store.grants.length > COLLAPSED_COUNT && (
+          <div className={styles.grants__footer}>
             <ActionButton
-              variant="primary"
+              variant="text"
               size="sm"
-              type="button"
-              className={styles.grants__expandBtn}
               onClick={() => setIsExpanded((value) => !value)}
               aria-expanded={isExpanded}
               aria-controls="grants-list"
             >
-              <Text tag="span" view="p-14" weight="medium">
-                {isExpanded ? 'Свернуть архив' : `Ещё ${hiddenCount} записей`}
-              </Text>
-              <motion.span animate={{ rotate: isExpanded ? 180 : 0 }}>
-                <IconArrowDown size={17} stroke={1.7} />
-              </motion.span>
+              {isExpanded ? 'Свернуть' : `Показать все (${store.grants.length})`}
+              <span aria-hidden="true">{isExpanded ? '−' : '+'}</span>
             </ActionButton>
-          )}
-        </motion.div>
-
-        <AnimatePresence>
-          {(isExpanded || hiddenCount === 0) && !isLoading && (
-            <motion.div
-              className={styles.grants__summary}
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-            >
-              <div>
-                <Text tag="span" view="p-12">
-                  Количество стипендий и грантов
-                </Text>
-                <Text tag="span" view="p-20" weight="bold">
-                  {store.grants.length}
-                </Text>
-              </div>
-              <div>
-                <Text tag="span" view="p-12">
-                  Общая сумма
-                </Text>
-                <Text tag="span" view="p-20" weight="bold">
-                  {formatAmount(totalSupport)}
-                </Text>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+          </div>
+        )}
       </div>
     </section>
   );
 });
-
 export default GrantsSection;

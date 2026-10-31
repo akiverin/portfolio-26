@@ -1,14 +1,9 @@
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { SegmentedControl } from 'shared/ui/ActionButton';
+import photo from 'assets/about/andrey-sunset.webp';
 import styles from './AboutSection.module.scss';
-import Text from 'shared/ui/Text';
-import photo from 'assets/photo-optimized.jpg';
-import FadeIn from 'shared/ui/FadeIn';
 
-type JourneyEntry = {
-  period: string;
-  title: string;
-  subtitle: string;
-};
+type JourneyEntry = { period: string; title: string; subtitle: string };
 
 const EDUCATION: JourneyEntry[] = [
   {
@@ -46,251 +41,72 @@ const WORK: JourneyEntry[] = [
   },
 ];
 
-const FOCUS_AREAS = [
-  { title: 'Frontend', caption: 'React · TypeScript · архитектура' },
-  { title: 'Product design', caption: 'UX-сценарии · UI-системы' },
-  { title: 'AI workflows', caption: 'Инструменты · автоматизация' },
-  { title: 'Research', caption: 'Гипотезы · данные · выводы' },
-] as const;
+const ROLES = ['UI/UX дизайнер', 'Full-stack разработчик', 'Начинающий аналитик'] as const;
 
-const stepVariants = {
-  hidden: { opacity: 0, y: 24, filter: 'blur(5px)' },
-  visible: (index: number) => ({
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
-    transition: {
-      type: 'spring' as const,
-      damping: 24,
-      stiffness: 115,
-      delay: index * 0.07,
-    },
-  }),
-};
-
-const EducationStep: React.FC<{ entry: JourneyEntry; index: number }> = ({ entry, index }) => (
-  <motion.article
-    className={styles.education__step}
-    variants={stepVariants}
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true, margin: '-40px' }}
-    custom={index}
-  >
-    <div className={styles.education__stepTop}>
-      <Text tag="span" view="p-12" className={styles.education__stepIndex}>
-        {String(index + 1).padStart(2, '0')}
-      </Text>
-      <Text tag="span" view="p-12" className={styles.education__period}>
-        {entry.period}
-      </Text>
-    </div>
-    <div className={styles.education__copy}>
-      <Text tag="h4" view="p-18" weight="bold">
-        {entry.title}
-      </Text>
-      <Text tag="p" view="p-12">
-        {entry.subtitle}
-      </Text>
-    </div>
-  </motion.article>
-);
-
-const AboutSection: React.FC = () => {
+const AboutSection = () => {
+  const [journey, setJourney] = useState('education');
+  const entries = journey === 'education' ? [...EDUCATION].reverse() : [...WORK].reverse();
   return (
-    <section className={styles.about} id="about">
-      <div className={styles.about__container}>
-        <FadeIn>
-          <div className={styles.about__header}>
-            <Text tag="span" view="p-12" className={styles.about__headerIndex}>
-              01 · Profile
-            </Text>
-            <Text tag="h2" view="title" weight="black" uppercase>
-              Обо мне
-            </Text>
-          </div>
-        </FadeIn>
-
-        <div className={styles.about__top}>
-          <FadeIn direction="left" delay={0.1} className={styles.about__profileColumn}>
-            <motion.div
-              className={styles.about__profileCard}
-              whileHover={{ rotate: -0.4 }}
-              transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-            >
-              <div className={styles.about__photoWrap}>
-                <img
-                  src={photo}
-                  alt="Фотография Андрея Киверина"
-                  className={styles.about__photo}
-                  loading="lazy"
-                />
-                <div className={styles.about__photoShade} />
-                <div className={styles.about__photoCaption}>
-                  <span className={styles.about__statusDot} />
-                  <Text tag="span" view="p-12" weight="medium">
-                    Frontend developer · UI designer
-                  </Text>
-                </div>
-              </div>
-              <div className={styles.about__profileFooter}>
-                <Text tag="span" view="p-12" color="secondary">
-                  Moscow, RU
-                </Text>
-                <Text tag="span" view="p-12" weight="medium">
-                  Создаю понятные продукты
-                </Text>
-              </div>
-              <span className={styles.about__profileGlow} aria-hidden="true" />
-            </motion.div>
-          </FadeIn>
-
-          <FadeIn direction="right" delay={0.16} className={styles.about__introColumn}>
-            <div className={styles.about__intro}>
-              <div className={styles.about__introTopline}>
-                <Text tag="span" view="p-12" className={styles.about__kicker}>
-                  Разработка × дизайн
-                </Text>
-                <Text tag="span" view="p-12" className={styles.about__availability}>
-                  Открыт новым задачам
-                </Text>
-              </div>
-
-              <Text tag="h3" view="p-32" weight="bold" className={styles.about__statement}>
-                Проектирую интерфейсы, где логика ощущается так же хорошо, как визуальный слой.
-              </Text>
-
-              <div className={styles.about__bio}>
-                <Text tag="span" view="p-12" className={styles.about__bioIndex}>
-                  A/01
-                </Text>
-                <Text tag="p" view="p-16">
-                  Создаю сайты, корпоративные продукты и мобильные интерфейсы — исследую задачу,
-                  нахожу ясную структуру и довожу решение до аккуратной реализации. Техническое
-                  образование помогает смотреть на продукт как на систему, а дизайн — делать эту
-                  систему понятной человеку.
-                </Text>
-              </div>
-
-              <div className={styles.about__focusGrid} aria-label="Основные компетенции">
-                {FOCUS_AREAS.map((area, index) => (
-                  <motion.div
-                    key={area.title}
-                    className={styles.about__focusItem}
-                    initial={{ opacity: 0, y: 12 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.18 + index * 0.06 }}
-                  >
-                    <Text tag="span" view="p-12" className={styles.about__focusIndex}>
-                      0{index + 1}
-                    </Text>
-                    <div>
-                      <Text tag="h4" view="p-16" weight="bold">
-                        {area.title}
-                      </Text>
-                      <Text tag="span" view="p-12">
-                        {area.caption}
-                      </Text>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </FadeIn>
+    <section className={styles.about} id="about" aria-labelledby="about-title">
+      <header className={styles.about__header}>
+        <h2 id="about-title">Обо мне</h2>
+      </header>
+      <div className={styles.about__top}>
+        <div className={styles.about__photoWrap}>
+          <img
+            src={photo}
+            alt="Андрей Киверин на фоне гор и подсолнухов на закате"
+            width={940}
+            height={940}
+            decoding="async"
+            loading="lazy"
+            className={styles.about__photo}
+          />
+          <span className={styles.about__photoCaption}>Frontend developer, Moscow</span>
         </div>
-
-        <div className={styles.about__journey}>
-          <div className={styles.about__journeyHeader}>
-            <div>
-              <Text tag="span" view="p-12" className={styles.about__kicker}>
-                Траектория
-              </Text>
-              <Text tag="h3" view="p-28" weight="bold">
-                Образование и опыт
-              </Text>
-            </div>
-            <Text tag="p" view="p-14">
-              Последовательный путь от технической базы к продуктовой разработке.
-            </Text>
-          </div>
-
-          <div className={styles.about__journeyGrid}>
-            <FadeIn delay={0.08} className={styles.about__educationPanel}>
-              <div className={styles.about__panelHeader}>
-                <div>
-                  <Text tag="h3" view="p-20" weight="bold">
-                    Образование
-                  </Text>
-                  <Text tag="span" view="p-12">
-                    4 последовательных этапа
-                  </Text>
-                </div>
-              </div>
-
-              <div className={styles.education}>
-                {EDUCATION.map((entry, index) => (
-                  <EducationStep
-                    key={`${entry.period}-${entry.title}`}
-                    entry={entry}
-                    index={index}
-                  />
-                ))}
-              </div>
-            </FadeIn>
-
-            <FadeIn delay={0.16} className={styles.about__experiencePanel}>
-              <div className={styles.about__panelHeader}>
-                <div>
-                  <Text tag="h3" view="p-20" weight="bold">
-                    Практика
-                  </Text>
-                  <Text tag="span" view="p-12">
-                    Проекты и коммерческий опыт
-                  </Text>
-                </div>
-              </div>
-
-              <div className={styles.experience}>
-                {WORK.map((entry, index) => (
-                  <motion.article
-                    key={`${entry.period}-${entry.title}`}
-                    className={styles.experience__item}
-                    variants={stepVariants}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: '-40px' }}
-                    custom={index}
-                  >
-                    <div className={styles.experience__topline}>
-                      <Text tag="span" view="p-12">
-                        {entry.period}
-                      </Text>
-                      {index === WORK.length - 1 && (
-                        <Text tag="span" view="p-12">
-                          Current
-                        </Text>
-                      )}
-                    </div>
-                    <div className={styles.experience__content}>
-                      <div>
-                        <Text tag="h4" view="p-18" weight="bold">
-                          {entry.title}
-                        </Text>
-                        <Text tag="p" view="p-12">
-                          {entry.subtitle}
-                        </Text>
-                      </div>
-                    </div>
-                  </motion.article>
-                ))}
-              </div>
-            </FadeIn>
-          </div>
+        <div className={styles.about__intro}>
+          <h3 className={styles.about__statement}>Frontend-разработчик</h3>
+          <p className={styles.about__bio}>
+            Работаю с React и TypeScript. Занимаюсь разработкой сайтов и интерфейсов, изучаю
+            технологии ИИ. Работаю в студии КТС, учусь в магистратуре Московского политеха.
+          </p>
+          <ul className={styles.about__roles} aria-label="Другие навыки">
+            {ROLES.map((role) => (
+              <li key={role}>{role}</li>
+            ))}
+          </ul>
         </div>
+      </div>
+      <div className={styles.about__journey}>
+        <div className={styles.about__journeyHeader}>
+          <h3>Образование и опыт</h3>
+          <SegmentedControl
+            label="Образование и опыт"
+            value={journey}
+            onChange={setJourney}
+            options={[
+              { value: 'education', label: 'Образование' },
+              { value: 'experience', label: 'Опыт' },
+            ]}
+            compact
+          />
+        </div>
+        <ul
+          className={styles.about__journeyList}
+          aria-label={journey === 'education' ? 'Образование' : 'Опыт работы'}
+        >
+          {entries.map((entry) => (
+            <li key={entry.period + entry.title}>
+              <span className={styles.about__period}>{entry.period}</span>
+              <div>
+                <h4>{entry.title}</h4>
+                <p>{entry.subtitle}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
 };
-
 export default AboutSection;

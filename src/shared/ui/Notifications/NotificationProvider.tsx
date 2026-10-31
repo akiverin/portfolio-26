@@ -58,6 +58,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
               <span className={styles.toast__message}>{toast.message}</span>
               <ActionButton
                 variant="icon"
+                surface="dark"
                 size="xs"
                 type="button"
                 className={styles.toast__close}

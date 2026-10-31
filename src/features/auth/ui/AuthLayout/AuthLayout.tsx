@@ -1,5 +1,4 @@
 import React from 'react';
-import { IconLock } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from 'shared/configs/routes';
 import Text from 'shared/ui/Text';
@@ -71,10 +70,6 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ mode, children }) => {
                 </Text>
               </Link>
             </nav>
-            <Text tag="span" view="p-14" className={styles.layout__security}>
-              <IconLock size={16} stroke={1.6} aria-hidden="true" />
-              Данные защищены
-            </Text>
           </div>
         </aside>
 

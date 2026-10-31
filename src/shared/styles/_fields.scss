@@ -1,0 +1,39 @@
+/* Shared geometry for text fields, native selects and admin form controls. */
+@mixin field-surface {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+  padding: 14px 16px;
+  border: 1px solid var(--field-border, #868686);
+  border-radius: 12px;
+  background: var(--field-bg, #161616);
+  box-shadow: none;
+  color: var(--field-text, #f5f5f5);
+  font: 400 16px/1.375 var(--font-sans);
+  transition: border-color 0.18s ease;
+
+  &::placeholder {
+    color: var(--field-placeholder, #a1a1a1);
+    opacity: 1;
+  }
+
+  &:hover:not(:disabled) {
+    border-color: var(--field-text, #f5f5f5);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--field-text, #f5f5f5);
+    outline-offset: 2px;
+  }
+
+  &[aria-invalid="true"] {
+    border-color: var(--field-text, #f5f5f5);
+    box-shadow: inset 0 0 0 1px var(--field-text, #f5f5f5);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+}

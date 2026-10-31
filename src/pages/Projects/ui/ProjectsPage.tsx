@@ -13,7 +13,6 @@ import { useDebounce } from 'shared/hooks/useDebounce';
 import { Meta } from 'shared/lib/meta';
 import FadeIn from 'shared/ui/FadeIn';
 import Pagination from 'shared/ui/Pagination';
-import { IconFolder, IconSearch, IconSparkles } from '@tabler/icons-react';
 
 const PAGE_SIZE = 6;
 
@@ -25,11 +24,10 @@ const SORT_OPTIONS = [
 ];
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 40, filter: 'blur(4px)' },
+  hidden: { opacity: 0, y: 40 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
     transition: {
       duration: 0.5,
       delay: i * 0.08,
@@ -111,14 +109,8 @@ export const ProjectsPage: React.FC = observer(() => {
     <main className={styles.page}>
       <FadeIn>
         <div className={styles.page__header}>
-          <Text tag="span" view="p-12" className={styles.page__eyebrow}>
-            <IconSparkles size={14} /> Selected work · Archive
-          </Text>
           <Text tag="h1" view="title" weight="black" uppercase>
             Проекты
-          </Text>
-          <Text view="p-16" color="secondary">
-            Шесть работ на странице — спокойно изучайте детали и выбирайте интересное.
           </Text>
         </div>
       </FadeIn>
@@ -131,10 +123,10 @@ export const ProjectsPage: React.FC = observer(() => {
               onChange={setSearch}
               placeholder="Поиск проектов..."
               aria-label="Поиск проектов"
-              afterSlot={<IconSearch size={18} stroke={1.5} />}
             />
           </div>
           <Select
+            aria-label="Сортировка проектов"
             value={sort}
             options={SORT_OPTIONS}
             onChange={setSort}
@@ -180,7 +172,7 @@ export const ProjectsPage: React.FC = observer(() => {
         {!isLoading && filteredAndSorted.length > 0 && (
           <div className={styles.page__paginationRow}>
             <Text tag="span" view="p-12" className={styles.page__resultCount}>
-              <IconFolder size={15} stroke={1.5} /> {filteredAndSorted.length} работ
+              {filteredAndSorted.length} работ
             </Text>
             <Pagination
               page={page}

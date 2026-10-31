@@ -1,52 +1,69 @@
-# Monochrome interface
+# Portfolio interface
 
-The portfolio uses independently implemented, neutral controls informed by the
-interaction patterns on [apple.com](https://www.apple.com/) and the
-[iPhone product page](https://www.apple.com/iphone/). No Apple code, graphics,
-fonts or downloadable design-kit components are embedded.
+The portfolio uses independently implemented controls and layouts informed by
+[Apple product cards](https://www.apple.com/mac/),
+[Apple Newsroom](https://www.apple.com/newsroom/),
+[Apple TV](https://tv.apple.com/) and
+[Apple's text-field guidance](https://developer.apple.com/design/human-interface-guidelines/text-fields).
+No Apple artwork, fonts or design-kit components are embedded.
 
-The [official design resources](https://developer.apple.com/design/resources/)
-provide platform mock-up kits. Their [license](https://developer.apple.com/support/downloads/terms/apple-design-resources/Apple-Design-Resources-License-20230621-English.pdf)
-does not authorize embedding those resources into this website. Existing React,
-native HTML and SCSS implement the controls without an additional UI dependency.
+## Surfaces and layout
 
-## Components
+The ASCII Hero keeps its animated grayscale landscape and scroll parallax.
+Its copy describes the actual service: websites, web applications and interfaces.
+Content sections below it use white backgrounds, a shared 1200 px content width,
+quiet dividers and responsive grids. The header uses blur without a dark fill.
+The authenticated sidebar retains its black frame; the content viewport is white.
 
-- `ActionButton`: primary fill, secondary outline, tertiary soft fill, text action
-  and circular icon action. Four sizes: 28, 36, 44 and 56 px; touch targets have a
-  44 px minimum. Optional leading/trailing icons remain supported.
-- `ActionLink`: the same variants with native URL semantics, internal routing,
-  new-tab support and an optional CSS chevron. Disabled links have no `href`.
-- `SegmentedControl`: controlled native radio group with keyboard navigation.
-- Native `details/summary`: disclosure example with plus/minus in the playground.
-- `Button`: compatibility entry point for existing forms.
+The About portrait is the user's provided 940 × 940 color image. Its caption sits
+at the top; the main role and three additional roles are separate from the image. The original is
+stored at `assets/about/andrey-sunset-source.png`; the 132,384-byte WebP is served
+from `src/assets/about/andrey-sunset.webp` with lazy loading and explicit dimensions.
 
-Use one primary action per group. Prefer a text link with a chevron for secondary
-navigation, and labelled text for actions that do not require an icon. Menu,
-password visibility, close, zoom and similar controls retain meaningful icons.
+Project cards use a full-width preview, a prominent heading, a primary action and
+supporting text links. Achievement cards use an editorial image/category/title/date
+hierarchy. Both share `_cards.scss`; portrait and landscape media can fit inside
+without cropping. Image inspection and external link semantics remain available.
 
-Controls inherit `--control-*` colors. `surface="light"` or `surface="dark"`
-overrides a single control; containers can set the variables for an entire group.
-The admin theme supplies both palettes. Medeo remains the self-hosted UI font.
+Generic decorative icons and repeated editorial labels are removed. Grant and
+scholarship marks still map the database's `icon` field to the actual organization
+SVG in its original colors. Three cards are shown initially: a row on desktop and
+a native horizontal scroller on smaller screens. Show all reveals the full grid;
+sorting, aggregate support and period/monthly amounts use the existing records.
+The compact education/experience selector preserves all four education and two
+work entries, and shows one category at a time.
 
-There are no Film gradients, moving button highlights or hover translations.
-Focus, disabled, loading, pressed, current-page and reduced-motion states remain
-available. Loading retains the label's width. The ASCII scene computes neutral
-luminance in its existing fragment shader; its fallback image is grayscale.
-Scroll-driven parallax, pause/resume and rendering lifecycle remain unchanged.
-The five custom SVG cursors fit within 24 × 24 px with preserved proportions;
-their CSS hotspots scale with the artwork.
+## Controls and forms
+
+- `ActionButton` and `ActionLink`: filled, outlined, soft, text and icon variants;
+  optional leading/trailing icons, loading, disabled, pressed and focus states.
+- `SegmentedControl`: native radio semantics. The contact form uses its compact,
+  full-width variant; touch segments remain at least 44 px tall.
+- `Input`, `Textarea`, `Select`: shared outlined field surface, 52 px standard
+  height and a clear focus ring. Select uses the native picker, type-ahead and
+  mobile chooser rather than an animated custom menu.
+- `AnimatedCheckbox`: compatibility name for a native labelled checkbox. The
+  achievement date control uses it on the homepage and in the archive.
+- `Pagination`: numbered controls with a current-page state, previous/next
+  boundaries and a compact current/total layout on small screens.
+
+The contact form has no entrance, hover, spring or success animations. It retains
+validation, a 1200-character limit, errors, loading and reset behavior. Inputs and
+segments are disabled during submission. Medeo remains the local UI font and the
+five custom cursors fit within 24 × 24 px with scaled hotspots.
 
 ## Review
 
-Open `/playground/buttons` for light/dark examples, states, icon placement,
-sizes, disclosures and segmented controls. Run against the dev server:
+`/playground/buttons` shows light/dark controls. Against a running dev server:
 
 ```sh
 rtk proxy node scripts/monochrome-ui-smoke.mjs
+rtk proxy node scripts/forms-content-smoke.mjs
 ```
 
-`UI_QA_URL` targets a production preview. The suite checks font requests,
-neutral interface paint, responsive overflow, controls, native keyboard behavior,
-touch sizes, authentication controls and a simulated admin modal/sidebar. The
-admin simulation never signs into an account or saves data.
+The first suite checks real routes, font requests, responsive overflow, shared
+controls, authentication utilities and a simulated admin modal/sidebar. The second
+mounts the real page/components with browser-only fixture records, verifies grant
+marks, dates, sorting, cards, the color portrait, pagination and contact form states
+at 1440/768/390/320 px. Form submission is simulated locally; no messages or account
+changes are sent. `UI_QA_URL` can target a production preview for the first suite.

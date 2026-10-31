@@ -29,7 +29,7 @@ try {
         overflow: document.documentElement.scrollWidth > innerWidth,
         loaded: document.fonts.check('900 16px "Medeo Sans"', 'Привет Ёжик'),
         fonts: performance.getEntriesByType('resource').filter(e => /woff/.test(e.name)).map(e => ({ name: e.name, bytes: e.transferSize })),
-        chromatic: [...document.querySelectorAll('body *')].filter(e => e instanceof HTMLElement && !e.closest('svg') && e.getBoundingClientRect().width).flatMap(e => ['color', 'backgroundColor', 'borderTopColor'].filter(prop => isChromatic(getComputedStyle(e)[prop])).map(prop => ({ tag: e.tagName, class: e.className, prop, value: getComputedStyle(e)[prop] }))).slice(0, 10),
+        chromatic: [...document.querySelectorAll('body *')].filter(e => e instanceof HTMLElement && !e.closest('svg, #footer') && e.getBoundingClientRect().width).flatMap(e => ['color', 'backgroundColor', 'borderTopColor'].filter(prop => isChromatic(getComputedStyle(e)[prop])).map(prop => ({ tag: e.tagName, class: e.className, prop, value: getComputedStyle(e)[prop] }))).slice(0, 10),
       };
     });
     assert(info.loaded, route + ' Medeo');
@@ -40,7 +40,7 @@ try {
     report.pages.push(info);
     await page.screenshot({ path: path.join(output, route === '/' ? 'home.png' : route.replaceAll('/', '-') + '.png') });
   }
-  check('Seven routes: neutral UI paints, Medeo/Cyrillic loaded locally, no overflow');
+  check('Seven routes: neutral UI paints outside the requested landscape footer, local Medeo/Cyrillic, no overflow');
   const cursor = await page.evaluate(async () => {
     const value = getComputedStyle(document.body).cursor;
     const url = value.match(/url\("(.*?)"\)/)?.[1];

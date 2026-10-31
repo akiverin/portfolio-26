@@ -4,8 +4,9 @@
 .page {
   @include wrapper;
 
+  max-width: 1280px;
   min-height: var(--page-viewport-height, 100vh);
-  color: #f6f6f6;
+  color: #1d1d1d;
   padding-top: var(--page-top-padding, 150px);
   padding-bottom: 100px;
 
@@ -25,12 +26,14 @@
 
     & h1 {
       letter-spacing: -0.055em;
-      line-height: 0.9;
+      line-height: 1.08;
+      font-weight: 600;
+      text-transform: none;
     }
 
     & > p {
       max-width: 640px;
-      color: rgb(255 255 255 / 50%);
+      color: #6e6e6e;
       line-height: 1.5;
     }
   }
@@ -52,16 +55,14 @@
     overflow: hidden;
     flex-direction: column;
     gap: 32px;
-    padding: clamp(20px, 4vw, 52px);
-    border: 1px solid rgb(255 255 255 / 8%);
+    padding: 0;
+    border: 0;
     border-radius: 30px;
-    background:
-      radial-gradient(circle at 100% 0%, rgb(163 163 163 / 12%), transparent 25%),
-      #101010;
+    background: #fff;
 
     @include smallerThanTablet {
       gap: 22px;
-      padding: 16px 12px 22px;
+      padding: 0;
       border-radius: 22px;
     }
   }
@@ -165,7 +166,7 @@
     flex-direction: column;
     gap: 14px;
     padding: 8px;
-    border: 1px solid rgb(255 255 255 / 8%);
+    border: 0;
     border-radius: 22px;
     background: rgb(255 255 255 / 4%);
   }

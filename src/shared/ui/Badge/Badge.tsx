@@ -1,28 +1,6 @@
-import React from 'react';
-import styles from './Badge.module.scss';
+import type { FC } from 'react';
 import classNames from 'classnames';
-import Text from 'shared/ui/Text';
-import Article from 'shared/ui/icons/Article';
-import Conference from 'shared/ui/icons/Conference';
-import Citation from 'shared/ui/icons/Citation';
-import Design from 'shared/ui/icons/Design';
-import Team from 'shared/ui/icons/Team';
-import Code from 'shared/ui/icons/Code';
-import Trophy from 'shared/ui/icons/Trophy';
-import Student from 'shared/ui/icons/Student';
-import GovScience from 'shared/ui/icons/GovScience';
-import Polytech from 'shared/ui/icons/Polytech';
-import Moscow from 'shared/ui/icons/Moscow';
-import Alfa from 'shared/ui/icons/Alfa';
-import {
-  IconBolt,
-  IconCrown,
-  IconDiamond,
-  IconFlame,
-  IconHeart,
-  IconMedal,
-  IconStar,
-} from '@tabler/icons-react';
+import styles from './Badge.module.scss';
 
 export type ColorsBadgeT =
   | 'black'
@@ -56,28 +34,6 @@ export type IconsBadgeT =
   | 'moscow'
   | 'alfa';
 
-const ICONS: Record<IconsBadgeT, React.ReactNode> = {
-  article: <Article height={14} width={14} className={styles.badge__icon} />,
-  conference: <Conference height={14} width={14} className={styles.badge__icon} />,
-  citation: <Citation height={14} width={14} className={styles.badge__icon} />,
-  design: <Design height={14} width={14} className={styles.badge__icon} />,
-  team: <Team height={14} width={14} className={styles.badge__icon} />,
-  trophy: <Trophy height={14} width={14} className={styles.badge__icon} />,
-  student: <Student height={14} width={14} className={styles.badge__icon} />,
-  code: <Code height={14} width={14} className={styles.badge__icon} />,
-  medal: <IconMedal size={14} className={styles.badge__icon} />,
-  star: <IconStar size={14} className={styles.badge__icon} />,
-  flame: <IconFlame size={14} className={styles.badge__icon} />,
-  lightning: <IconBolt size={14} className={styles.badge__icon} />,
-  diamond: <IconDiamond size={14} className={styles.badge__icon} />,
-  heart: <IconHeart size={14} className={styles.badge__icon} />,
-  crown: <IconCrown size={14} className={styles.badge__icon} />,
-  govScience: <GovScience height={14} width={14} className={styles.badge__icon} />,
-  polytech: <Polytech height={14} width={14} className={styles.badge__icon} />,
-  moscow: <Moscow height={14} width={14} className={styles.badge__icon} />,
-  alfa: <Alfa height={14} width={14} className={styles.badge__icon} />,
-};
-
 export type BadgeProps = {
   className?: string;
   title: string;
@@ -85,17 +41,8 @@ export type BadgeProps = {
   icon?: IconsBadgeT | null;
 };
 
-const Badge: React.FC<BadgeProps> = ({ title, color = 'black', icon, className }) => {
-  const badgeClasses = classNames(styles.badge, className, styles[`badge--c-${color}`]);
-
-  return (
-    <div className={badgeClasses}>
-      {icon && ICONS[icon] ? ICONS[icon] : null}
-      <Text weight="medium" view="p-14" noWrap className={styles.badge__title}>
-        {title}
-      </Text>
-    </div>
-  );
-};
-
+/** Category text carries the meaning without decorative symbols. */
+const Badge: FC<BadgeProps> = ({ title, className }) => (
+  <span className={classNames(styles.badge, className)}>{title}</span>
+);
 export default Badge;

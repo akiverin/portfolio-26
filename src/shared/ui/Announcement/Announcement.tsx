@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import ActionButton from 'shared/ui/ActionButton';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
@@ -6,22 +7,25 @@ import styles from './Announcement.module.scss';
 
 export type AnnouncementProps = {
   open: boolean;
-  message: React.ReactNode;
+  message: ReactNode;
+  title?: string;
   badge?: string;
+  icon?: ReactNode;
   onClose?: () => void;
   reserveSidebarSpace?: boolean;
 };
 
-const Announcement: React.FC<AnnouncementProps> = ({
+const Announcement = ({
   open,
   message,
-  badge = 'New',
+  title,
+  badge,
+  icon,
   onClose,
   reserveSidebarSpace = false,
-}) => {
+}: AnnouncementProps) => {
   const reducedMotion = useReducedMotion();
   if (typeof document === 'undefined') return null;
-
   return createPortal(
     <div className={styles.container} data-with-sidebar={reserveSidebarSpace || undefined}>
       <AnimatePresence>
@@ -32,34 +36,39 @@ const Announcement: React.FC<AnnouncementProps> = ({
             role="status"
             aria-live="polite"
             aria-atomic="true"
-            initial={{ opacity: 0, y: reducedMotion ? 0 : 14, scale: reducedMotion ? 1 : 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
+            initial={{ opacity: 0, y: reducedMotion ? 0 : 12 }}
+            animate={{ opacity: 1, y: 0 }}
             exit={{
               opacity: 0,
-              y: reducedMotion ? 0 : 10,
-              scale: reducedMotion ? 1 : 0.985,
-              transition: { duration: reducedMotion ? 0.12 : 0.22, ease: [0.22, 1, 0.36, 1] },
+              y: reducedMotion ? 0 : 6,
+              transition: { duration: reducedMotion ? 0.1 : 0.16 },
             }}
-            transition={
-              reducedMotion
-                ? { duration: 0.15 }
-                : { type: 'spring', stiffness: 270, damping: 28, mass: 0.85 }
-            }
+            transition={{ duration: reducedMotion ? 0.12 : 0.28, ease: [0.16, 1, 0.3, 1] }}
           >
-            <span className={styles.notice__badge} aria-hidden="true">
-              <span>{badge}</span>
-            </span>
-            <span className={styles.notice__message}>{message}</span>
+            {icon && (
+              <span className={styles.notice__icon} aria-hidden="true">
+                {icon}
+              </span>
+            )}
+            <div className={styles.notice__copy}>
+              {(title || badge) && (
+                <div className={styles.notice__heading}>
+                  {title && <span className={styles.notice__title}>{title}</span>}
+                  {badge && <span className={styles.notice__badge}>{badge}</span>}
+                </div>
+              )}
+              <div className={styles.notice__message}>{message}</div>
+            </div>
             {onClose && (
               <ActionButton
                 variant="icon"
+                surface="light"
                 size="xs"
-                type="button"
                 className={styles.notice__close}
                 onClick={onClose}
                 aria-label="Скрыть уведомление"
               >
-                <XIcon size={15} weight="bold" aria-hidden="true" />
+                <XIcon size={14} aria-hidden="true" />
               </ActionButton>
             )}
           </motion.div>
@@ -69,5 +78,4 @@ const Announcement: React.FC<AnnouncementProps> = ({
     document.body,
   );
 };
-
 export default Announcement;
