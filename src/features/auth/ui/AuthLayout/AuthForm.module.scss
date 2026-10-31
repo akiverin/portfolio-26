@@ -50,49 +50,21 @@
   }
 }
 
-.back,
-.passwordToggle,
-.textButton {
-  border: 0;
-  background: transparent;
-  color: rgb(255 255 255 / 44%);
-}
-
 .back {
   display: flex;
   width: fit-content;
   align-items: center;
   gap: 8px;
-  padding: 0;
-
-  &:hover,
-  &:focus-visible {
-    color: #69e2d4;
-  }
 }
 
 .passwordToggle {
   display: grid;
-  padding: 5px;
   place-items: center;
-  transition: color 0.15s ease;
-
-  &:hover,
-  &:focus-visible {
-    color: #fff;
-  }
 }
 
 .textButton {
   width: fit-content;
   align-self: center;
-  padding: 0;
-  transition: color 0.15s ease;
-
-  &:hover,
-  &:focus-visible {
-    color: #fff;
-  }
 }
 
 .link {

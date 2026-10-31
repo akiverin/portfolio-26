@@ -1,3 +1,4 @@
+import ActionButton from 'shared/ui/ActionButton';
 import React, { useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useNavigate } from 'react-router-dom';
@@ -202,7 +203,9 @@ const ProfileForm: React.FC = observer(() => {
 
               <div className={styles.profile__formActions}>
                 {form.isDirty && (
-                  <button
+                  <ActionButton
+                    variant="secondary"
+                    size="sm"
                     type="button"
                     className={styles.profile__resetButton}
                     onClick={() => form.resetChanges()}
@@ -211,7 +214,7 @@ const ProfileForm: React.FC = observer(() => {
                     <Text tag="span" view="p-14" weight="medium">
                       Отменить изменения
                     </Text>
-                  </button>
+                  </ActionButton>
                 )}
                 <Button
                   type="submit"

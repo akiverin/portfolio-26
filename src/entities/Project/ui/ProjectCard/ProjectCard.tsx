@@ -1,3 +1,4 @@
+import ActionButton from 'shared/ui/ActionButton';
 import React, { useEffect, useState } from 'react';
 import styles from './ProjectCard.module.scss';
 import classNames from 'classnames';
@@ -17,9 +18,7 @@ export type ProjectCardProps = {
 };
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
-  const year = project.date?.seconds
-    ? new Date(project.date.seconds * 1000).getFullYear()
-    : '—';
+  const year = project.date?.seconds ? new Date(project.date.seconds * 1000).getFullYear() : '—';
   const mediaUrl = getMediaUrl(project.cover, 'projects');
   const isVideo = isVideoMedia(project.cover, project.coverType);
   const [imageFit, setImageFit] = useState<ImageFit>(null);
@@ -61,14 +60,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
               onLoad={handleImageLoad}
               onError={() => setImageFit(null)}
             />
-            <button
+            <ActionButton
+              variant="icon"
+              size="sm"
               type="button"
               className={styles.projectCard__inspect}
               onClick={() => setIsLightboxOpen(true)}
               aria-label={`Открыть изображение проекта «${project.title}»`}
             >
               <IconZoomIn size={22} stroke={1.6} />
-            </button>
+            </ActionButton>
           </>
         ) : (
           <VideoWithFallback
@@ -94,7 +95,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
           <Text view="p-24" tag="h3" weight="medium">
             {project.title}
           </Text>
-          <Text tag="span" view="p-12" className={styles.projectCard__year}>{year}</Text>
+          <Text tag="span" view="p-12" className={styles.projectCard__year}>
+            {year}
+          </Text>
         </div>
         <Text view="p-14" maxLines={2} color="secondary">
           {project.desc}
@@ -112,11 +115,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, className }) => {
           </a>
         )}
         {project.github && (
-          <a
-            href={project.github}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href={project.github} target="_blank" rel="noopener noreferrer">
             <Github width={16} height={16} />
             <Text tag="span" view="p-14" weight="medium">
               GitHub

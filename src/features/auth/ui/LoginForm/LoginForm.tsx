@@ -1,3 +1,4 @@
+import ActionButton from 'shared/ui/ActionButton';
 import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import Text from 'shared/ui/Text';
@@ -63,7 +64,9 @@ const LoginForm: React.FC = observer(() => {
   return (
     <AuthLayout mode="login">
       {mode === 'reset' && (
-        <button
+        <ActionButton
+          variant="icon"
+          size="xs"
           type="button"
           className={styles.back}
           onClick={() => setMode('login')}
@@ -73,7 +76,7 @@ const LoginForm: React.FC = observer(() => {
           <Text tag="span" view="p-14">
             Назад ко входу
           </Text>
-        </button>
+        </ActionButton>
       )}
 
       <form onSubmit={mode === 'login' ? handleLogin : handleReset} className={styles.form}>
@@ -133,14 +136,16 @@ const LoginForm: React.FC = observer(() => {
                 aria-invalid={Boolean(form.errors.password)}
                 aria-describedby={form.errors.password ? 'password-error' : undefined}
                 afterSlot={
-                  <button
+                  <ActionButton
+                    variant="icon"
+                    size="sm"
                     type="button"
                     className={styles.passwordToggle}
                     onClick={() => setShowPassword((value) => !value)}
                     aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
                   >
                     {showPassword ? <IconEyeOff size={18} /> : <IconEye size={18} />}
-                  </button>
+                  </ActionButton>
                 }
               />
               {form.errors.password && (
@@ -166,7 +171,9 @@ const LoginForm: React.FC = observer(() => {
           </Button>
 
           {mode === 'login' && (
-            <button
+            <ActionButton
+              variant="secondary"
+              size="sm"
               type="button"
               className={styles.textButton}
               onClick={() => setMode('reset')}
@@ -175,7 +182,7 @@ const LoginForm: React.FC = observer(() => {
               <Text view="p-14" color="secondary">
                 Забыли пароль?
               </Text>
-            </button>
+            </ActionButton>
           )}
         </div>
 
@@ -192,6 +199,7 @@ const LoginForm: React.FC = observer(() => {
               type="button"
               onClick={handleGoogle}
               loading={userStore.meta === Meta.loading}
+              variant="secondary"
               className={styles.providerButton}
             >
               <Google width={16} height={16} />

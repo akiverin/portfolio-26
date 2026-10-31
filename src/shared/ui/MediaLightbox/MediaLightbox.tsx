@@ -1,3 +1,4 @@
+import ActionButton from 'shared/ui/ActionButton';
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -115,10 +116,19 @@ const MediaLightbox: React.FC<MediaLightboxProps> = ({ isOpen, src, alt, onClose
         >
           <img src={src} className={styles.lightbox__backdrop} alt="" aria-hidden="true" />
           <div className={styles.lightbox__topbar}>
-            <span className={styles.lightbox__hint}>Колесо — масштаб · перетаскивание — навигация</span>
-            <button type="button" className={styles.lightbox__iconButton} onClick={onClose} aria-label="Закрыть просмотр">
+            <span className={styles.lightbox__hint}>
+              Колесо — масштаб · перетаскивание — навигация
+            </span>
+            <ActionButton
+              variant="icon"
+              size="sm"
+              type="button"
+              className={styles.lightbox__iconButton}
+              onClick={onClose}
+              aria-label="Закрыть просмотр"
+            >
               <IconX size={21} stroke={1.7} />
-            </button>
+            </ActionButton>
           </div>
 
           <div
@@ -141,16 +151,37 @@ const MediaLightbox: React.FC<MediaLightboxProps> = ({ isOpen, src, alt, onClose
           </div>
 
           <div className={styles.lightbox__controls}>
-            <button type="button" className={styles.lightbox__iconButton} onClick={() => setScale((value) => clampScale(value - SCALE_STEP))} aria-label="Уменьшить масштаб">
+            <ActionButton
+              variant="icon"
+              size="sm"
+              type="button"
+              className={styles.lightbox__iconButton}
+              onClick={() => setScale((value) => clampScale(value - SCALE_STEP))}
+              aria-label="Уменьшить масштаб"
+            >
               <IconMinus size={19} stroke={1.8} />
-            </button>
+            </ActionButton>
             <output className={styles.lightbox__scale}>{Math.round(scale * 100)}%</output>
-            <button type="button" className={styles.lightbox__iconButton} onClick={() => setScale((value) => clampScale(value + SCALE_STEP))} aria-label="Увеличить масштаб">
+            <ActionButton
+              variant="icon"
+              size="sm"
+              type="button"
+              className={styles.lightbox__iconButton}
+              onClick={() => setScale((value) => clampScale(value + SCALE_STEP))}
+              aria-label="Увеличить масштаб"
+            >
               <IconPlus size={19} stroke={1.8} />
-            </button>
-            <button type="button" className={styles.lightbox__iconButton} onClick={resetView} aria-label="Сбросить масштаб и положение">
+            </ActionButton>
+            <ActionButton
+              variant="icon"
+              size="sm"
+              type="button"
+              className={styles.lightbox__iconButton}
+              onClick={resetView}
+              aria-label="Сбросить масштаб и положение"
+            >
               <IconArrowsMaximize size={18} stroke={1.8} />
-            </button>
+            </ActionButton>
           </div>
         </motion.div>
       )}

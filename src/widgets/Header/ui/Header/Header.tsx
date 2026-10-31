@@ -1,3 +1,4 @@
+import ActionButton from 'shared/ui/ActionButton';
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -38,8 +39,7 @@ const Header: React.FC = observer(() => {
   const isAdmin = userStore.currentUser?.role === 'admin';
   const isProfileActive = location.pathname === ROUTES.PROFILE;
   const isAdminActive = location.pathname === ROUTES.ADMIN;
-  const isLoginActive =
-    location.pathname === ROUTES.AUTH || location.pathname === ROUTES.REGISTER;
+  const isLoginActive = location.pathname === ROUTES.AUTH || location.pathname === ROUTES.REGISTER;
 
   useEffect(() => {
     const handleScroll = () => setScrolled(globalThis.scrollY > 20);
@@ -215,7 +215,10 @@ const Header: React.FC = observer(() => {
             )}
           </ul>
 
-          <button
+          <ActionButton
+            variant="icon"
+            size="sm"
+            nativeContent
             className={classNames(
               styles.header__burger,
               isMenuOpen && styles['header__burger--open'],
@@ -228,7 +231,7 @@ const Header: React.FC = observer(() => {
           >
             <span />
             <span />
-          </button>
+          </ActionButton>
         </nav>
       </div>
 

@@ -1,0 +1,147 @@
+{
+  "title": "andkiv · ASCII cinema — five Hero directions",
+  "date": "2026-10-24",
+  "generator": "Built-in image_gen",
+  "requestedResolution": [
+    3840,
+    2160
+  ],
+  "exportNote": "4K exports are Lanczos upscales when the generated source is smaller; they are not native 4K generations.",
+  "concepts": [
+    {
+      "id": "01-first-light",
+      "name": "Первый свет",
+      "headline": "Из идеи —\nв работающий продукт.",
+      "body": "Проектирую интерфейсы и разрабатываю сайты, в которых дизайн и код работают вместе.",
+      "primary": "Смотреть проекты",
+      "secondary": "Обсудить идею",
+      "scene": "Рассвет над многоуровневой долиной ASCII-облаков.",
+      "motion": "Передние облака смещаются быстрее дальних, оранжевый свет медленно открывает горизонт.",
+      "palette": [
+        "#07182D",
+        "#2169C8",
+        "#FF984A"
+      ],
+      "image": "concepts/01-first-light.png",
+      "export": "exports-4k/01-first-light-4k.png",
+      "prompt": "cinemaPrompt01",
+      "sourceSize": [
+        1672,
+        941
+      ],
+      "exportSize": [
+        3840,
+        2160
+      ],
+      "exportMethod": "Lanczos upscale; non-native 4K"
+    },
+    {
+      "id": "02-after-hours",
+      "name": "После заката",
+      "headline": "Интерфейсы,\nк которым хочется\nвозвращаться.",
+      "body": "Соединяю визуальный характер, удобство и живую анимацию.",
+      "primary": "Смотреть работы",
+      "secondary": "Давайте знакомиться",
+      "scene": "Ночной океан из символов, тёплое отражение далёкого горизонта.",
+      "motion": "Волны движутся на разных планах; тонкая тёплая дорожка отражения реагирует на курсор.",
+      "palette": [
+        "#061326",
+        "#1457BE",
+        "#EF8740"
+      ],
+      "image": "concepts/02-after-hours.png",
+      "export": "exports-4k/02-after-hours-4k.png",
+      "prompt": "cinemaPrompt02",
+      "sourceSize": [
+        1672,
+        941
+      ],
+      "exportSize": [
+        3840,
+        2160
+      ],
+      "exportMethod": "Lanczos upscale; non-native 4K"
+    },
+    {
+      "id": "03-creative-geology",
+      "name": "Геология идей",
+      "headline": "Точность кода.\nХарактер дизайна.",
+      "body": "Создаю цифровые продукты на стыке разработки, визуальных систем и движения.",
+      "primary": "Исследовать проекты",
+      "secondary": "Обсудить задачу",
+      "scene": "Оранжевые ASCII-скалы и холодная синяя река между ними.",
+      "motion": "Ближние стены каньона дают глубокий параллакс, река уводит взгляд в проекты.",
+      "palette": [
+        "#102A50",
+        "#DA793D",
+        "#58A8FB"
+      ],
+      "image": "concepts/03-creative-geology.png",
+      "export": "exports-4k/03-creative-geology-4k.png",
+      "prompt": "cinemaPrompt03",
+      "sourceSize": [
+        1672,
+        941
+      ],
+      "exportSize": [
+        3840,
+        2160
+      ],
+      "exportMethod": "Lanczos upscale; non-native 4K"
+    },
+    {
+      "id": "04-clear-passage",
+      "name": "Ясный проход",
+      "headline": "Сложное внутри.\nПонятное снаружи.",
+      "body": "Превращаю сложные задачи в ясные интерфейсы и продуманные веб-продукты.",
+      "primary": "Как это выглядит",
+      "secondary": "Обсудить проект",
+      "scene": "Тёмный скальный проход открывается к тёплому свету и синему небу.",
+      "motion": "Скальные планы раздвигаются при скролле, раскрывая следующий раздел.",
+      "palette": [
+        "#091A31",
+        "#A7D5FB",
+        "#F7A361"
+      ],
+      "image": "concepts/04-clear-passage.png",
+      "export": "exports-4k/04-clear-passage-4k.png",
+      "prompt": "cinemaPrompt04",
+      "sourceSize": [
+        1672,
+        941
+      ],
+      "exportSize": [
+        3840,
+        2160
+      ],
+      "exportMethod": "Lanczos upscale; non-native 4K"
+    },
+    {
+      "id": "05-next-digital-step",
+      "name": "Следующий шаг",
+      "headline": "Ваш следующий\nцифровой шаг.",
+      "body": "От первой идеи до запуска — проектирую, разрабатываю и оживляю.",
+      "primary": "Начать разговор",
+      "secondary": "Посмотреть проекты",
+      "scene": "Городской горизонт из ASCII на синем берегу, с тёплыми окнами.",
+      "motion": "Ближний берег, город и небо двигаются с разной скоростью, свет проводит к CTA.",
+      "palette": [
+        "#081C3B",
+        "#3E87E0",
+        "#FF9B4A"
+      ],
+      "image": "concepts/05-next-digital-step.png",
+      "export": "exports-4k/05-next-digital-step-4k.png",
+      "prompt": "cinemaPrompt05",
+      "sourceSize": [
+        1672,
+        941
+      ],
+      "exportSize": [
+        3840,
+        2160
+      ],
+      "exportMethod": "Lanczos upscale; non-native 4K"
+    }
+  ]
+}

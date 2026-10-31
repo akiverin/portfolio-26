@@ -1,3 +1,4 @@
+import { ActionLink } from 'shared/ui/ActionButton';
 import React, { useEffect, useState } from 'react';
 import {
   IconArrowUpRight,
@@ -5,7 +6,6 @@ import {
   IconCamera,
   IconShieldCheck,
 } from '@tabler/icons-react';
-import { Link } from 'react-router-dom';
 import { ROUTES } from 'shared/configs/routes';
 import Text from 'shared/ui/Text';
 import styles from './ProfileForm.module.scss';
@@ -95,12 +95,12 @@ const ProfileSummary: React.FC<ProfileSummaryProps> = ({
       )}
 
       {role === 'admin' && (
-        <Link to={ROUTES.ADMIN} className={styles.profile__adminLink}>
+        <ActionLink variant="secondary" href={ROUTES.ADMIN} className={styles.profile__adminLink}>
           <Text tag="span" view="p-14" weight="medium">
             Открыть админ-панель
           </Text>
           <IconArrowUpRight size={18} stroke={1.6} aria-hidden="true" />
-        </Link>
+        </ActionLink>
       )}
     </aside>
   );

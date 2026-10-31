@@ -1,3 +1,4 @@
+import ActionButton from 'shared/ui/ActionButton';
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IconDownload, IconChevronDown } from '@tabler/icons-react';
@@ -39,7 +40,9 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({ onExport, loading }) =>
 
   return (
     <div className={styles.export} ref={ref}>
-      <button
+      <ActionButton
+        variant="secondary"
+        size="sm"
         type="button"
         className={styles.export__trigger}
         onClick={() => setOpen(!open)}
@@ -48,7 +51,7 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({ onExport, loading }) =>
         <IconDownload size={16} stroke={1.5} />
         Экспорт
         <IconChevronDown size={14} stroke={2} />
-      </button>
+      </ActionButton>
 
       <AnimatePresence>
         {open && (
@@ -62,14 +65,16 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({ onExport, loading }) =>
             <div className={styles.export__section}>
               <span className={styles.export__sectionTitle}>Период</span>
               {TIME_RANGES.map((r) => (
-                <button
+                <ActionButton
+                  variant="secondary"
+                  size="sm"
                   key={r.value}
                   type="button"
                   className={`${styles.export__option} ${range === r.value ? styles['export__option--active'] : ''}`}
                   onClick={() => setRange(r.value)}
                 >
                   {r.label}
-                </button>
+                </ActionButton>
               ))}
             </div>
             <div className={styles.export__divider} />
@@ -77,7 +82,9 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({ onExport, loading }) =>
               <span className={styles.export__sectionTitle}>Формат</span>
               <div className={styles.export__formats}>
                 {FORMATS.map((f) => (
-                  <button
+                  <ActionButton
+                    variant="secondary"
+                    size="sm"
                     key={f.value}
                     type="button"
                     className={styles.export__formatBtn}
@@ -87,7 +94,7 @@ const ExportDropdown: React.FC<ExportDropdownProps> = ({ onExport, loading }) =>
                     }}
                   >
                     {f.label}
-                  </button>
+                  </ActionButton>
                 ))}
               </div>
             </div>

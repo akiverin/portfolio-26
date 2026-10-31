@@ -18,7 +18,7 @@
   border-radius: 16px;
   padding: 32px;
   color: var(--admin-text);
-  font-family: Pretendard, sans-serif;
+  font-family: var(--font-sans);
   text-align: center;
 
   &__icon {
@@ -54,32 +54,10 @@
 
   &__cancelBtn,
   &__confirmBtn {
-    padding: 10px 24px;
-    border-radius: 10px;
-    font-family: Pretendard, sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    border: none;
-    transition:
-      background 0.15s ease,
-      color 0.15s ease;
     flex: 1;
   }
 
-  &__cancelBtn {
-    background: var(--admin-sidebar-item-hover);
-    color: var(--admin-text-secondary);
-
-    &:hover {
-      background: var(--admin-theme-btn-hover-bg);
-      color: var(--admin-text);
-    }
-  }
-
   &__confirmBtn {
-    background: var(--admin-danger-text);
-    color: var(--admin-text-on-danger, #fff);
-
     &:hover {
       opacity: 0.9;
     }

@@ -20,6 +20,14 @@ export const App: React.FC = observer(() => {
   usePageSeo(pathname);
 
   if (userStore.isRestoringSession) return <StartupLoader />;
+  if (pathname === ROUTES.BUTTON_LAB) {
+    return (
+      <>
+        <ScrollToTop />
+        <AppRouter />
+      </>
+    );
+  }
   if (userStore.isAuth && isAuth) return <Navigate to={ROUTES.PROFILE} replace />;
 
   if (userStore.isAuth && !isAuth) {

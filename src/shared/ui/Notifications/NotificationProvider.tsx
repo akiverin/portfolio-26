@@ -1,3 +1,4 @@
+import ActionButton from 'shared/ui/ActionButton';
 import React, { createContext, useContext, useCallback, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { IconCheck, IconX, IconInfoCircle } from '@tabler/icons-react';
@@ -55,14 +56,16 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
             >
               <span className={styles.toast__icon}>{ICONS[toast.type]}</span>
               <span className={styles.toast__message}>{toast.message}</span>
-              <button
+              <ActionButton
+                variant="icon"
+                size="xs"
                 type="button"
                 className={styles.toast__close}
                 onClick={() => dismiss(toast.id)}
                 aria-label="Закрыть"
               >
                 <IconX size={14} stroke={2} />
-              </button>
+              </ActionButton>
             </motion.div>
           ))}
         </AnimatePresence>

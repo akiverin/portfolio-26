@@ -13,7 +13,10 @@
   background: rgb(255 255 255 / 4%);
   box-shadow: 0 10px 30px rgb(0 0 0 / 10%);
   color: #f3f7f8;
-  transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+  transition:
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.35s ease;
 
   &:hover {
     border-color: rgb(105 226 212 / 24%);
@@ -31,7 +34,6 @@
         transform: scale(1);
       }
     }
-
   }
 
   &__cover {
@@ -52,7 +54,13 @@
         position: absolute;
         z-index: 1;
         inset: 0;
-        background: linear-gradient(90deg, rgb(5 10 13 / 18%), transparent 28%, transparent 72%, rgb(5 10 13 / 18%));
+        background: linear-gradient(
+          90deg,
+          rgb(5 10 13 / 18%),
+          transparent 28%,
+          transparent 72%,
+          rgb(5 10 13 / 18%)
+        );
         content: "";
         pointer-events: none;
       }
@@ -63,7 +71,13 @@
         position: absolute;
         z-index: 1;
         inset: 0;
-        background: linear-gradient(0deg, rgb(5 10 13 / 22%), transparent 30%, transparent 70%, rgb(5 10 13 / 22%));
+        background: linear-gradient(
+          0deg,
+          rgb(5 10 13 / 22%),
+          transparent 30%,
+          transparent 70%,
+          rgb(5 10 13 / 22%)
+        );
         content: "";
         pointer-events: none;
       }
@@ -93,7 +107,9 @@
     object-fit: cover;
     object-position: center center;
     filter: saturate(0.78);
-    transition: filter 0.45s ease, transform 0.65s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition:
+      filter 0.45s ease,
+      transform 0.65s cubic-bezier(0.2, 0.7, 0.2, 1);
 
     .achievementCard__cover--framed & {
       object-fit: contain;
@@ -109,22 +125,14 @@
     display: grid;
     width: 32px;
     height: 32px;
-    padding: 0;
-    border: 0;
-    border-radius: 10px;
-    background: rgb(5 16 20 / 58%);
-    box-shadow: 0 8px 24px rgb(0 0 0 / 22%);
-    color: #effffd;
     cursor: zoom-in;
     opacity: 0;
     place-items: center;
-    transition: opacity 0.3s ease;
 
     svg {
       width: 16px;
       height: 16px;
       transform: scale(0.82);
-      transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
     }
 
     &:focus-visible {

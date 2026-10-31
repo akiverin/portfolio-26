@@ -9,7 +9,8 @@ import { usePersistentAnnouncement } from '../model/usePersistentAnnouncement';
 const DesignUpdateAnnouncement = observer(() => {
   const userStore = useUserStore();
   const { pathname } = useLocation();
-  const isAuthPage = pathname === ROUTES.AUTH || pathname === ROUTES.REGISTER;
+  const isAuthPage =
+    pathname === ROUTES.AUTH || pathname === ROUTES.REGISTER || pathname === ROUTES.BUTTON_LAB;
   const { visible, close } = usePersistentAnnouncement(
     DESIGN_UPDATE_ANNOUNCEMENT,
     userStore.isInitialized && !isAuthPage,

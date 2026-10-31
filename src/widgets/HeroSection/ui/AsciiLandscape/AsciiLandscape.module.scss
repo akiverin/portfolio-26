@@ -1,0 +1,39 @@
+.landscape {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: linear-gradient(160deg, #0a2440, #98c6ed 52%, #e9ae79);
+  pointer-events: none;
+
+  &__fallback,
+  &__canvas {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    inset: 0;
+  }
+
+  &__fallback {
+    object-fit: cover;
+    object-position: 53% 50%;
+    transform: scale(1.06);
+
+    @media (width <= 1023px) and (orientation: portrait) {
+      object-fit: fill;
+    }
+  }
+
+  &__canvas {
+    opacity: 0;
+  }
+
+  &[data-renderer="webgl"] &__canvas {
+    opacity: 1;
+    transition: opacity 0.65s ease;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+}

@@ -5,24 +5,14 @@ import { HomePage } from 'pages/Home';
 import Loader from 'shared/ui/Loader';
 import styles from '../App.module.scss';
 
-const AuthPage = lazy(() =>
-  import('pages/Auth').then((m) => ({ default: m.AuthPage })),
-);
+const AuthPage = lazy(() => import('pages/Auth').then((m) => ({ default: m.AuthPage })));
 const RegisterPage = lazy(() =>
   import('pages/Register').then((m) => ({ default: m.RegisterPage })),
 );
-const ProfilePage = lazy(() =>
-  import('pages/Profile').then((m) => ({ default: m.ProfilePage })),
-);
-const AdminPage = lazy(() =>
-  import('pages/Admin').then((m) => ({ default: m.AdminPage })),
-);
-const TermsPage = lazy(() =>
-  import('pages/Terms').then((m) => ({ default: m.TermsPage })),
-);
-const PrivacyPage = lazy(() =>
-  import('pages/Privacy').then((m) => ({ default: m.PrivacyPage })),
-);
+const ProfilePage = lazy(() => import('pages/Profile').then((m) => ({ default: m.ProfilePage })));
+const AdminPage = lazy(() => import('pages/Admin').then((m) => ({ default: m.AdminPage })));
+const TermsPage = lazy(() => import('pages/Terms').then((m) => ({ default: m.TermsPage })));
+const PrivacyPage = lazy(() => import('pages/Privacy').then((m) => ({ default: m.PrivacyPage })));
 const AchievementsPage = lazy(() =>
   import('pages/Achievements').then((m) => ({ default: m.AchievementsPage })),
 );
@@ -31,6 +21,9 @@ const ProjectsPage = lazy(() =>
 );
 const NotFoundPage = lazy(() =>
   import('pages/NotFound').then((m) => ({ default: m.NotFoundPage })),
+);
+const ButtonLabPage = lazy(() =>
+  import('pages/ButtonLab').then((m) => ({ default: m.ButtonLabPage })),
 );
 
 export const AppRouter: React.FC = () => {
@@ -43,6 +36,7 @@ export const AppRouter: React.FC = () => {
       }
     >
       <Routes>
+        <Route path={ROUTES.BUTTON_LAB} element={<ButtonLabPage />} />
         <Route path={ROUTES.HOME} element={<HomePage />} />
         <Route path={ROUTES.AUTH} element={<AuthPage />} />
         <Route path={ROUTES.REGISTER} element={<RegisterPage />} />

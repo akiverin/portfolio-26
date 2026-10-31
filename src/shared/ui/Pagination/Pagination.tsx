@@ -1,3 +1,4 @@
+import ActionButton from 'shared/ui/ActionButton';
 import React from 'react';
 import styles from './Pagination.module.scss';
 import classNames from 'classnames';
@@ -47,14 +48,16 @@ const Pagination: React.FC<PaginationProps> = ({ page, pageCount, onPageChange, 
 
   return (
     <div className={classNames(styles.pagination, className)}>
-      <button
+      <ActionButton
+        variant="icon"
+        size="sm"
         className={styles.pagination__arrow}
         disabled={page <= 1}
         onClick={() => onPageChange(page - 1)}
         aria-label="Предыдущая страница"
       >
         <IconChevronLeft size={17} stroke={1.7} />
-      </button>
+      </ActionButton>
 
       {pages.map((item) =>
         item.type === 'dots' ? (
@@ -64,7 +67,9 @@ const Pagination: React.FC<PaginationProps> = ({ page, pageCount, onPageChange, 
             </Text>
           </span>
         ) : (
-          <button
+          <ActionButton
+            variant="secondary"
+            size="sm"
             key={item.value}
             className={classNames(styles.pagination__page, {
               [styles['pagination__page--active']]: item.value === page,
@@ -76,18 +81,20 @@ const Pagination: React.FC<PaginationProps> = ({ page, pageCount, onPageChange, 
             <Text view="p-14" weight={item.value === page ? 'bold' : 'medium'}>
               {item.value}
             </Text>
-          </button>
+          </ActionButton>
         ),
       )}
 
-      <button
+      <ActionButton
+        variant="icon"
+        size="sm"
         className={styles.pagination__arrow}
         disabled={page >= pageCount}
         onClick={() => onPageChange(page + 1)}
         aria-label="Следующая страница"
       >
         <IconChevronRight size={17} stroke={1.7} />
-      </button>
+      </ActionButton>
     </div>
   );
 };

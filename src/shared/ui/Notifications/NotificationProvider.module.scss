@@ -22,7 +22,7 @@
   backdrop-filter: blur(16px);
   border: 1px solid rgb(255, 255, 255, 8%);
   color: #fff;
-  font-family: Pretendard, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   line-height: 1.4;
   box-shadow: 0 8px 32px rgb(0, 0, 0, 30%);
@@ -63,16 +63,6 @@
 
   &__close {
     flex-shrink: 0;
-    background: none;
-    border: none;
-    color: #666;
-    padding: 2px;
     display: flex;
-    border-radius: 4px;
-    transition: color 0.15s ease;
-
-    &:hover {
-      color: #fff;
-    }
   }
 }

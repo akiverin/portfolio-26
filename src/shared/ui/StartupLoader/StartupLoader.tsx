@@ -1,4 +1,4 @@
-import mascot from 'assets/brand/mascot.svg';
+import mascot from 'assets/brand/mascot-blue.svg';
 import styles from './StartupLoader.module.scss';
 
 const StartupLoader: React.FC = () => (

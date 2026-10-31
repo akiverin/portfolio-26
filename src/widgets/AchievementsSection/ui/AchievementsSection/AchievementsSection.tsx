@@ -1,7 +1,8 @@
+import { ActionLink } from 'shared/ui/ActionButton';
+import ActionButton from 'shared/ui/ActionButton';
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import {
   IconArrowUpRight,
   IconAward,
@@ -83,17 +84,20 @@ const AchievementsSection: React.FC = observer(() => {
             <Text tag="p" view="p-16">
               Награды, публикации и профессиональные результаты — коротко и по существу.
             </Text>
-            <button
+            <ActionButton
+              variant="icon"
+              size="sm"
               type="button"
               className={styles.achievements__dateToggle}
               onClick={() => setShowDates((value) => !value)}
               aria-pressed={showDates}
+              aria-label="Переключить"
             >
               {showDates ? <IconEyeOff size={16} /> : <IconEye size={16} />}
               <Text tag="span" view="p-12" weight="medium">
                 {showDates ? 'Скрыть даты' : 'Показать даты'}
               </Text>
-            </button>
+            </ActionButton>
           </div>
         </motion.header>
 
@@ -144,10 +148,14 @@ const AchievementsSection: React.FC = observer(() => {
                 Архив обновляется
               </Text>
             </div>
-            <Link to={ROUTES.ACHIEVEMENTS} className={styles.achievements__allLink}>
+            <ActionLink
+              variant="secondary"
+              href={ROUTES.ACHIEVEMENTS}
+              className={styles.achievements__allLink}
+            >
               Все достижения
               <IconArrowUpRight size={18} stroke={1.7} />
-            </Link>
+            </ActionLink>
           </motion.footer>
         )}
       </div>

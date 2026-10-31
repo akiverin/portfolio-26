@@ -1,3 +1,4 @@
+import ActionButton from 'shared/ui/ActionButton';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IconX } from '@tabler/icons-react';
@@ -112,7 +113,11 @@ const EditModal: React.FC<EditModalProps> = ({
 
     try {
       const uploaded = await onUploadMedia(entity, file);
-      if (currentChange?.uploadedUrl && isManagedMediaUrl(currentChange.uploadedUrl) && onDeleteMedia) {
+      if (
+        currentChange?.uploadedUrl &&
+        isManagedMediaUrl(currentChange.uploadedUrl) &&
+        onDeleteMedia
+      ) {
         await onDeleteMedia(currentChange.uploadedUrl);
       }
 
@@ -137,7 +142,12 @@ const EditModal: React.FC<EditModalProps> = ({
     const currentUrl = String(formData[fieldKey] ?? '');
     const currentChange = mediaChanges.find((item) => item.fieldKey === fieldKey);
 
-    if (currentChange?.uploadedUrl && currentChange.uploadedUrl !== value && isManagedMediaUrl(currentChange.uploadedUrl) && onDeleteMedia) {
+    if (
+      currentChange?.uploadedUrl &&
+      currentChange.uploadedUrl !== value &&
+      isManagedMediaUrl(currentChange.uploadedUrl) &&
+      onDeleteMedia
+    ) {
       try {
         await onDeleteMedia(currentChange.uploadedUrl);
       } catch {
@@ -160,7 +170,11 @@ const EditModal: React.FC<EditModalProps> = ({
     const currentChange = mediaChanges.find((item) => item.fieldKey === fieldKey);
     setMediaError(null);
 
-    if (currentChange?.uploadedUrl && isManagedMediaUrl(currentChange.uploadedUrl) && onDeleteMedia) {
+    if (
+      currentChange?.uploadedUrl &&
+      isManagedMediaUrl(currentChange.uploadedUrl) &&
+      onDeleteMedia
+    ) {
       try {
         await onDeleteMedia(currentChange.uploadedUrl);
       } catch (error) {
@@ -176,7 +190,11 @@ const EditModal: React.FC<EditModalProps> = ({
         uploadedUrl: null,
       });
     }
-    setFormData((previous) => ({ ...previous, [fieldKey]: '', ...(fieldKey === 'cover' ? { coverType: 'image' } : {}) }));
+    setFormData((previous) => ({
+      ...previous,
+      [fieldKey]: '',
+      ...(fieldKey === 'cover' ? { coverType: 'image' } : {}),
+    }));
   };
 
   const handleClose = () => {
@@ -242,14 +260,16 @@ const EditModal: React.FC<EditModalProps> = ({
           >
             <div className={styles.modal__header}>
               <h3 className={styles.modal__title}>{title}</h3>
-              <button
+              <ActionButton
+                variant="icon"
+                size="sm"
                 type="button"
                 className={styles.modal__closeBtn}
                 onClick={handleClose}
                 aria-label="Закрыть"
               >
                 <IconX size={18} stroke={2} />
-              </button>
+              </ActionButton>
             </div>
 
             <form onSubmit={handleSubmit} className={styles.modal__form}>
@@ -264,7 +284,10 @@ const EditModal: React.FC<EditModalProps> = ({
                       <div className={styles.modal__media}>
                         {formData[field.key] ? (
                           <div className={styles.modal__mediaPreview}>
-                            {isVideoMedia(String(formData[field.key]), String(formData.coverType ?? '')) ? (
+                            {isVideoMedia(
+                              String(formData[field.key]),
+                              String(formData.coverType ?? ''),
+                            ) ? (
                               <video src={String(formData[field.key])} controls muted />
                             ) : (
                               <img src={String(formData[field.key])} alt="Предпросмотр обложки" />
@@ -287,21 +310,25 @@ const EditModal: React.FC<EditModalProps> = ({
                               disabled={loading || uploadingField === field.key}
                               onChange={(e) => {
                                 const file = e.target.files?.[0];
-                                if (file) void handleMediaUpload(field.key, field.mediaEntity!, file);
+                                if (file)
+                                  void handleMediaUpload(field.key, field.mediaEntity!, file);
                                 e.currentTarget.value = '';
                               }}
                             />
                             {uploadingField === field.key ? 'Загрузка...' : 'Загрузить файл'}
                           </label>
                           {formData[field.key] ? (
-                            <button
+                            <ActionButton
+                              variant="secondary"
+                              size="sm"
+                              tone="danger"
                               type="button"
                               className={styles.modal__removeMediaBtn}
                               onClick={() => void handleRemoveMedia(field.key)}
                               disabled={loading || uploadingField === field.key}
                             >
                               Удалить медиа
-                            </button>
+                            </ActionButton>
                           ) : null}
                         </div>
                         <span className={styles.modal__mediaHint}>
@@ -337,7 +364,7 @@ const EditModal: React.FC<EditModalProps> = ({
                       <div className={styles.modal__multiselect}>
                         {(field.asyncOptions && asyncOptions?.[field.asyncOptions]
                           ? asyncOptions[field.asyncOptions]
-                          : field.options ?? []
+                          : (field.options ?? [])
                         ).map((opt) => {
                           const selected = Array.isArray(formData[field.key])
                             ? (formData[field.key] as string[])
@@ -376,9 +403,11 @@ const EditModal: React.FC<EditModalProps> = ({
                         })}
                         {(field.asyncOptions && asyncOptions?.[field.asyncOptions]
                           ? asyncOptions[field.asyncOptions]
-                          : field.options ?? []
+                          : (field.options ?? [])
                         ).length === 0 && (
-                          <span className={styles.modal__multiselectEmpty}>Нет доступных опций</span>
+                          <span className={styles.modal__multiselectEmpty}>
+                            Нет доступных опций
+                          </span>
                         )}
                       </div>
                     ) : field.type === 'date' ? (
@@ -414,17 +443,26 @@ const EditModal: React.FC<EditModalProps> = ({
 
               <div className={styles.modal__actions}>
                 {mediaError ? <span className={styles.modal__mediaError}>{mediaError}</span> : null}
-                <button
+                <ActionButton
+                  variant="icon"
+                  size="sm"
                   type="button"
                   className={styles.modal__cancelBtn}
                   onClick={handleClose}
                   disabled={loading || uploadingField !== null}
+                  aria-label="Переключить"
                 >
                   Отмена
-                </button>
-                <button type="submit" className={styles.modal__saveBtn} disabled={loading || uploadingField !== null}>
+                </ActionButton>
+                <ActionButton
+                  variant="primary"
+                  size="sm"
+                  type="submit"
+                  className={styles.modal__saveBtn}
+                  disabled={loading || uploadingField !== null}
+                >
                   {loading ? 'Сохранение...' : 'Сохранить'}
-                </button>
+                </ActionButton>
               </div>
             </form>
           </motion.div>

@@ -12,7 +12,11 @@
   border-radius: 22px;
   background: rgb(255 255 255 / 5%);
   color: #f4f7f8;
-  transition: border-color 0.35s ease, background 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+  transition:
+    border-color 0.35s ease,
+    background 0.35s ease,
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
 
   &::after {
     position: absolute;
@@ -24,7 +28,9 @@
     content: "";
     opacity: 0;
     transform: scaleX(0.4);
-    transition: opacity 0.35s ease, transform 0.35s ease;
+    transition:
+      opacity 0.35s ease,
+      transform 0.35s ease;
   }
 
   &:hover {
@@ -72,7 +78,13 @@
         position: absolute;
         z-index: 1;
         inset: 0;
-        background: linear-gradient(90deg, rgb(7 12 16 / 22%), transparent 28%, transparent 72%, rgb(7 12 16 / 22%));
+        background: linear-gradient(
+          90deg,
+          rgb(7 12 16 / 22%),
+          transparent 28%,
+          transparent 72%,
+          rgb(7 12 16 / 22%)
+        );
         content: "";
         pointer-events: none;
       }
@@ -83,7 +95,13 @@
         position: absolute;
         z-index: 1;
         inset: 0;
-        background: linear-gradient(0deg, rgb(7 12 16 / 25%), transparent 30%, transparent 70%, rgb(7 12 16 / 25%));
+        background: linear-gradient(
+          0deg,
+          rgb(7 12 16 / 25%),
+          transparent 30%,
+          transparent 70%,
+          rgb(7 12 16 / 25%)
+        );
         content: "";
         pointer-events: none;
       }
@@ -127,22 +145,14 @@
     display: grid;
     width: 32px;
     height: 32px;
-    padding: 0;
-    border: 0;
-    border-radius: 10px;
-    background: rgb(5 16 20 / 58%);
-    box-shadow: 0 8px 24px rgb(0 0 0 / 22%);
-    color: #dbfffb;
     cursor: zoom-in;
     opacity: 0;
     place-items: center;
-    transition: opacity 0.3s ease;
 
     svg {
       width: 16px;
       height: 16px;
       transform: scale(0.82);
-      transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
     }
 
     &:focus-visible {
@@ -219,12 +229,17 @@
       border: 1px solid rgb(255 255 255 / 9%);
       border-radius: 999px;
       color: rgb(255 255 255 / 64%);
-      transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+      transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease;
 
       & svg:last-child {
         opacity: 0;
         transform: translateX(-3px);
-        transition: opacity 0.2s ease, transform 0.2s ease;
+        transition:
+          opacity 0.2s ease,
+          transform 0.2s ease;
       }
 
       &:hover {
@@ -239,5 +254,4 @@
       }
     }
   }
-
 }

@@ -1,5 +1,5 @@
+import { ActionLink } from 'shared/ui/ActionButton';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import styles from './NotFoundPage.module.scss';
 import Text from 'shared/ui/Text';
@@ -35,7 +35,6 @@ const digitVariants = {
 const DIGITS = ['4', '0', '4'] as const;
 
 export const NotFoundPage: React.FC = () => {
-
   return (
     <div className={styles.notFound}>
       <div className={styles.notFound__bg}>
@@ -107,12 +106,12 @@ export const NotFoundPage: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.9 }}
         >
-          <Link to={ROUTES.HOME} className={styles.notFound__link}>
+          <ActionLink variant="primary" href={ROUTES.HOME} className={styles.notFound__link}>
             <IconArrowLeft size={18} stroke={2} />
             <Text view="p-16" weight="medium">
               Вернуться на главную
             </Text>
-          </Link>
+          </ActionLink>
         </motion.div>
       </div>
     </div>

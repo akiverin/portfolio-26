@@ -15,7 +15,7 @@ import { UserIcon } from '@phosphor-icons/react/dist/csr/User';
 import classNames from 'classnames';
 import { ANCHORS, ROUTES } from 'shared/configs/routes';
 import { useUserStore } from 'shared/stores/StoreContext';
-import mascot from 'assets/brand/mascot.svg';
+import mascot from 'assets/brand/mascot-blue.svg';
 import styles from './AccountShell.module.scss';
 
 type NavigationItem = {

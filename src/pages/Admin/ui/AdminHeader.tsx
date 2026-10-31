@@ -1,3 +1,4 @@
+import ActionButton from 'shared/ui/ActionButton';
 import React from 'react';
 import { IconMoon, IconPlus, IconSun, IconTrash } from '@tabler/icons-react';
 import { ExportDropdown } from 'features/admin/ui/ExportDropdown';
@@ -44,15 +45,24 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
 
     <div className={styles.admin__headerActions}>
       {selectedCount > 0 && (
-        <button type="button" className={styles.admin__bulkDeleteBtn} onClick={onBulkDelete}>
+        <ActionButton
+          variant="secondary"
+          size="sm"
+          tone="danger"
+          type="button"
+          className={styles.admin__bulkDeleteBtn}
+          onClick={onBulkDelete}
+        >
           <IconTrash size={16} stroke={1.5} aria-hidden="true" />
           <Text tag="span" view="p-14" weight="medium">
             Удалить ({selectedCount})
           </Text>
-        </button>
+        </ActionButton>
       )}
       {activeSection === 'achievements' && <ExportDropdown onExport={onExport} loading={loading} />}
-      <button
+      <ActionButton
+        variant="icon"
+        size="sm"
         type="button"
         className={styles.admin__themeBtn}
         onClick={onToggleTheme}
@@ -60,13 +70,19 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({
         title={darkMode ? 'Светлая тема' : 'Тёмная тема'}
       >
         {darkMode ? <IconSun size={18} stroke={1.5} /> : <IconMoon size={18} stroke={1.5} />}
-      </button>
-      <button type="button" className={styles.admin__addBtn} onClick={onCreate}>
+      </ActionButton>
+      <ActionButton
+        variant="primary"
+        size="sm"
+        type="button"
+        className={styles.admin__addBtn}
+        onClick={onCreate}
+      >
         <IconPlus size={16} stroke={2} aria-hidden="true" />
         <Text tag="span" view="p-14" weight="medium">
           Добавить
         </Text>
-      </button>
+      </ActionButton>
     </div>
   </header>
 );

@@ -21,7 +21,7 @@
   border: 1px solid var(--admin-card-border, rgb(255, 255, 255, 8%));
   border-radius: 16px;
   color: var(--admin-text, #fff);
-  font-family: Pretendard, sans-serif;
+  font-family: var(--font-sans);
 
   &::-webkit-scrollbar {
     width: 4px;
@@ -32,7 +32,7 @@
     border-radius: 2px;
   }
 
-  &[data-dark='true'] &__input[type='date'] {
+  &[data-dark="true"] &__input[type="date"] {
     color-scheme: dark;
   }
 
@@ -55,16 +55,6 @@
     justify-content: center;
     width: 32px;
     height: 32px;
-    border: none;
-    background: transparent;
-    color: var(--admin-text-secondary, #666);
-    border-radius: 8px;
-    transition: all 0.15s ease;
-
-    &:hover {
-      background: var(--admin-card-border, rgb(255, 255, 255, 6%));
-      color: var(--admin-text, #fff);
-    }
   }
 
   &__form {
@@ -106,7 +96,7 @@
     border: 1px solid var(--admin-input-border, rgb(255, 255, 255, 8%));
     border-radius: 10px;
     color: var(--admin-input-text, var(--admin-text, #fff));
-    font-family: Pretendard, sans-serif;
+    font-family: var(--font-sans);
     font-size: 14px;
     outline: none;
     transition: border-color 0.15s ease;
@@ -119,7 +109,7 @@
       border-color: $brand;
     }
 
-    &[type='date'] {
+    &[type="date"] {
       color-scheme: light;
 
       &::-webkit-calendar-picker-indicator {
@@ -212,7 +202,9 @@
     opacity: 0;
     place-items: center;
     transform: scale(0.75);
-    transition: opacity 0.15s ease, transform 0.15s ease;
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease;
   }
 
   &__multiselectEmpty {
@@ -255,11 +247,6 @@
     align-items: center;
     justify-content: center;
     min-height: 38px;
-    padding: 8px 12px;
-    border: 1px solid var(--admin-input-border, rgb(255, 255, 255, 8%));
-    border-radius: 8px;
-    color: var(--admin-text, #fff);
-    font-size: 13px;
     cursor: pointer;
   }
 
@@ -273,15 +260,6 @@
       height: 1px;
       overflow: hidden;
       clip-path: inset(50%);
-    }
-  }
-
-  &__removeMediaBtn {
-    background: transparent;
-
-    &:hover {
-      border-color: #e5484b;
-      color: #ff8a8d;
     }
   }
 
@@ -304,31 +282,7 @@
     border-top: 1px solid var(--admin-card-border, rgb(255, 255, 255, 6%));
   }
 
-  &__cancelBtn,
   &__saveBtn {
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-family: Pretendard, sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    border: none;
-    transition: all 0.15s ease;
-  }
-
-  &__cancelBtn {
-    background: var(--admin-card-border, rgb(255, 255, 255, 6%));
-    color: var(--admin-text-secondary, #999);
-
-    &:hover {
-      background: rgb(255, 255, 255, 10%);
-      color: var(--admin-text, #fff);
-    }
-  }
-
-  &__saveBtn {
-    background: $brand;
-    color: #000;
-
     &:hover {
       opacity: 0.9;
     }

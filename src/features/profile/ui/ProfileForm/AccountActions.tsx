@@ -1,3 +1,4 @@
+import ActionButton from 'shared/ui/ActionButton';
 import React from 'react';
 import { IconLogout, IconShieldLock, IconTrash } from '@tabler/icons-react';
 import Text from 'shared/ui/Text';
@@ -25,18 +26,31 @@ const AccountActions: React.FC<AccountActionsProps> = ({ onSignOut, onDelete }) 
     </div>
 
     <div className={styles.profile__accountActions}>
-      <button type="button" className={styles.profile__logoutButton} onClick={onSignOut}>
+      <ActionButton
+        variant="secondary"
+        size="sm"
+        type="button"
+        className={styles.profile__logoutButton}
+        onClick={onSignOut}
+      >
         <IconLogout size={18} stroke={1.6} aria-hidden="true" />
         <Text tag="span" view="p-14" weight="medium">
           Выйти
         </Text>
-      </button>
-      <button type="button" className={styles.profile__deleteButton} onClick={onDelete}>
+      </ActionButton>
+      <ActionButton
+        variant="secondary"
+        size="sm"
+        tone="danger"
+        type="button"
+        className={styles.profile__deleteButton}
+        onClick={onDelete}
+      >
         <IconTrash size={18} stroke={1.6} aria-hidden="true" />
         <Text tag="span" view="p-14" weight="medium">
           Удалить аккаунт
         </Text>
-      </button>
+      </ActionButton>
     </div>
   </section>
 );

@@ -32,7 +32,7 @@
   min-height: var(--page-viewport-height, 100vh);
   background: var(--admin-bg);
   color: var(--admin-text);
-  font-family: Pretendard, sans-serif;
+  font-family: var(--font-sans);
 
   &--dark {
     --admin-bg: #0e0e0e;
@@ -131,32 +131,13 @@
     justify-content: center;
     width: 40px;
     height: 40px;
-    padding: 0;
-    border: 1px solid var(--admin-card-border);
-    border-radius: 10px;
-    background: var(--admin-theme-btn-bg);
-    color: var(--admin-theme-btn-color);
     cursor: pointer;
-    transition: background 0.15s ease, border-color 0.15s ease;
-
-    &:hover {
-      background: var(--admin-theme-btn-hover-bg);
-    }
   }
 
   &__addBtn {
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 10px 18px;
-    background: var(--admin-checkbox-accent);
-    color: var(--admin-add-btn-text);
-    border: none;
-    border-radius: 10px;
-    font-family: Pretendard, sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    transition: opacity 0.15s ease;
 
     &:hover {
       opacity: 0.9;
@@ -167,19 +148,6 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 10px 18px;
-    background: var(--admin-danger-bg);
-    color: var(--admin-danger-text);
-    border: 1px solid var(--admin-danger-border);
-    border-radius: 10px;
-    font-family: Pretendard, sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    transition: background 0.15s ease;
-
-    &:hover {
-      background: var(--admin-danger-hover-bg);
-    }
   }
 }
 

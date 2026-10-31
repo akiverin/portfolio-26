@@ -151,24 +151,8 @@
     align-items: center;
     justify-content: center;
     gap: 9px;
-    padding: 0 20px;
-    border-radius: 999px;
-    border: 1px solid rgb(255 255 255 / 10%);
-    background: #111a20;
-    color: #f3f7f8;
-    font-size: 13px;
-    font-weight: 600;
-    transition:
-      background 0.2s ease,
-      transform 0.2s ease;
-
-    & svg {
-      transition: transform 0.2s ease;
-    }
 
     &:hover {
-      background: #8df2e4;
-
       & svg {
         transform: translateX(2px);
       }

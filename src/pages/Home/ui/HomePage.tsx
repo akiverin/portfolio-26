@@ -10,8 +10,8 @@ import ContactSection from 'widgets/ContactSection/ui/ContactSection';
 export const HomePage: React.FC = () => {
   return (
     <main className={styles.home}>
+      <HeroSection />
       <div className={styles.home__wrapper}>
-        <HeroSection />
         <AboutSection />
         <ProjectsSection />
         <AchievementsSection />

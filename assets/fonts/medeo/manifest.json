@@ -1,0 +1,53 @@
+{
+  "repository": "https://github.com/DNFDEVS/medeo-font",
+  "revision": "a67da3062336585ebd9ab7a4553e0bad3a0cc64d",
+  "license": "SIL Open Font License 1.1",
+  "fontTools": "4.68.0",
+  "modifications": "Latin/Cyrillic web subsets; wght limited to 400–900; original opsz retained; no outlines redesigned.",
+  "files": [
+    {
+      "file": "MedeoSansVariable-latin-cyrillic.woff2",
+      "sourceBytes": 338864,
+      "bytes": 277060,
+      "sha256": "0d1ba88ba93018e53655f4efc8842ab1d16b09748c2348ff541228adf793ca7d",
+      "axes": {
+        "wght": [
+          400.0,
+          900.0
+        ],
+        "opsz": [
+          14.0,
+          32.0
+        ]
+      }
+    },
+    {
+      "file": "MedeoSansVariable-Italic-latin-cyrillic.woff2",
+      "sourceBytes": 358776,
+      "bytes": 294908,
+      "sha256": "70759a00b7323c07cf3435a21c6a2b30445eb8698f0d5bf5d598f88c8b8606ec",
+      "axes": {
+        "wght": [
+          400.0,
+          900.0
+        ],
+        "opsz": [
+          14.0,
+          32.0
+        ]
+      }
+    },
+    {
+      "file": "MedeoMonoVariable-latin-cyrillic.woff2",
+      "sourceBytes": 93964,
+      "bytes": 62592,
+      "sha256": "12f6f8e7c49ead1ed5cab1f869f7f9071fdd38e75166f1ff2bb72202a6d6f22e",
+      "axes": {
+        "wght": [
+          400.0,
+          900.0
+        ]
+      }
+    }
+  ]
+}

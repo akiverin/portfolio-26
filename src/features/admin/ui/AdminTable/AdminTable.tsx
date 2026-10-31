@@ -1,3 +1,4 @@
+import ActionButton from 'shared/ui/ActionButton';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { observer } from 'mobx-react-lite';
 import {
@@ -164,7 +165,10 @@ const InlineCell: React.FC<InlineCellProps> = ({
 
   return (
     <span
-      className={classNames(styles.table__cellText, editable && styles['table__cellText--editable'])}
+      className={classNames(
+        styles.table__cellText,
+        editable && styles['table__cellText--editable'],
+      )}
       onDoubleClick={startEdit}
       title={editable ? 'Двойной клик для редактирования' : undefined}
     >
@@ -218,9 +222,7 @@ const AdminTable: React.FC<AdminTableProps> = observer(
     };
 
     const pages = Array.from({ length: pageCount }, (_, i) => i + 1);
-    const visiblePages = pages.filter(
-      (p) => p === 1 || p === pageCount || Math.abs(p - page) <= 1,
-    );
+    const visiblePages = pages.filter((p) => p === 1 || p === pageCount || Math.abs(p - page) <= 1);
 
     return (
       <div className={styles.table}>
@@ -312,15 +314,21 @@ const AdminTable: React.FC<AdminTableProps> = observer(
                     ))}
                     <td className={styles.table__actionsCol}>
                       <div className={styles.table__actions}>
-                        <button
+                        <ActionButton
+                          variant="icon"
+                          size="sm"
                           type="button"
                           className={styles.table__actionBtn}
                           onClick={() => onEdit(id)}
                           title="Редактировать"
+                          aria-label="Редактировать"
                         >
                           <IconPencil size={16} stroke={1.5} />
-                        </button>
-                        <button
+                        </ActionButton>
+                        <ActionButton
+                          variant="icon"
+                          size="sm"
+                          tone="danger"
                           type="button"
                           className={classNames(
                             styles.table__actionBtn,
@@ -328,9 +336,10 @@ const AdminTable: React.FC<AdminTableProps> = observer(
                           )}
                           onClick={() => onDelete(id)}
                           title="Удалить"
+                          aria-label="Удалить"
                         >
                           <IconTrash size={16} stroke={1.5} />
-                        </button>
+                        </ActionButton>
                       </div>
                     </td>
                   </tr>
@@ -342,45 +351,52 @@ const AdminTable: React.FC<AdminTableProps> = observer(
 
         {pageCount > 1 && (
           <div className={styles.table__pagination}>
-            <span className={styles.table__paginationInfo}>
-              Всего: {total}
-            </span>
+            <span className={styles.table__paginationInfo}>Всего: {total}</span>
             <div className={styles.table__paginationControls}>
-              <button
+              <ActionButton
+                variant="secondary"
+                size="sm"
                 type="button"
                 className={styles.table__pageBtn}
+                aria-label="Предыдущая страница"
                 disabled={page <= 1}
                 onClick={() => onPageChange(page - 1)}
               >
                 <IconChevronLeft size={16} />
-              </button>
+              </ActionButton>
               {visiblePages.map((p, i) => {
                 const prev = visiblePages[i - 1];
                 const showEllipsis = prev !== undefined && p - prev > 1;
                 return (
                   <React.Fragment key={p}>
                     {showEllipsis && <span className={styles.table__ellipsis}>...</span>}
-                    <button
+                    <ActionButton
+                      variant="secondary"
+                      size="sm"
                       type="button"
                       className={classNames(
                         styles.table__pageBtn,
                         p === page && styles['table__pageBtn--active'],
                       )}
+                      aria-current={p === page ? 'page' : undefined}
                       onClick={() => onPageChange(p)}
                     >
                       {p}
-                    </button>
+                    </ActionButton>
                   </React.Fragment>
                 );
               })}
-              <button
+              <ActionButton
+                variant="secondary"
+                size="sm"
                 type="button"
                 className={styles.table__pageBtn}
+                aria-label="Следующая страница"
                 disabled={page >= pageCount}
                 onClick={() => onPageChange(page + 1)}
               >
                 <IconChevronRight size={16} />
-              </button>
+              </ActionButton>
             </div>
           </div>
         )}

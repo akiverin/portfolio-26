@@ -1,7 +1,7 @@
+import { ActionLink } from 'shared/ui/ActionButton';
 import { useEffect, useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { IconArrowUpRight, IconCode, IconSparkles } from '@tabler/icons-react';
 import styles from './ProjectsSection.module.scss';
 import Text from 'shared/ui/Text';
@@ -124,10 +124,14 @@ const ProjectsSection: React.FC = observer(() => {
             <Text tag="span" view="p-12">
               {store.projects.length} работ в коллекции
             </Text>
-            <Link to={ROUTES.PROJECTS} className={styles.projects__allLink}>
+            <ActionLink
+              variant="secondary"
+              href={ROUTES.PROJECTS}
+              className={styles.projects__allLink}
+            >
               Все проекты
               <IconArrowUpRight size={18} stroke={1.7} />
-            </Link>
+            </ActionLink>
           </motion.div>
         )}
       </div>

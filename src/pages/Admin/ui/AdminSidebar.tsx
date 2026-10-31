@@ -1,3 +1,4 @@
+import ActionButton from 'shared/ui/ActionButton';
 import React from 'react';
 import { motion } from 'framer-motion';
 import {
@@ -76,27 +77,33 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
             Админ
           </motion.span>
         )}
-        <button
+        <ActionButton
+          variant="icon"
+          size="sm"
           type="button"
           className={styles.sidebar__toggle}
           onClick={onToggle}
           aria-label={collapsed ? 'Развернуть' : 'Свернуть'}
         >
           {collapsed ? <IconChevronRight size={18} /> : <IconChevronLeft size={18} />}
-        </button>
+        </ActionButton>
       </div>
 
       <nav className={styles.sidebar__nav}>
         {items.map((item) => {
           const Icon = ICONS[item.icon] || IconFolder;
           return (
-            <button
+            <ActionButton
+              variant="secondary"
+              size="sm"
               key={item.key}
               type="button"
               className={classNames(
                 styles.sidebar__item,
                 active === item.key && styles['sidebar__item--active'],
               )}
+              aria-pressed={active === item.key}
+              aria-label={item.label}
               onClick={() => onSelect(item.key)}
               title={collapsed ? item.label : undefined}
             >
@@ -111,13 +118,15 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                   {item.label}
                 </motion.span>
               )}
-            </button>
+            </ActionButton>
           );
         })}
       </nav>
 
       <div className={styles.sidebar__footer}>
-        <button
+        <ActionButton
+          variant="secondary"
+          size="sm"
           type="button"
           className={styles.sidebar__item}
           onClick={onToggleTheme}
@@ -126,7 +135,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
         >
           {darkMode ? <IconSun size={20} stroke={1.5} /> : <IconMoon size={20} stroke={1.5} />}
           {!collapsed && <span className={styles.sidebar__label}>{themeToggleLabel}</span>}
-        </button>
+        </ActionButton>
         <Link
           to={ROUTES.HOME}
           className={styles.sidebar__item}
@@ -135,15 +144,19 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
           <IconHome size={20} stroke={1.5} />
           {!collapsed && <span className={styles.sidebar__label}>На сайт</span>}
         </Link>
-        <button
+        <ActionButton
+          variant="secondary"
+          size="sm"
+          tone="danger"
           type="button"
           className={classNames(styles.sidebar__item, styles['sidebar__item--danger'])}
+          aria-label="Выйти"
           onClick={onLogout}
           title={collapsed ? 'Выйти' : undefined}
         >
           <IconLogout size={20} stroke={1.5} />
           {!collapsed && <span className={styles.sidebar__label}>Выйти</span>}
-        </button>
+        </ActionButton>
       </div>
     </motion.aside>
   );

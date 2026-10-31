@@ -1,3 +1,4 @@
+import ActionButton from 'shared/ui/ActionButton';
 import React, { useEffect, useMemo, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -238,7 +239,9 @@ const GrantsSection: React.FC = observer(() => {
           </ul>
 
           {!isLoading && hiddenCount > 0 && (
-            <button
+            <ActionButton
+              variant="primary"
+              size="sm"
               type="button"
               className={styles.grants__expandBtn}
               onClick={() => setIsExpanded((value) => !value)}
@@ -251,7 +254,7 @@ const GrantsSection: React.FC = observer(() => {
               <motion.span animate={{ rotate: isExpanded ? 180 : 0 }}>
                 <IconArrowDown size={17} stroke={1.7} />
               </motion.span>
-            </button>
+            </ActionButton>
           )}
         </motion.div>
 

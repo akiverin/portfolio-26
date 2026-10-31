@@ -27,7 +27,7 @@
   &__element {
     width: 100%;
     border-collapse: collapse;
-    font-family: Pretendard, sans-serif;
+    font-family: var(--font-sans);
     font-size: 14px;
     color: var(--admin-text);
     min-width: 600px;
@@ -175,7 +175,7 @@
     border: 1px solid var(--admin-checkbox-accent);
     border-radius: 6px;
     color: var(--admin-input-text);
-    font-family: Pretendard, sans-serif;
+    font-family: var(--font-sans);
     font-size: 14px;
     outline: none;
   }
@@ -193,21 +193,6 @@
     justify-content: center;
     width: 32px;
     height: 32px;
-    border: none;
-    background: transparent;
-    color: var(--admin-text-secondary);
-    border-radius: 8px;
-    transition: background 0.15s ease, color 0.15s ease;
-
-    &:hover {
-      background: var(--admin-sidebar-item-hover);
-      color: var(--admin-text);
-    }
-
-    &--danger:hover {
-      background: var(--admin-danger-bg);
-      color: var(--admin-danger-text);
-    }
   }
 
   &__empty {
@@ -255,28 +240,10 @@
     justify-content: center;
     min-width: 32px;
     height: 32px;
-    padding: 0 8px;
-    border: none;
-    background: transparent;
-    color: var(--admin-text-secondary);
-    font-family: Pretendard, sans-serif;
-    font-size: 13px;
-    border-radius: 8px;
-    transition: background 0.15s ease, color 0.15s ease;
-
-    &:hover:not(:disabled) {
-      background: var(--admin-sidebar-item-hover);
-      color: var(--admin-text);
-    }
 
     &:disabled {
       opacity: 0.3;
       cursor: default;
-    }
-
-    &--active {
-      background: var(--admin-sidebar-item-active-bg);
-      color: var(--admin-checkbox-accent);
     }
   }
 

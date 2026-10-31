@@ -1,3 +1,4 @@
+import ActionButton from 'shared/ui/ActionButton';
 import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import Text from 'shared/ui/Text';
@@ -119,14 +120,16 @@ const RegisterForm: React.FC = observer(() => {
               aria-invalid={Boolean(form.errors.password)}
               aria-describedby={form.errors.password ? 'register-password-error' : undefined}
               afterSlot={
-                <button
+                <ActionButton
+                  variant="icon"
+                  size="xs"
                   type="button"
                   className={styles.passwordToggle}
                   onClick={() => setShowPassword((value) => !value)}
                   aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
                 >
                   {showPassword ? <IconEyeOff size={18} /> : <IconEye size={18} />}
-                </button>
+                </ActionButton>
               }
             />
             {form.errors.password && (
@@ -187,7 +190,7 @@ const RegisterForm: React.FC = observer(() => {
           type="button"
           onClick={handleGoogle}
           loading={userStore.meta === Meta.loading}
-          className={styles.providerButton}
+          variant="secondary" className={styles.providerButton}
         >
           <Google width={16} height={16} />
           <Text view="p-14">Войти через Google</Text>

@@ -8,6 +8,7 @@ export const ROUTES = {
   PROJECTS: '/projects',
   TERMS: '/terms',
   PRIVACY: '/privacy',
+  BUTTON_LAB: '/playground/buttons',
 } as const;
 
 export const ANCHORS = {

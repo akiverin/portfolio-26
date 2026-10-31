@@ -1,12 +1,21 @@
 html,
 body {
-  font-family: var(--font-pretendard, "Pretendard", Arial, Helvetica, sans-serif);
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  font-synthesis: none;
   height: 100%;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
   background: #080d12;
   color: #f3f7f8;
+}
+
+/* Let the document scroll for guests; the signed-in shell owns its own viewport. */
+body {
+  height: auto;
+  min-height: 100%;
+  overflow-x: clip;
 }
 
 * {
@@ -23,6 +32,13 @@ input,
 textarea,
 select {
   font: inherit;
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--font-mono);
 }
 
 button {

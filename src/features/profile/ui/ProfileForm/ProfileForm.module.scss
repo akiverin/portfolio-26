@@ -270,22 +270,6 @@
     justify-content: space-between;
     gap: 12px;
     margin-top: 22px;
-    padding: 0 14px;
-    border: 1px solid rgb(255 255 255 / 8%);
-    border-radius: 12px;
-    background: rgb(255 255 255 / 3%);
-    color: rgb(255 255 255 / 68%);
-    transition:
-      border-color 0.2s ease,
-      background 0.2s ease,
-      color 0.2s ease;
-
-    &:hover,
-    &:focus-visible {
-      border-color: rgb(105 226 212 / 22%);
-      background: rgb(105 226 212 / 6%);
-      color: #a0f1e8;
-    }
   }
 
   &__main {
@@ -407,7 +391,6 @@
   &__logoutButton,
   &__deleteButton {
     min-height: 46px;
-    border-radius: 12px;
   }
 
   &__saveButton {
@@ -421,26 +404,6 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 0 16px;
-    font-family: Pretendard, sans-serif;
-    transition:
-      border-color 0.2s ease,
-      background 0.2s ease,
-      color 0.2s ease;
-  }
-
-  &__resetButton,
-  &__logoutButton {
-    border: 1px solid rgb(255 255 255 / 8%);
-    background: rgb(255 255 255 / 4%);
-    color: rgb(255 255 255 / 64%);
-
-    &:hover,
-    &:focus-visible {
-      border-color: rgb(255 255 255 / 14%);
-      background: rgb(255 255 255 / 7%);
-      color: #fff;
-    }
   }
 
   &__accountActions {
@@ -455,18 +418,6 @@
 
     @media (width <= 520px) {
       grid-template-columns: 1fr;
-    }
-  }
-
-  &__deleteButton {
-    border: 1px solid rgb(229 72 75 / 20%);
-    background: rgb(229 72 75 / 7%);
-    color: #ff7477;
-
-    &:hover,
-    &:focus-visible {
-      border-color: rgb(229 72 75 / 34%);
-      background: rgb(229 72 75 / 12%);
     }
   }
 

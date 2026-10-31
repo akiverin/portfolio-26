@@ -1,0 +1,430 @@
+{
+  "date": "2026-10-24T14:04:33.336Z",
+  "origin": "http://localhost:5173",
+  "environment": "Headless Chromium with SwiftShader software WebGL; timing is not a hardware GPU FPS guarantee.",
+  "checks": [
+    {
+      "name": "pause-control-clickable-with-announcement",
+      "passed": true
+    },
+    {
+      "name": "desktop-1440",
+      "passed": true,
+      "viewport": [
+        1440,
+        1000
+      ],
+      "documentWidth": 1440,
+      "hero": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 1000
+      },
+      "title": {
+        "x": 236.59375,
+        "y": 351.765625,
+        "right": 1285,
+        "bottom": 503.109375
+      },
+      "canvas": {
+        "width": 1440,
+        "height": 1000
+      },
+      "headings": 1
+    },
+    {
+      "name": "live-ascii-animation",
+      "passed": true,
+      "changedPixelsPercent": 5.2171,
+      "drawsIn1200ms": 23
+    },
+    {
+      "name": "no-pointer-parallax",
+      "passed": true,
+      "changedPixelsPercent": 0
+    },
+    {
+      "name": "scroll-parallax",
+      "passed": true,
+      "shaderScroll": 0.29981378119207186
+    },
+    {
+      "name": "offscreen-pause",
+      "passed": true
+    },
+    {
+      "name": "onscreen-resume",
+      "passed": true
+    },
+    {
+      "name": "runtime-reduced-motion",
+      "passed": true,
+      "changedPixelsPercent": 0
+    },
+    {
+      "name": "user-pause-resume",
+      "passed": true
+    },
+    {
+      "name": "document-visibility-pause",
+      "passed": true,
+      "method": "Simulated document hidden/visibilitychange"
+    },
+    {
+      "name": "steady-state-timing",
+      "passed": true,
+      "sampleMs": 2573.2999999970198,
+      "draws": 32,
+      "compositorRafMedianMs": 83.29999999999927,
+      "compositorRafP95Ms": 100,
+      "cpuDrawSubmissionP95Ms": 0.10000000894069672,
+      "longTasks": []
+    },
+    {
+      "name": "responsive-3840x2160",
+      "passed": true,
+      "viewport": [
+        3840,
+        2160
+      ],
+      "documentWidth": 3840,
+      "hero": {
+        "x": 0,
+        "y": 0,
+        "width": 3840,
+        "height": 2160
+      },
+      "title": {
+        "x": 1445,
+        "y": 907.65625,
+        "right": 2485,
+        "bottom": 1082.375
+      },
+      "canvas": {
+        "width": 2309,
+        "height": 1299
+      },
+      "headings": 1
+    },
+    {
+      "name": "responsive-1920x1080",
+      "passed": true,
+      "viewport": [
+        1920,
+        1080
+      ],
+      "documentWidth": 1920,
+      "hero": {
+        "x": 0,
+        "y": 0,
+        "width": 1920,
+        "height": 1080
+      },
+      "title": {
+        "x": 485,
+        "y": 375.65625,
+        "right": 1525,
+        "bottom": 550.375
+      },
+      "canvas": {
+        "width": 1920,
+        "height": 1080
+      },
+      "headings": 1
+    },
+    {
+      "name": "responsive-768x1024",
+      "passed": true,
+      "viewport": [
+        768,
+        1024
+      ],
+      "documentWidth": 768,
+      "hero": {
+        "x": 0,
+        "y": 0,
+        "width": 768,
+        "height": 1024
+      },
+      "title": {
+        "x": 67.1875,
+        "y": 405.28125,
+        "right": 744,
+        "bottom": 485.375
+      },
+      "canvas": {
+        "width": 768,
+        "height": 1024
+      },
+      "headings": 1
+    },
+    {
+      "name": "responsive-390x844",
+      "passed": true,
+      "viewport": [
+        390,
+        844
+      ],
+      "documentWidth": 390,
+      "hero": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844
+      },
+      "title": {
+        "x": 20,
+        "y": 313,
+        "right": 370,
+        "bottom": 375.625
+      },
+      "canvas": {
+        "width": 390,
+        "height": 844
+      },
+      "headings": 1
+    },
+    {
+      "name": "responsive-320x640",
+      "passed": true,
+      "viewport": [
+        320,
+        640
+      ],
+      "documentWidth": 320,
+      "hero": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 660
+      },
+      "title": {
+        "x": 14,
+        "y": 194,
+        "right": 306,
+        "bottom": 256.625
+      },
+      "canvas": {
+        "width": 320,
+        "height": 660
+      },
+      "headings": 1
+    },
+    {
+      "name": "responsive-844x390",
+      "passed": true,
+      "viewport": [
+        844,
+        390
+      ],
+      "documentWidth": 844,
+      "hero": {
+        "x": 0,
+        "y": 0,
+        "width": 844,
+        "height": 560
+      },
+      "title": {
+        "x": 71.75,
+        "y": 216.578125,
+        "right": 820,
+        "bottom": 291.453125
+      },
+      "canvas": {
+        "width": 844,
+        "height": 560
+      },
+      "headings": 1
+    },
+    {
+      "name": "anchor-projects",
+      "passed": true,
+      "targetTop": -0.4375
+    },
+    {
+      "name": "anchor-contact",
+      "passed": true,
+      "targetTop": -0.21875
+    },
+    {
+      "name": "tablet-mascot-clears-actions",
+      "passed": true,
+      "overlapPx": 0
+    },
+    {
+      "name": "authenticated-shell-simulated",
+      "passed": true,
+      "viewport": [
+        1440,
+        1000
+      ],
+      "documentWidth": 1440,
+      "hero": {
+        "x": 62,
+        "y": 6,
+        "width": 1372,
+        "height": 988
+      },
+      "title": {
+        "x": 260.515625,
+        "y": 328.046875,
+        "right": 1313,
+        "bottom": 471.796875
+      },
+      "canvas": {
+        "width": 1372,
+        "height": 988
+      },
+      "headings": 1
+    },
+    {
+      "name": "internal-scroller-parallax",
+      "passed": true,
+      "shaderScroll": 0.3035418635745235,
+      "simulatedUser": true
+    },
+    {
+      "name": "internal-scroller-offscreen-pause",
+      "passed": true,
+      "simulatedUser": true
+    },
+    {
+      "name": "touch-phone-390-dpr3",
+      "passed": true,
+      "viewport": [
+        390,
+        844
+      ],
+      "documentWidth": 390,
+      "hero": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844
+      },
+      "title": {
+        "x": 20,
+        "y": 313,
+        "right": 370,
+        "bottom": 375.625
+      },
+      "canvas": {
+        "width": 390,
+        "height": 844
+      },
+      "headings": 1
+    },
+    {
+      "name": "touch-quality-cap",
+      "passed": true,
+      "ratio": 1
+    },
+    {
+      "name": "initial-reduced-motion-no-loop",
+      "passed": true
+    },
+    {
+      "name": "webgl-context-loss-fallback",
+      "passed": true,
+      "viewport": [
+        1440,
+        1000
+      ],
+      "documentWidth": 1440,
+      "hero": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 1000
+      },
+      "title": {
+        "x": 236.59375,
+        "y": 351.765625,
+        "right": 1285,
+        "bottom": 503.109375
+      },
+      "canvas": {
+        "width": 1440,
+        "height": 1000
+      },
+      "headings": 1
+    },
+    {
+      "name": "webgl-context-loss-no-loop",
+      "passed": true
+    },
+    {
+      "name": "webgl-context-restoration",
+      "passed": true
+    },
+    {
+      "name": "webgl-unavailable-fallback",
+      "passed": true,
+      "viewport": [
+        1440,
+        1000
+      ],
+      "documentWidth": 1440,
+      "hero": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 1000
+      },
+      "title": {
+        "x": 236.59375,
+        "y": 351.765625,
+        "right": 1285,
+        "bottom": 503.109375
+      },
+      "canvas": {
+        "width": 300,
+        "height": 150
+      },
+      "headings": 1
+    },
+    {
+      "name": "webgl-unavailable-no-loop",
+      "passed": true
+    },
+    {
+      "name": "production-build-desktop",
+      "passed": true,
+      "viewport": [
+        1440,
+        1000
+      ],
+      "documentWidth": 1440,
+      "hero": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 1000
+      },
+      "title": {
+        "x": 236.59375,
+        "y": 351.765625,
+        "right": 1285,
+        "bottom": 503.109375
+      },
+      "canvas": {
+        "width": 1440,
+        "height": 1000
+      },
+      "headings": 1
+    },
+    {
+      "name": "production-build-webgl-pause-resume",
+      "passed": true,
+      "url": "http://127.0.0.1:5174"
+    },
+    {
+      "name": "no-uncaught-errors",
+      "passed": true
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "continuation": "Public checks retained from immediately preceding run; remaining checks resumed after correcting test-only Vite module URL identity."
+}

@@ -1,3 +1,4 @@
+import ActionButton from 'shared/ui/ActionButton';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { XIcon } from '@phosphor-icons/react/dist/csr/X';
@@ -5,7 +6,7 @@ import styles from './Announcement.module.scss';
 
 export type AnnouncementProps = {
   open: boolean;
-  message: string;
+  message: React.ReactNode;
   badge?: string;
   onClose?: () => void;
   reserveSidebarSpace?: boolean;
@@ -50,14 +51,16 @@ const Announcement: React.FC<AnnouncementProps> = ({
             </span>
             <span className={styles.notice__message}>{message}</span>
             {onClose && (
-              <button
+              <ActionButton
+                variant="icon"
+                size="xs"
                 type="button"
                 className={styles.notice__close}
                 onClick={onClose}
                 aria-label="Скрыть уведомление"
               >
                 <XIcon size={15} weight="bold" aria-hidden="true" />
-              </button>
+              </ActionButton>
             )}
           </motion.div>
         )}

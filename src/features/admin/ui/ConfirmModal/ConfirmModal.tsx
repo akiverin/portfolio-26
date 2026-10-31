@@ -1,3 +1,4 @@
+import ActionButton from 'shared/ui/ActionButton';
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IconAlertTriangle } from '@tabler/icons-react';
@@ -61,7 +62,9 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
               {message}
             </Text>
             <div className={styles.modal__actions}>
-              <button
+              <ActionButton
+                variant="secondary"
+                size="sm"
                 type="button"
                 className={styles.modal__cancelBtn}
                 onClick={onCancel}
@@ -70,8 +73,11 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
                 <Text tag="span" view="p-14" weight="medium">
                   Отмена
                 </Text>
-              </button>
-              <button
+              </ActionButton>
+              <ActionButton
+                variant="primary"
+                size="sm"
+                tone="danger"
                 type="button"
                 className={styles.modal__confirmBtn}
                 onClick={onConfirm}
@@ -80,7 +86,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
                 <Text tag="span" view="p-14" weight="medium">
                   {loading ? 'Удаление...' : confirmLabel}
                 </Text>
-              </button>
+              </ActionButton>
             </div>
           </motion.div>
         </motion.div>

@@ -105,7 +105,7 @@
     border-radius: 11px;
     background: rgb(66 189 218 / 9%);
     color: #69e2d4;
-    font-family: Pretendard, sans-serif;
+    font-family: var(--font-sans);
     font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -127,7 +127,7 @@
     align-items: center;
     gap: 9px;
     color: rgb(255 255 255 / 54%);
-    font-family: Pretendard, sans-serif;
+    font-family: var(--font-sans);
     font-size: 14px;
 
     & span {

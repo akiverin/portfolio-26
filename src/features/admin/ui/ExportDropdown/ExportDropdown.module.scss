@@ -5,20 +5,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 10px 18px;
-    border: 1px solid var(--admin-card-border, #e8e8e8);
-    border-radius: 10px;
-    background: var(--admin-card-bg, #fff);
-    color: var(--admin-text, #1a1a1a);
-    font-family: Pretendard, sans-serif;
-    font-size: 14px;
-    font-weight: 500;
     cursor: pointer;
-    transition: all 0.15s ease;
-
-    &:hover {
-      background: var(--admin-row-hover, rgb(0, 0, 0, 2%));
-    }
 
     &:disabled {
       opacity: 0.5;
@@ -60,25 +47,7 @@
   &__option {
     display: flex;
     align-items: center;
-    padding: 8px 10px;
-    border: none;
-    background: transparent;
-    color: var(--admin-text, #1a1a1a);
-    font-family: Pretendard, sans-serif;
-    font-size: 13px;
-    border-radius: 8px;
     cursor: pointer;
-    transition: background 0.15s ease;
-
-    &:hover {
-      background: var(--admin-row-hover, rgb(0, 0, 0, 4%));
-    }
-
-    &--active {
-      background: var(--admin-sidebar-item-active-bg, rgb(66, 189, 218, 8%));
-      color: var(--admin-sidebar-item-active-color, #42bdda);
-      font-weight: 500;
-    }
   }
 
   &__divider {
@@ -94,21 +63,6 @@
   }
 
   &__formatBtn {
-    padding: 8px 12px;
-    border: 1px solid var(--admin-card-border, #e8e8e8);
-    border-radius: 8px;
-    background: transparent;
-    color: var(--admin-text, #1a1a1a);
-    font-family: Pretendard, sans-serif;
-    font-size: 13px;
-    font-weight: 500;
     cursor: pointer;
-    transition: all 0.15s ease;
-
-    &:hover {
-      background: var(--admin-sidebar-item-active-bg, rgb(66, 189, 218, 8%));
-      border-color: var(--admin-sidebar-item-active-color, #42bdda);
-      color: var(--admin-sidebar-item-active-color, #42bdda);
-    }
   }
 }

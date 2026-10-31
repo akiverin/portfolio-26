@@ -47,13 +47,6 @@
     align-items: center;
     gap: 8px;
     margin-bottom: 12px;
-    color: #69e2d4;
-    transition: color 0.2s ease;
-
-    &:hover,
-    &:focus-visible {
-      color: #a0f1e8;
-    }
   }
 
   &__title {

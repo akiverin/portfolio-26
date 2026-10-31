@@ -1,3 +1,4 @@
+import ActionButton from 'shared/ui/ActionButton';
 import React, { useEffect, useState } from 'react';
 import styles from './AchievementCard.module.scss';
 import classNames from 'classnames';
@@ -93,14 +94,16 @@ const AchievementCard: React.FC<AchievementCardProps> = ({
               onLoad={handleImageLoad}
               onError={() => setImageFit(null)}
             />
-            <button
+            <ActionButton
+              variant="icon"
+              size="sm"
               type="button"
               className={styles.achievementCard__inspect}
               onClick={() => setIsLightboxOpen(true)}
               aria-label={`Открыть изображение достижения «${achievement.title}»`}
             >
               <IconZoomIn size={22} stroke={1.6} />
-            </button>
+            </ActionButton>
           </>
         )}
       </div>

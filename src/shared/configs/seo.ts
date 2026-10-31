@@ -17,6 +17,11 @@ const DEFAULT_SEO: PageSeo = {
 };
 
 const ROUTE_SEO: Record<string, PageSeo> = {
+  [ROUTES.BUTTON_LAB]: {
+    title: 'Button playground — andkiv',
+    description: 'Тестовая страница пяти вариантов кнопок.',
+    index: false,
+  },
   [ROUTES.HOME]: DEFAULT_SEO,
   [ROUTES.PROJECTS]: {
     title: 'Проекты — Андрей Киверин',
