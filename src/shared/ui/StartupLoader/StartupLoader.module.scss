@@ -4,8 +4,8 @@
   inset: 0;
   display: grid;
   overflow: hidden;
-  background: radial-gradient(ellipse at 50% 41%, rgb(255 198 159 / 4%), transparent 36%), #080d12;
-  color: #fff4e7;
+  background: radial-gradient(ellipse at 50% 41%, rgb(207 207 207 / 4%), transparent 36%), #0c0c0c;
+  color: #f5f5f5;
   place-items: center;
 
   &__content {
@@ -30,7 +30,7 @@
     height: 116px;
     border-radius: 50%;
     animation: startup-halo 3.2s ease-in-out infinite;
-    background: radial-gradient(circle, rgb(255 198 159 / 15%), transparent 70%);
+    background: radial-gradient(circle, rgb(207 207 207 / 15%), transparent 70%);
     filter: blur(12px);
   }
 
@@ -39,7 +39,7 @@
     position: absolute;
     width: 170px;
     height: 170px;
-    border: 1px solid rgb(255 198 159 / 8%);
+    border: 1px solid rgb(207 207 207 / 8%);
     border-radius: 50%;
     animation: startup-orbit 9s linear infinite;
     transform: rotate(-30deg) scaleY(0.55);
@@ -51,8 +51,8 @@
       width: 4px;
       height: 4px;
       border-radius: 50%;
-      background: #ffc69f;
-      box-shadow: 0 0 12px rgb(255 198 159 / 35%);
+      background: #cfcfcf;
+      box-shadow: 0 0 12px rgb(207 207 207 / 35%);
       content: "";
     }
   }
@@ -67,7 +67,7 @@
     &::after {
       width: 3px;
       height: 3px;
-      background: #85e8dc;
+      background: #d2d2d2;
     }
   }
 
@@ -89,7 +89,7 @@
 
   &__caption {
     margin-top: 14px;
-    color: rgb(255 244 231 / 42%);
+    color: rgb(245 245 245 / 42%);
     font-size: 12px;
     line-height: 1.5;
   }
@@ -101,7 +101,7 @@
     margin-top: 25px;
     overflow: hidden;
     border-radius: 2px;
-    background: rgb(255 244 231 / 7%);
+    background: rgb(245 245 245 / 7%);
 
     & span {
       position: absolute;
@@ -109,14 +109,14 @@
       height: 100%;
       border-radius: inherit;
       animation: startup-progress 1.8s ease-in-out infinite;
-      background: linear-gradient(90deg, transparent, #ffc69f, transparent);
+      background: linear-gradient(90deg, transparent, #cfcfcf, transparent);
     }
   }
 
   &__signature {
     position: absolute;
     bottom: max(28px, env(safe-area-inset-bottom));
-    color: rgb(255 244 231 / 22%);
+    color: rgb(245 245 245 / 22%);
     font-size: 9px;
     letter-spacing: 0.2em;
   }

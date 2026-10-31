@@ -1,33 +1,30 @@
-.button {
-  --button-height: 46px;
-  --button-padding: 21px;
-  --button-radius: 10px;
-  --button-bg: #ff7900;
-  --button-hover: #ff941f;
-  --button-color: #101e32;
-  --button-border: transparent;
-  --button-shadow: 0 0 0 transparent;
-  --button-hover-shadow: 0 5px 16px rgb(16 30 50 / 12%);
+.button[data-design] {
+  --action-height: 44px;
+  --action-padding: 22px;
+  --action-bg: var(--control-fill, #f5f5f5);
+  --action-fg: var(--control-on-fill, #1d1d1d);
+  --action-hover: var(--control-fill-hover, #fff);
+  --action-border: transparent;
 
   position: relative;
   display: inline-flex;
-  min-width: var(--button-height);
+  min-width: var(--action-height);
+  min-height: var(--action-height);
   max-width: 100%;
-  min-height: var(--button-height);
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  gap: 8px;
+  padding: 10px var(--action-padding);
   overflow: hidden;
-  padding: 0 var(--button-padding);
-  border: 1px solid var(--button-border);
-  border-radius: var(--button-radius);
   appearance: none;
-  background: var(--button-bg);
-  box-shadow: var(--button-shadow);
-  color: var(--button-color);
-  font:
-    600 14px/1.25 var(--font-sans),
-    sans-serif;
+  border: 1px solid var(--action-border);
+  border-radius: 980px;
+  background: var(--action-bg);
+  box-shadow: none;
+  color: var(--action-fg);
+  font: 400 17px/1.25 var(--font-sans);
+  letter-spacing: -0.015em;
   text-align: center;
   text-decoration: none;
   vertical-align: middle;
@@ -36,362 +33,232 @@
   transition:
     background-color 0.2s ease,
     border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.18s ease;
+    opacity 0.2s ease;
 
-  &::before {
-    position: absolute;
-    z-index: 0;
-    inset: 0;
-    border-radius: inherit;
-    content: "";
-    pointer-events: none;
+  &[data-surface="light"] {
+    --control-fill: #1d1d1d;
+    --control-on-fill: #fff;
+    --control-fill-hover: #333;
+    --control-text: #1d1d1d;
+    --control-soft: rgb(0 0 0 / 6%);
+    --control-soft-hover: rgb(0 0 0 / 12%);
   }
 
-  &__content {
-    position: relative;
-    z-index: 1;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: opacity 0.15s ease;
+  &[data-surface="dark"] {
+    --control-fill: #f5f5f5;
+    --control-on-fill: #1d1d1d;
+    --control-fill-hover: #fff;
+    --control-text: #f5f5f5;
+    --control-soft: rgb(255 255 255 / 10%);
+    --control-soft-hover: rgb(255 255 255 / 18%);
   }
 
-  &__label {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+  &[data-variant="secondary"] {
+    --action-bg: transparent;
+    --action-fg: var(--control-text, #f5f5f5);
+    --action-border: var(--control-text, #f5f5f5);
+    --action-hover: var(--control-soft, rgb(255 255 255 / 10%));
+  }
+
+  &[data-variant="tertiary"],
+  &[data-variant="icon"] {
+    --action-bg: var(--control-soft, rgb(255 255 255 / 10%));
+    --action-fg: var(--control-text, #f5f5f5);
+    --action-hover: var(--control-soft-hover, rgb(255 255 255 / 18%));
+  }
+
+  &[data-variant="text"] {
+    --action-bg: transparent;
+    --action-fg: var(--control-text, #f5f5f5);
+    --action-hover: transparent;
+    --action-padding: 0px;
+
     min-width: 0;
-    overflow-wrap: anywhere;
-  }
-
-  &__icon {
-    display: inline-flex;
-    flex-shrink: 0;
-
-    & svg {
-      width: 18px;
-      height: 18px;
-    }
-  }
-
-  &__progress {
-    position: absolute;
-    z-index: 2;
-    inset: 0;
-    display: grid;
-    place-items: center;
-  }
-
-  &__spinner {
-    width: 18px;
-    height: 18px;
-    border: 2px solid currentcolor;
-    border-right-color: transparent;
-    border-radius: 50%;
-    animation: button-spin 0.7s linear infinite;
-  }
-
-  &__srOnly {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-
-  &[data-size="sm"] {
-    --button-height: 38px;
-    --button-padding: 15px;
-
-    font-size: 12px;
+    overflow: visible;
+    border-color: transparent;
+    border-radius: 4px;
   }
 
   &[data-size="xs"] {
-    --button-height: 28px;
-    --button-padding: 8px;
+    --action-height: 28px;
+    --action-padding: 12px;
 
-    font-size: 11px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 12px;
+  }
+
+  &[data-size="sm"] {
+    --action-height: 36px;
+    --action-padding: 16px;
+
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size: 14px;
   }
 
   &[data-size="lg"] {
-    --button-height: 54px;
-    --button-padding: 26px;
+    --action-height: 56px;
+    --action-padding: 28px;
 
-    font-size: 15px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    font-size: 17px;
+  }
+
+  &[data-variant="text"] {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  &[data-variant="icon"] {
+    width: var(--action-height);
+    height: var(--action-height);
+    padding: 0;
+    border-radius: 50%;
   }
 
   &[data-full-width] {
     width: 100%;
   }
 
-  &[data-variant="secondary"],
-  &[data-variant="icon"] {
-    --button-bg: #102f50;
-    --button-hover: #1b426a;
-    --button-color: #fff;
-    --button-border: #102f50;
+  &[aria-pressed="true"],
+  &[aria-current="page"] {
+    --action-bg: var(--control-fill, #f5f5f5);
+    --action-fg: var(--control-on-fill, #1d1d1d);
+    --action-hover: var(--control-fill-hover, #fff);
   }
 
-  &[data-variant="icon"] {
-    width: var(--button-height);
-    height: var(--button-height);
-    padding: 0;
-
-    & svg {
-      display: block;
-      width: 20px;
-      height: 20px;
-    }
+  & :where(span, p, strong, b, em, small) {
+    color: inherit;
   }
 
-  &[data-design="cobalt"] {
-    --button-radius: 8px;
-    --button-bg: #1246ce;
-    --button-hover: #0b36ae;
-    --button-color: #fff;
-
-    &[data-variant="secondary"],
-    &[data-variant="icon"] {
-      --button-bg: #f7faff;
-      --button-hover: #e0eaff;
-      --button-color: #123dae;
-      --button-border: #1246ce;
-    }
+  & svg {
+    flex-shrink: 0;
   }
 
-  &[data-design="press"] {
-    --button-radius: 6px;
-    --button-bg: #ff8d28;
-    --button-hover: #ffa64e;
-    --button-border: #102943;
-    --button-shadow: 0 4px 0 #102943;
-    --button-hover-shadow: 0 6px 0 #102943;
-
-    &[data-variant="secondary"],
-    &[data-variant="icon"] {
-      --button-bg: #b9d7ff;
-      --button-hover: #d5e7ff;
-      --button-color: #102943;
-    }
+  &::before {
+    display: none;
   }
 
-  &[data-design="circuit"] {
-    --button-radius: 4px;
-    --button-bg: #ff8a1c;
-    --button-hover: #ffa13c;
-
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: -0.025em;
-
-    &::before {
-      inset: 3px;
-      border: 1px solid rgb(5 27 48 / 18%);
-      border-radius: 1px;
-    }
-
-    &[data-variant="secondary"],
-    &[data-variant="icon"] {
-      --button-bg: #102e4a;
-      --button-hover: #193f61;
-      --button-color: #d5edff;
-      --button-border: #72b8f5;
-
-      &::before {
-        border-color: rgb(114 184 245 / 18%);
-      }
-    }
+  &:focus-visible {
+    outline: 2px solid var(--control-text, #f5f5f5);
+    outline-offset: 4px;
   }
 
-  &[data-design="film"] {
-    --button-radius: 12px;
-    --button-bg: #ff8120;
-    --button-hover: #ff9238;
-    --button-border: #fbaa5a;
-    --button-color: #000;
-    --button-shadow: inset 0 1px 0 rgb(255 255 255 / 35%), 0 3px 8px rgb(99 48 8 / 15%);
+  &:not(:disabled, [aria-disabled="true"]):active {
+    opacity: 0.72;
+    transform: none;
+  }
 
-    &::before {
-      inset: -100% -40%;
-      background: linear-gradient(
-        110deg,
-        transparent 38%,
-        rgb(255 255 255 / 40%) 50%,
-        transparent 62%
-      );
-      opacity: 0;
-      transform: translateX(-65%);
-      transition:
-        transform 0.7s ease,
-        opacity 0.2s ease;
-    }
+  &:disabled,
+  &[aria-disabled="true"] {
+    opacity: 0.4;
+    cursor: default;
+  }
 
-    &[data-variant="secondary"],
-    &[data-variant="icon"] {
-      --button-bg: #9fc5ff;
-      --button-hover: #b8d4ff;
-      --button-color: #000;
-      --button-border: #6897db;
-    }
-
-    // Keep the shared appearance authoritative over page-specific legacy styles.
-    min-height: var(--button-height);
-    padding: 0 var(--button-padding);
-    border: 1px solid var(--button-border);
-    border-radius: var(--button-radius);
-    background: var(--button-bg);
-    box-shadow: var(--button-shadow);
-    color: #000;
-    font-weight: 600;
-    text-shadow: none;
-    backdrop-filter: none;
-
-    & :where(span, p, strong, b, em, small) {
-      color: inherit;
-    }
-
-    &[data-variant="icon"] {
-      width: var(--button-height);
-      height: var(--button-height);
-      padding: 0;
-    }
-
-    &[data-tone="danger"] {
-      --button-bg: #ffb4aa;
-      --button-hover: #ffc9c1;
-      --button-border: #cb6559;
-    }
-
-    &[data-size="xs"] {
-      --button-radius: 8px;
-    }
-
-    &[aria-current="page"],
-    &[aria-pressed="true"] {
-      --button-bg: #ff8120;
-      --button-hover: #ff9238;
-      --button-border: #fbaa5a;
-    }
-
-    &:not(:disabled, [aria-disabled="true"]):hover {
-      background: var(--button-hover);
-      border-color: var(--button-border);
-      color: #000;
-    }
-
-    &:disabled,
-    &[aria-disabled="true"] {
-      background: #c7d0da;
-      border-color: #9daab9;
-      box-shadow: none;
-      color: #000;
-      cursor: not-allowed;
-      opacity: 0.55;
-      transform: none;
-
-      &::before {
-        opacity: 0;
-      }
-    }
-
-    &[data-loading] {
-      background: var(--button-bg);
-      border-color: var(--button-border);
-      color: #000;
-      cursor: wait;
-      opacity: 1;
-    }
+  &[data-loading] .button__content {
+    opacity: 0;
   }
 
   @media (hover: hover) {
     &:not(:disabled, [aria-disabled="true"]):hover {
-      background: var(--button-hover);
-      box-shadow: var(--button-hover-shadow);
-      transform: translateY(-1px);
+      background: var(--action-hover);
+      color: var(--action-fg);
+      box-shadow: none;
+      transform: none;
     }
 
-    &[data-design="press"]:not(:disabled):hover {
-      transform: translateY(-2px);
-    }
-
-    &[data-design="film"]:not(:disabled, [aria-disabled="true"]):hover::before {
-      opacity: 1;
-      transform: translateX(65%);
-    }
-  }
-
-  &:not(:disabled, [aria-disabled="true"]):active {
-    box-shadow: none;
-    transform: translateY(1px);
-  }
-
-  &[data-design="press"]:not(:disabled):active {
-    box-shadow: 0 1px 0 #102943;
-    transform: translateY(3px);
-  }
-
-  &:focus-visible {
-    outline: 2px solid #fff;
-    outline-offset: 2px;
-    box-shadow: 0 0 0 5px #1752d9;
-  }
-
-  &[aria-pressed="true"]:not(:disabled) {
-    box-shadow: inset 0 0 0 2px var(--button-color);
-  }
-
-  &:disabled {
-    background: #c7d0da;
-    border-color: #9daab9;
-    box-shadow: none;
-    color: #566779;
-    cursor: not-allowed;
-    transform: none;
-
-    &::before {
-      opacity: 0;
-    }
-  }
-
-  &[data-loading] {
-    background: var(--button-bg);
-    border-color: var(--button-border);
-    color: var(--button-color);
-    cursor: wait;
-
-    & .button__content {
-      opacity: 0;
+    &[data-variant="text"]:not(:disabled, [aria-disabled="true"]):hover .button__label {
+      text-decoration: underline;
+      text-underline-offset: 3px;
     }
   }
 
   @media (pointer: coarse) {
-    min-height: max(44px, var(--button-height));
+    min-height: max(44px, var(--action-height));
 
     &[data-variant="icon"] {
-      width: max(44px, var(--button-height));
-      height: max(44px, var(--button-height));
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    &,
-    &::before,
-    &__content {
-      transition: none;
-    }
-
-    &__spinner {
-      animation: none;
+      width: max(44px, var(--action-height));
+      height: max(44px, var(--action-height));
     }
   }
 }
 
-@keyframes button-spin {
+.button__content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.button__label {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  overflow-wrap: anywhere;
+}
+
+.button__icon {
+  display: inline-flex;
+
+  & svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.button[data-chevron] .button__content::after {
+  display: block;
+  width: 0.35em;
+  height: 0.35em;
+  flex-shrink: 0;
+  margin-right: 2px;
+  border-top: 1.5px solid currentcolor;
+  border-right: 1.5px solid currentcolor;
+  content: "";
+  transform: rotate(45deg);
+}
+
+.button__progress {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+.button__spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid currentcolor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: control-spin 0.8s linear infinite;
+}
+
+.button__srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@keyframes control-spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button[data-design] {
+    transition: none;
+  }
+
+  .button__spinner {
+    animation: none;
   }
 }

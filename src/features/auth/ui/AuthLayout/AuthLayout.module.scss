@@ -7,8 +7,8 @@
   overflow: hidden;
   padding: 32px;
   background:
-    radial-gradient(circle at 8% 8%, rgb(66 189 218 / 12%), transparent 30%),
-    radial-gradient(circle at 92% 92%, rgb(102 78 220 / 9%), transparent 32%), #0e0e0e;
+    radial-gradient(circle at 8% 8%, rgb(165 165 165 / 12%), transparent 30%),
+    radial-gradient(circle at 92% 92%, rgb(93 93 93 / 9%), transparent 32%), #0e0e0e;
   color: #fff;
   place-items: center;
 
@@ -67,7 +67,7 @@
       bottom: 10%;
       border-radius: 50%;
       animation: auth-glow 5s ease-in-out infinite alternate;
-      background: rgb(66 189 218 / 12%);
+      background: rgb(165 165 165 / 12%);
       content: "";
       filter: blur(14px);
       pointer-events: none;
@@ -101,10 +101,10 @@
     display: grid;
     width: 40px;
     height: 40px;
-    border: 1px solid rgb(66 189 218 / 26%);
+    border: 1px solid rgb(165 165 165 / 26%);
     border-radius: 11px;
-    background: rgb(66 189 218 / 9%);
-    color: #69e2d4;
+    background: rgb(165 165 165 / 9%);
+    color: #c7c7c7;
     font-family: var(--font-sans);
     font-size: 13px;
     font-weight: 700;
@@ -134,8 +134,8 @@
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: #69e2d4;
-      box-shadow: 0 0 16px rgb(105 226 212 / 65%);
+      background: #c7c7c7;
+      box-shadow: 0 0 16px rgb(199 199 199 / 65%);
     }
   }
 

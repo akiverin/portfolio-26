@@ -53,6 +53,6 @@ the manifest. These are build-time tools only; no runtime dependency is added.
 
 ## Verification
 
-`scripts/medeo-film-smoke.mjs` checks actual custom font rendering in Chromium,
+`scripts/medeo-ui-smoke.mjs` checks actual custom font rendering in Chromium,
 Cyrillic/bold loading, local network requests, responsive overflow and button
-behavior against a local dev server. `MEDEO_QA_URL` can target a production preview.
+behavior against a local dev server. `UI_QA_URL` can target a production preview.

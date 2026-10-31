@@ -1,0 +1,75 @@
+.segmented {
+  display: inline-flex;
+  max-width: 100%;
+  gap: 3px;
+  margin: 0;
+  padding: 4px;
+  border: 0;
+  border-radius: 980px;
+  background: var(--control-soft);
+
+  &:disabled {
+    opacity: 0.4;
+  }
+
+  &__legend {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  &__option {
+    position: relative;
+    min-width: 0;
+    flex: 1;
+
+    & input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
+    & span {
+      display: flex;
+      min-height: 36px;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 18px;
+      border-radius: 980px;
+      color: var(--control-text);
+      font-size: 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    & input:checked + span {
+      background: var(--control-fill);
+      color: var(--control-on-fill);
+    }
+
+    & input:focus-visible + span {
+      outline: 2px solid var(--control-text);
+      outline-offset: 2px;
+    }
+
+    & input:disabled + span {
+      cursor: default;
+    }
+  }
+
+  @media (pointer: coarse) {
+    &__option span {
+      min-height: 44px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__option span {
+      transition: none;
+    }
+  }
+}

@@ -26,7 +26,7 @@
     height: 22px;
     border-radius: 7px;
     border: 2px solid rgb(255 255 255 / 14%);
-    background: #151d22;
+    background: #1c1c1c;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -38,12 +38,12 @@
     .checkbox__input:checked + & {
       background: $brand;
       border-color: $brand;
-      box-shadow: 0 2px 8px rgb(66 189 218 / 30%);
+      box-shadow: 0 2px 8px rgb(165 165 165 / 30%);
       color: $white;
     }
 
     .checkbox__input:focus-visible + & {
-      box-shadow: 0 0 0 3px rgb(66 189 218 / 25%);
+      box-shadow: 0 0 0 3px rgb(165 165 165 / 25%);
     }
   }
 

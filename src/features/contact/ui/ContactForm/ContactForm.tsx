@@ -2,13 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import {
-  IconArrowUpRight,
-  IconAt,
-  IconCheck,
-  IconSend,
-  IconUser,
-} from '@tabler/icons-react';
+import { IconCheck } from '@tabler/icons-react';
 import styles from './ContactForm.module.scss';
 import Text from 'shared/ui/Text';
 import Input from 'shared/ui/Input';
@@ -64,7 +58,6 @@ const ContactForm: React.FC = observer(() => {
           <Text view="p-14" weight="medium">
             Написать ещё
           </Text>
-          <IconArrowUpRight size={17} />
         </Button>
       </motion.div>
     );
@@ -81,12 +74,13 @@ const ContactForm: React.FC = observer(() => {
             Расскажите о задаче
           </Text>
         </div>
-        <IconSend className={styles.contact__formIcon} size={24} stroke={1.4} />
       </div>
 
       <fieldset className={styles.contact__projectFieldset}>
         <legend>
-          <Text tag="span" view="p-14" weight="medium">Что нужно сделать?</Text>
+          <Text tag="span" view="p-14" weight="medium">
+            Что нужно сделать?
+          </Text>
         </legend>
         <div className={styles.contact__projectTypes}>
           {PROJECT_TYPES.map((type) => (
@@ -105,7 +99,9 @@ const ContactForm: React.FC = observer(() => {
                 checked={form.projectType === type.value}
                 onChange={(event) => form.setField('projectType', event.target.value)}
               />
-              <Text tag="span" view="p-14" weight="medium">{type.label}</Text>
+              <Text tag="span" view="p-14" weight="medium">
+                {type.label}
+              </Text>
             </label>
           ))}
         </div>
@@ -125,7 +121,6 @@ const ContactForm: React.FC = observer(() => {
               autoComplete="name"
               aria-invalid={Boolean(form.errors.name)}
               aria-describedby={form.errors.name ? 'contact-name-error' : undefined}
-              afterSlot={<IconUser size={18} stroke={1.5} aria-hidden="true" />}
             />
             {form.errors.name && (
               <Text id="contact-name-error" view="p-12" color="accent" role="alert">
@@ -146,7 +141,6 @@ const ContactForm: React.FC = observer(() => {
               autoComplete="email"
               aria-invalid={Boolean(form.errors.email)}
               aria-describedby={form.errors.email ? 'contact-email-error' : undefined}
-              afterSlot={<IconAt size={18} stroke={1.5} aria-hidden="true" />}
             />
             {form.errors.email && (
               <Text id="contact-email-error" view="p-12" color="accent" role="alert">
@@ -201,12 +195,13 @@ const ContactForm: React.FC = observer(() => {
           <Text view="p-16" weight="medium">
             Отправить заявку
           </Text>
-          <IconArrowUpRight size={18} stroke={1.8} />
         </Button>
         <Text tag="p" view="p-12" className={styles.contact__legal}>
           Нажимая кнопку, вы соглашаетесь с{' '}
           <Link to={ROUTES.PRIVACY}>
-            <Text tag="span" view="p-12">политикой конфиденциальности</Text>
+            <Text tag="span" view="p-12">
+              политикой конфиденциальности
+            </Text>
           </Link>
         </Text>
       </div>

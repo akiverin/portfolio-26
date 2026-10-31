@@ -2,12 +2,15 @@ import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
 import classNames from 'classnames';
 import styles from './ActionButton.module.scss';
 
-export const BUTTON_DESIGNS = ['studio', 'cobalt', 'press', 'circuit', 'film'] as const;
+export const BUTTON_DESIGNS = ['mono'] as const;
 export type ButtonDesign = (typeof BUTTON_DESIGNS)[number];
+export type ActionVariant = 'primary' | 'secondary' | 'tertiary' | 'text' | 'icon';
 export type ActionButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 
 export type ActionButtonBaseProps = {
   design?: ButtonDesign;
+  surface?: 'light' | 'dark';
+  chevron?: boolean;
   size?: ActionButtonSize;
   startIcon?: ReactNode;
   endIcon?: ReactNode;
@@ -23,14 +26,16 @@ type BaseProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> & Act
 
 export type ActionButtonProps = BaseProps &
   (
-    | { variant?: 'primary' | 'secondary'; children: ReactNode }
+    | { variant?: Exclude<ActionVariant, 'icon'>; children: ReactNode }
     | { variant: 'icon'; children: ReactNode; 'aria-label': string }
   );
 
 /** Native button semantics shared by every visual direction in the button lab. */
 const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(function ActionButton(
   {
-    design = 'film',
+    design = 'mono',
+    surface,
+    chevron = false,
     variant = 'primary',
     size = 'md',
     startIcon,
@@ -59,6 +64,8 @@ const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(function A
       aria-label={loading && variant === 'icon' ? `${ariaLabel}: ${loadingLabel}` : ariaLabel}
       className={classNames(styles.button, className)}
       data-design={design}
+      data-surface={surface}
+      data-chevron={chevron || undefined}
       data-variant={variant}
       data-size={size}
       data-loading={loading || undefined}

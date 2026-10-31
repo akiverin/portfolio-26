@@ -1,0 +1,33 @@
+:root {
+  color-scheme: dark;
+  accent-color: #a1a1a1;
+
+  --surface: #0d0d0d;
+  --surface-raised: #161616;
+  --text: #f5f5f5;
+  --text-muted: #a1a1a1;
+  --control-fill: #f5f5f5;
+  --control-on-fill: #1d1d1d;
+  --control-fill-hover: #fff;
+  --control-text: #f5f5f5;
+  --control-soft: rgb(255 255 255 / 10%);
+  --control-soft-hover: rgb(255 255 255 / 18%);
+}
+
+/* Native links keep URL, keyboard and new-tab behavior. */
+a {
+  color: inherit;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
+@media (hover: hover) {
+  a:not([data-variant]):hover {
+    text-decoration: underline;
+  }
+}
+
+/* Legacy inline brand symbols follow the neutral interface palette. */
+svg {
+  filter: grayscale(1);
+}

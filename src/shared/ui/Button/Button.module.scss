@@ -58,7 +58,7 @@
 
     &:not(#{$self}--loading):hover {
       background-image: $button-accent-bg-hover;
-      box-shadow: 0 6px 20px rgb(66 189 218 / 25%);
+      box-shadow: 0 6px 20px rgb(165 165 165 / 25%);
     }
 
     &:not(#{$self}--loading):active {

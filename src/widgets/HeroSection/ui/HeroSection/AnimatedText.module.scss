@@ -6,7 +6,7 @@
   width: 100%;
   flex-direction: column;
   overflow: visible;
-  color: #f7fafb;
+  color: #f9f9f9;
   font-weight: 900;
   letter-spacing: -0.07em;
   line-height: 0.78;
@@ -23,7 +23,7 @@
   &:last-of-type {
     align-self: flex-end;
     margin-top: -0.04em;
-    background: linear-gradient(105deg, #f7fafb 5%, #a5fff1 45%, #a997ff 100%);
+    background: linear-gradient(105deg, #f9f9f9 5%, #ebebeb 45%, #a2a2a2 100%);
     background-clip: text;
     color: transparent;
   }
@@ -47,6 +47,6 @@
   right: -0.02em;
   bottom: 0.08em;
   border-radius: 50%;
-  background: #72f4e0;
-  box-shadow: 0 0 28px rgb(114 244 224 / 55%);
+  background: #d7d7d7;
+  box-shadow: 0 0 28px rgb(215 215 215 / 55%);
 }

@@ -2,7 +2,7 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background: linear-gradient(160deg, #0a2440, #98c6ed 52%, #e9ae79);
+  background: linear-gradient(160deg, #202020, #bfbfbf 52%, #b7b7b7);
   pointer-events: none;
 
   &__fallback,
@@ -15,6 +15,7 @@
   }
 
   &__fallback {
+    filter: grayscale(1);
     object-fit: cover;
     object-position: 53% 50%;
     transform: scale(1.06);

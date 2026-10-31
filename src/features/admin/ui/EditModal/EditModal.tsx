@@ -251,6 +251,9 @@ const EditModal: React.FC<EditModalProps> = ({
         >
           <motion.div
             className={styles.modal}
+            role="dialog"
+            aria-modal="true"
+            aria-label={title}
             data-dark={darkMode ? 'true' : undefined}
             initial={{ opacity: 0, y: 30, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -444,13 +447,12 @@ const EditModal: React.FC<EditModalProps> = ({
               <div className={styles.modal__actions}>
                 {mediaError ? <span className={styles.modal__mediaError}>{mediaError}</span> : null}
                 <ActionButton
-                  variant="icon"
+                  variant="secondary"
                   size="sm"
                   type="button"
                   className={styles.modal__cancelBtn}
                   onClick={handleClose}
                   disabled={loading || uploadingField !== null}
-                  aria-label="Переключить"
                 >
                   Отмена
                 </ActionButton>

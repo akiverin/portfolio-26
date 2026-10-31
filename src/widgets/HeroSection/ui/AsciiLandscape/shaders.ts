@@ -75,6 +75,7 @@ void main() {
   vec3 cloudAscii = continuous * (0.82 + ink * 0.32);
   // Far sky remains quiet and smooth so the HTML headline is always readable.
   vec3 color = mix(mix(continuous, cloudAscii, warmClouds), ascii, asciiMix);
-  gl_FragColor = vec4(color, 1.0);
+  float neutral = dot(color, vec3(0.2126, 0.7152, 0.0722));
+  gl_FragColor = vec4(vec3(neutral), 1.0);
 }
 `;

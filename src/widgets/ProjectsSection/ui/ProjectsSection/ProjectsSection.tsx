@@ -2,7 +2,7 @@ import { ActionLink } from 'shared/ui/ActionButton';
 import { useEffect, useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 import { motion } from 'framer-motion';
-import { IconArrowUpRight, IconCode, IconSparkles } from '@tabler/icons-react';
+import { IconCode } from '@tabler/icons-react';
 import styles from './ProjectsSection.module.scss';
 import Text from 'shared/ui/Text';
 import { ProjectListStore } from 'entities/Project/stores/ProjectListStore';
@@ -73,7 +73,7 @@ const ProjectsSection: React.FC = observer(() => {
         >
           <div className={styles.projects__heading}>
             <Text tag="span" view="p-14" className={styles.projects__eyebrow}>
-              <IconSparkles size={14} stroke={1.6} /> 02 · Selected work
+              02 · Selected work
             </Text>
             <Text tag="h2" view="title" weight="black" uppercase>
               Проекты
@@ -125,12 +125,12 @@ const ProjectsSection: React.FC = observer(() => {
               {store.projects.length} работ в коллекции
             </Text>
             <ActionLink
-              variant="secondary"
+              variant="text"
+              chevron
               href={ROUTES.PROJECTS}
               className={styles.projects__allLink}
             >
               Все проекты
-              <IconArrowUpRight size={18} stroke={1.7} />
             </ActionLink>
           </motion.div>
         )}

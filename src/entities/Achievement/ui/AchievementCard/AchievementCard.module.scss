@@ -12,14 +12,14 @@
   border-radius: 22px;
   background: rgb(255 255 255 / 4%);
   box-shadow: 0 10px 30px rgb(0 0 0 / 10%);
-  color: #f3f7f8;
+  color: #f6f6f6;
   transition:
     border-color 0.35s ease,
     box-shadow 0.35s ease,
     transform 0.35s ease;
 
   &:hover {
-    border-color: rgb(105 226 212 / 24%);
+    border-color: rgb(199 199 199 / 24%);
     box-shadow: 0 24px 60px rgb(0 0 0 / 22%);
 
     & .achievementCard__image {
@@ -42,11 +42,11 @@
     aspect-ratio: 16 / 10;
     overflow: hidden;
     border-radius: 16px;
-    background: #dfe5e4;
+    background: #e4e4e4;
 
     &--framed {
       isolation: isolate;
-      background: #182126;
+      background: #1f1f1f;
     }
 
     &--portrait {
@@ -56,10 +56,10 @@
         inset: 0;
         background: linear-gradient(
           90deg,
-          rgb(5 10 13 / 18%),
+          rgb(9 9 9 / 18%),
           transparent 28%,
           transparent 72%,
-          rgb(5 10 13 / 18%)
+          rgb(9 9 9 / 18%)
         );
         content: "";
         pointer-events: none;
@@ -73,10 +73,10 @@
         inset: 0;
         background: linear-gradient(
           0deg,
-          rgb(5 10 13 / 22%),
+          rgb(9 9 9 / 22%),
           transparent 30%,
           transparent 70%,
-          rgb(5 10 13 / 22%)
+          rgb(9 9 9 / 22%)
         );
         content: "";
         pointer-events: none;
@@ -208,7 +208,7 @@
       }
 
       &:hover {
-        color: #148f89;
+        color: #747474;
 
         & svg {
           transform: translateX(2px);

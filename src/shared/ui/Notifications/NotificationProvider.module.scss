@@ -28,27 +28,27 @@
   box-shadow: 0 8px 32px rgb(0, 0, 0, 30%);
 
   &--success {
-    border-color: rgb(72, 199, 142, 30%);
+    border-color: rgb(168, 168, 168, 30%);
   }
 
   &--success &__icon {
-    color: #48c78e;
+    color: #a8a8a8;
   }
 
   &--error {
-    border-color: rgb(229, 72, 75, 30%);
+    border-color: rgb(106, 106, 106, 30%);
   }
 
   &--error &__icon {
-    color: #e5484b;
+    color: #6a6a6a;
   }
 
   &--info {
-    border-color: rgb(66, 189, 218, 30%);
+    border-color: rgb(165, 165, 165, 30%);
   }
 
   &--info &__icon {
-    color: #42bdda;
+    color: #a5a5a5;
   }
 
   &__icon {

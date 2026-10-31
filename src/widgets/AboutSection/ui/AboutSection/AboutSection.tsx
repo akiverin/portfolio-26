@@ -1,15 +1,10 @@
 import { motion } from 'framer-motion';
-import { IconArrowUpRight, IconRoute, IconSparkles } from '@tabler/icons-react';
 import styles from './AboutSection.module.scss';
 import Text from 'shared/ui/Text';
 import photo from 'assets/photo-optimized.jpg';
-import Student from 'shared/ui/icons/Student';
-import Code from 'shared/ui/icons/Code';
-import Briefcase from 'shared/ui/icons/Briefcase';
 import FadeIn from 'shared/ui/FadeIn';
 
 type JourneyEntry = {
-  icon: React.ReactNode;
   period: string;
   title: string;
   subtitle: string;
@@ -17,25 +12,21 @@ type JourneyEntry = {
 
 const EDUCATION: JourneyEntry[] = [
   {
-    icon: <Student width={18} height={18} />,
     period: '2015 — 2021',
     title: 'Лицей информационных технологий №28 г. Киров',
     subtitle: 'Инженерно-технический профиль',
   },
   {
-    icon: <Student width={18} height={18} />,
     period: '2021 — 2025',
     title: 'Московский политехнический университет',
     subtitle: 'Бакалавриат с отличием · Информатика и вычислительная техника',
   },
   {
-    icon: <Code width={18} height={18} />,
     period: '2024',
     title: 'Московский политех и Иннополис',
     subtitle: 'Профессиональная переподготовка · Нейросетевые технологии',
   },
   {
-    icon: <Student width={18} height={18} />,
     period: '2025 — 2027',
     title: 'Московский политехнический университет',
     subtitle: 'Магистратура · Информационные системы и технологии',
@@ -44,13 +35,11 @@ const EDUCATION: JourneyEntry[] = [
 
 const WORK: JourneyEntry[] = [
   {
-    icon: <Code width={18} height={18} />,
     period: '2021 — сейчас',
     title: 'Проектная практика',
     subtitle: 'Веб-продукты, интерфейсы и мобильные приложения — от идеи до запуска',
   },
   {
-    icon: <Briefcase width={18} height={18} />,
     period: '2025 — сейчас',
     title: 'Студия КТС',
     subtitle: 'Младший frontend-разработчик · Коммерческие веб-продукты',
@@ -96,7 +85,6 @@ const EducationStep: React.FC<{ entry: JourneyEntry; index: number }> = ({ entry
         {entry.period}
       </Text>
     </div>
-    <div className={styles.education__icon}>{entry.icon}</div>
     <div className={styles.education__copy}>
       <Text tag="h4" view="p-18" weight="bold">
         {entry.title}
@@ -161,7 +149,7 @@ const AboutSection: React.FC = () => {
             <div className={styles.about__intro}>
               <div className={styles.about__introTopline}>
                 <Text tag="span" view="p-12" className={styles.about__kicker}>
-                  <IconSparkles size={14} stroke={1.6} /> Разработка × дизайн
+                  Разработка × дизайн
                 </Text>
                 <Text tag="span" view="p-12" className={styles.about__availability}>
                   Открыт новым задачам
@@ -205,7 +193,6 @@ const AboutSection: React.FC = () => {
                         {area.caption}
                       </Text>
                     </div>
-                    <IconArrowUpRight size={16} stroke={1.5} />
                   </motion.div>
                 ))}
               </div>
@@ -217,7 +204,7 @@ const AboutSection: React.FC = () => {
           <div className={styles.about__journeyHeader}>
             <div>
               <Text tag="span" view="p-12" className={styles.about__kicker}>
-                <IconRoute size={15} stroke={1.6} /> Траектория
+                Траектория
               </Text>
               <Text tag="h3" view="p-28" weight="bold">
                 Образование и опыт
@@ -231,9 +218,6 @@ const AboutSection: React.FC = () => {
           <div className={styles.about__journeyGrid}>
             <FadeIn delay={0.08} className={styles.about__educationPanel}>
               <div className={styles.about__panelHeader}>
-                <span className={styles.about__panelIcon}>
-                  <Student width={18} height={18} />
-                </span>
                 <div>
                   <Text tag="h3" view="p-20" weight="bold">
                     Образование
@@ -257,9 +241,6 @@ const AboutSection: React.FC = () => {
 
             <FadeIn delay={0.16} className={styles.about__experiencePanel}>
               <div className={styles.about__panelHeader}>
-                <span className={styles.about__panelIcon}>
-                  <Briefcase width={18} height={18} />
-                </span>
                 <div>
                   <Text tag="h3" view="p-20" weight="bold">
                     Практика
@@ -292,7 +273,6 @@ const AboutSection: React.FC = () => {
                       )}
                     </div>
                     <div className={styles.experience__content}>
-                      <span className={styles.experience__icon}>{entry.icon}</span>
                       <div>
                         <Text tag="h4" view="p-18" weight="bold">
                           {entry.title}

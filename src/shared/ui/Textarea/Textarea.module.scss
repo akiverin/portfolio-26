@@ -40,8 +40,8 @@
   }
 
   &:has(textarea:focus) {
-    border-color: rgb(66 189 218 / 40%);
-    box-shadow: 0 0 0 3px rgb(66 189 218 / 8%);
+    border-color: rgb(165 165 165 / 40%);
+    box-shadow: 0 0 0 3px rgb(165 165 165 / 8%);
     background-color: var(--input-bg);
     color: var(--input-text);
   }

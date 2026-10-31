@@ -1,13 +1,13 @@
 import { forwardRef, type AnchorHTMLAttributes, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
-import type { ActionButtonBaseProps } from './ActionButton';
+import type { ActionButtonBaseProps, ActionVariant } from './ActionButton';
 import styles from './ActionButton.module.scss';
 
 type ActionLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> &
   ActionButtonBaseProps & {
     href: string;
-    variant?: 'primary' | 'secondary' | 'icon';
+    variant?: ActionVariant;
     children: ReactNode;
     disabled?: boolean;
   };
@@ -17,7 +17,9 @@ const ActionLink = forwardRef<HTMLAnchorElement, ActionLinkProps>(function Actio
   {
     href,
     variant = 'primary',
-    design = 'film',
+    design = 'mono',
+    surface,
+    chevron = false,
     size = 'md',
     startIcon,
     endIcon,
@@ -46,6 +48,8 @@ const ActionLink = forwardRef<HTMLAnchorElement, ActionLinkProps>(function Actio
     rel: rel ?? (target === '_blank' ? 'noopener noreferrer' : undefined),
     className: classNames(styles.button, className),
     'data-design': design,
+    'data-surface': surface,
+    'data-chevron': chevron || undefined,
     'data-variant': variant,
     'data-size': size,
     'data-loading': loading || undefined,

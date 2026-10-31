@@ -1,5 +1,3 @@
-import Text from '@/shared/ui/Text';
-
 export const DESIGN_UPDATE_ANNOUNCEMENT = {
   id: 'design-update-2026',
   message: (

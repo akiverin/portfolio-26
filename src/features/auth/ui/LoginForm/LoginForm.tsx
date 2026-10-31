@@ -65,7 +65,7 @@ const LoginForm: React.FC = observer(() => {
     <AuthLayout mode="login">
       {mode === 'reset' && (
         <ActionButton
-          variant="icon"
+          variant="text"
           size="xs"
           type="button"
           className={styles.back}
@@ -172,7 +172,7 @@ const LoginForm: React.FC = observer(() => {
 
           {mode === 'login' && (
             <ActionButton
-              variant="secondary"
+              variant="text"
               size="sm"
               type="button"
               className={styles.textButton}

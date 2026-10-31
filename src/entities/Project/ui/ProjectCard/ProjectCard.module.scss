@@ -11,7 +11,7 @@
   border: 1px solid rgb(255 255 255 / 9%);
   border-radius: 22px;
   background: rgb(255 255 255 / 5%);
-  color: #f4f7f8;
+  color: #f6f6f6;
   transition:
     border-color 0.35s ease,
     background 0.35s ease,
@@ -24,7 +24,7 @@
     right: 18px;
     bottom: 0;
     left: 18px;
-    background: linear-gradient(90deg, transparent, rgb(116 236 221 / 50%), transparent);
+    background: linear-gradient(90deg, transparent, rgb(209 209 209 / 50%), transparent);
     content: "";
     opacity: 0;
     transform: scaleX(0.4);
@@ -34,7 +34,7 @@
   }
 
   &:hover {
-    border-color: rgb(128 239 225 / 24%);
+    border-color: rgb(214 214 214 / 24%);
     background: rgb(255 255 255 / 7%);
     box-shadow: 0 24px 55px rgb(0 0 0 / 20%);
 
@@ -62,7 +62,7 @@
     aspect-ratio: 16 / 10;
     overflow: hidden;
     border-radius: 16px;
-    background: #172027;
+    background: #1f1f1f;
 
     @include smallerThanTablet {
       border-radius: 14px;
@@ -70,7 +70,7 @@
 
     &--framed {
       isolation: isolate;
-      background: #10191f;
+      background: #181818;
     }
 
     &--portrait {
@@ -80,10 +80,10 @@
         inset: 0;
         background: linear-gradient(
           90deg,
-          rgb(7 12 16 / 22%),
+          rgb(11 11 11 / 22%),
           transparent 28%,
           transparent 72%,
-          rgb(7 12 16 / 22%)
+          rgb(11 11 11 / 22%)
         );
         content: "";
         pointer-events: none;
@@ -97,10 +97,10 @@
         inset: 0;
         background: linear-gradient(
           0deg,
-          rgb(7 12 16 / 25%),
+          rgb(11 11 11 / 25%),
           transparent 30%,
           transparent 70%,
-          rgb(7 12 16 / 25%)
+          rgb(11 11 11 / 25%)
         );
         content: "";
         pointer-events: none;
@@ -243,9 +243,9 @@
       }
 
       &:hover {
-        border-color: rgb(125 237 223 / 28%);
-        background: rgb(125 237 223 / 8%);
-        color: #a4f8ed;
+        border-color: rgb(212 212 212 / 28%);
+        background: rgb(212 212 212 / 8%);
+        color: #e5e5e5;
 
         & svg:last-child {
           opacity: 1;

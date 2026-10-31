@@ -13,8 +13,8 @@
     padding: clamp(28px, 5vw, 72px);
     border: 1px solid rgb(255 255 255 / 8%);
     border-radius: 32px;
-    background: #0a1016;
-    color: #f3f7f8;
+    background: #0f0f0f;
+    color: #f6f6f6;
     isolation: isolate;
 
     @include smallerThanTablet {
@@ -37,12 +37,12 @@
     aspect-ratio: 1;
     top: -46%;
     right: -14%;
-    border: 1px solid rgb(126 232 219 / 7%);
+    border: 1px solid rgb(209 209 209 / 7%);
     border-radius: 50%;
     background:
-      radial-gradient(circle, transparent 24%, rgb(37 145 139 / 5%) 24.2%, transparent 24.7%),
-      radial-gradient(circle, transparent 48%, rgb(37 145 139 / 5%) 48.2%, transparent 48.7%),
-      conic-gradient(from 20deg, transparent, rgb(77 210 197 / 10%), transparent 18%);
+      radial-gradient(circle, transparent 24%, rgb(122 122 122 / 5%) 24.2%, transparent 24.7%),
+      radial-gradient(circle, transparent 48%, rgb(122 122 122 / 5%) 48.2%, transparent 48.7%),
+      conic-gradient(from 20deg, transparent, rgb(181 181 181 / 10%), transparent 18%);
     animation: radar-spin 22s linear infinite;
 
     &::after {
@@ -52,8 +52,8 @@
       top: 30%;
       left: 18%;
       border-radius: 50%;
-      background: #35bcb1;
-      box-shadow: 0 0 20px rgb(53 188 177 / 55%);
+      background: #9f9f9f;
+      box-shadow: 0 0 20px rgb(159 159 159 / 55%);
       content: "";
     }
 
@@ -98,7 +98,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    color: #82e9dc;
+    color: #d2d2d2;
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.11em;
@@ -171,8 +171,8 @@
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: #33b8ad;
-    box-shadow: 0 0 0 4px rgb(51 184 173 / 10%);
+    background: #9b9b9b;
+    box-shadow: 0 0 0 4px rgb(155 155 155 / 10%);
     animation: achievement-pulse 2.2s ease-in-out infinite;
   }
 
@@ -232,6 +232,6 @@
 
 @keyframes achievement-pulse {
   50% {
-    box-shadow: 0 0 0 8px rgb(51 184 173 / 2%);
+    box-shadow: 0 0 0 8px rgb(155 155 155 / 2%);
   }
 }

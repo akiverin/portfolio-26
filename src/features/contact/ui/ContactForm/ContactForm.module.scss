@@ -13,13 +13,13 @@
     border: 1px solid rgb(255 255 255 / 9%);
     border-radius: 26px;
     background:
-      radial-gradient(circle at 100% 0%, rgb(66 189 218 / 13%), transparent 28%),
-      #10181e;
+      radial-gradient(circle at 100% 0%, rgb(165 165 165 / 13%), transparent 28%),
+      #171717;
     box-shadow: 0 24px 70px rgb(0 0 0 / 28%);
-    color: #f3f7f8;
+    color: #f6f6f6;
 
     --input-bg: rgb(255 255 255 / 6%);
-    --input-text: #f3f7f8;
+    --input-text: #f6f6f6;
     --input-placeholder: rgb(255 255 255 / 36%);
     --input-bg-disabled: rgb(255 255 255 / 3%);
     --input-text-disabled: rgb(255 255 255 / 28%);
@@ -58,7 +58,7 @@
 
   &__formIcon {
     flex: 0 0 auto;
-    color: #309cb5;
+    color: #878787;
     transform: rotate(-7deg);
   }
 
@@ -107,9 +107,9 @@
     }
 
     &:hover {
-      border-color: rgb(66 189 218 / 36%);
-      background: rgb(107 231 216 / 7%);
-      color: #a0f2e8;
+      border-color: rgb(165 165 165 / 36%);
+      background: rgb(204 204 204 / 7%);
+      color: #e0e0e0;
     }
 
     &:has(input:focus-visible) {
@@ -118,10 +118,10 @@
     }
 
     &--active {
-      border-color: rgb(124 235 221 / 42%);
-      background: #8cece0;
-      color: #102126;
-      box-shadow: 0 0 0 3px rgb(124 235 221 / 8%);
+      border-color: rgb(210 210 210 / 42%);
+      background: #d7d7d7;
+      color: #1e1e1e;
+      box-shadow: 0 0 0 3px rgb(210 210 210 / 8%);
     }
   }
 
@@ -171,10 +171,10 @@
 
   &__error {
     padding: 11px 13px;
-    border: 1px solid rgb(229 72 75 / 16%);
+    border: 1px solid rgb(106 106 106 / 16%);
     border-radius: 10px;
-    background: rgb(229 72 75 / 7%);
-    color: #c73d42;
+    background: rgb(106 106 106 / 7%);
+    color: #5b5b5b;
     font-size: 12px;
   }
 
@@ -209,7 +209,7 @@
     line-height: 1.45;
 
     & a {
-      color: #8cece0;
+      color: #d7d7d7;
       text-decoration: underline;
       text-underline-offset: 2px;
     }
@@ -238,9 +238,9 @@
     align-items: center;
     justify-content: center;
     border-radius: 20px;
-    background: #15272e;
-    box-shadow: 0 14px 28px rgb(21 39 46 / 18%);
-    color: #75eddd;
+    background: #242424;
+    box-shadow: 0 14px 28px rgb(36 36 36 / 18%);
+    color: #d2d2d2;
   }
 
   &__againButton {

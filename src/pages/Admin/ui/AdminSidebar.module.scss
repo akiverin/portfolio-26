@@ -13,7 +13,11 @@
   &--collapsed {
     .sidebar__header {
       justify-content: center;
-      padding: 16px 12px;
+      padding: 16px 8px;
+    }
+
+    & [data-design] {
+      --action-padding: 8px;
     }
   }
 

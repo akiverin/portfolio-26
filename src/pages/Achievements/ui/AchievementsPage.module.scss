@@ -5,7 +5,7 @@
   @include wrapper;
 
   min-height: var(--page-viewport-height, 100vh);
-  color: #f3f7f8;
+  color: #f6f6f6;
   padding-top: var(--page-top-padding, 150px);
   padding-bottom: 100px;
 
@@ -39,7 +39,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    color: #82e9dc;
+    color: #d2d2d2;
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.11em;
@@ -56,8 +56,8 @@
     border: 1px solid rgb(255 255 255 / 8%);
     border-radius: 30px;
     background:
-      radial-gradient(circle at 100% 0%, rgb(67 190 181 / 12%), transparent 25%),
-      #0a1116;
+      radial-gradient(circle at 100% 0%, rgb(163 163 163 / 12%), transparent 25%),
+      #101010;
 
     @include smallerThanTablet {
       gap: 22px;
@@ -75,7 +75,7 @@
     border-bottom: 1px solid rgb(255 255 255 / 9%);
 
     --input-bg: rgb(255 255 255 / 6%);
-    --input-text: #f3f7f8;
+    --input-text: #f6f6f6;
     --input-placeholder: rgb(255 255 255 / 36%);
 
     @include smallerThanTablet {
@@ -155,8 +155,8 @@
     --pagination-bg: rgb(255 255 255 / 6%);
     --pagination-text: rgb(255 255 255 / 62%);
     --pagination-border: rgb(255 255 255 / 9%);
-    --pagination-active-bg: #8cece0;
-    --pagination-active-text: #102126;
+    --pagination-active-bg: #d7d7d7;
+    --pagination-active-text: #1e1e1e;
   }
 
   &__skeletonCard {

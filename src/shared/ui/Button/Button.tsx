@@ -7,12 +7,12 @@ export type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'childre
     children: ReactNode;
     href?: string;
     theme?: 'dark' | 'primary' | 'accent';
-    variant?: 'primary' | 'secondary';
+    variant?: 'primary' | 'secondary' | 'tertiary' | 'text';
     noPadding?: boolean;
     target?: '_blank' | '_self';
   };
 
-/** Compatibility entry point: existing forms now use the same Film component. */
+/** Compatibility entry point: existing forms now use the same monochrome component. */
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   {
     children,
@@ -21,7 +21,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
     variant = theme === 'dark' ? 'secondary' : 'primary',
     noPadding: _noPadding,
     target,
-    design = 'film',
+    design = 'mono',
     ...props
   },
   ref,
@@ -43,6 +43,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
         endIcon={props.endIcon}
         fullWidth={props.fullWidth}
         tone={props.tone}
+        surface={props.surface}
+        chevron={props.chevron}
         aria-label={props['aria-label']}
       >
         {children}

@@ -9,8 +9,8 @@
   overflow: hidden;
   padding: 30px 40px 26px;
   border-radius: 0 0 32px 32px;
-  background: #9fc5e5;
-  color: #082848;
+  background: #bfbfbf;
+  color: #242424;
   container-type: inline-size;
   isolation: isolate;
 
@@ -48,8 +48,8 @@
 
   &__atmosphere {
     background:
-      linear-gradient(0deg, rgb(3 17 35 / 72%), transparent 19%),
-      radial-gradient(ellipse at 55% 36%, rgb(191 221 245 / 12%), transparent 45%);
+      linear-gradient(0deg, rgb(15 15 15 / 72%), transparent 19%),
+      radial-gradient(ellipse at 55% 36%, rgb(216 216 216 / 12%), transparent 45%);
   }
 
   &__topline,
@@ -60,7 +60,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-    color: #e7f3ff;
+    color: #f1f1f1;
   }
 
   &__topline {
@@ -102,8 +102,8 @@
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: #ffbb7d;
-    box-shadow: 0 0 10px rgb(255 178 109 / 45%);
+    background: #c5c5c5;
+    box-shadow: 0 0 10px rgb(189 189 189 / 45%);
   }
 
   &__content {
@@ -117,7 +117,7 @@
 
   &__eyebrow {
     margin-bottom: 22px;
-    color: #214765;
+    color: #414141;
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.075em;
@@ -125,7 +125,7 @@
   }
 
   &__title {
-    color: #062745;
+    color: #222;
     font-size: clamp(38px, 5.35cqw, 84px);
     font-weight: 700;
     letter-spacing: -0.055em;
@@ -141,7 +141,7 @@
   &__description {
     max-width: 640px;
     margin: 26px auto 0;
-    color: #234862;
+    color: #424242;
     font-size: clamp(15px, 1.45cqw, 20px);
     line-height: 1.5;
     text-wrap: balance;
@@ -202,7 +202,7 @@
       position: relative;
       display: block;
       width: 100%;
-      filter: drop-shadow(0 6px 8px rgb(0 18 49 / 20%));
+      filter: drop-shadow(0 6px 8px rgb(16 16 16 / 20%));
       animation: passage-mascot 6s ease-in-out infinite;
       animation-play-state: var(--hero-motion-state, running);
     }
@@ -251,13 +251,13 @@
 
   &__scroll {
     gap: 11px;
-    color: #d5e8f7;
+    color: #e5e5e5;
     font-size: 10px;
     letter-spacing: 0.06em;
     transition: color 0.2s ease;
 
     &:hover {
-      color: #ffbd88;
+      color: #c7c7c7;
     }
   }
 
@@ -270,7 +270,7 @@
 
   @media (768px <= width <= 1023px) and (orientation: portrait) {
     &__availability {
-      color: #173b5b;
+      color: #363636;
     }
 
     &__mascot {

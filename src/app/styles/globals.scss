@@ -1,6 +1,7 @@
 @use "resets" as *;
+@use "theme";
 
-/* ------------------------- Big Cursor ------------------------- */
+/* ------------------------- Custom cursors (24px maximum dimension) ------------------------- */
 
 /* Default cursor */
 body,
@@ -22,7 +23,7 @@ body input[type="text"],
 body input[type="email"],
 body textarea,
 body [data-text] {
-  cursor: url("../../assets/cursors/cursor-text.svg") 9 19, text;
+  cursor: url("../../assets/cursors/cursor-text.svg") 8 16, text;
 }
 
 /* Hover cursor */
@@ -39,7 +40,7 @@ body [data-hover],
 body [data-hover] *,
 body [data-gsap-slider-list-status] [data-hover]:hover,
 body [data-gsap-slider-list-status] [data-hover]:hover * {
-  cursor: url("../../assets/cursors/cursor-pointer.svg") 12 0, pointer;
+  cursor: url("../../assets/cursors/cursor-pointer.svg") 9 0, pointer;
 }
 
 /* Grab */
@@ -47,7 +48,7 @@ body [data-gsap-slider-list-status="grab"]:hover,
 body [data-gsap-slider-list-status="grab"] *:hover,
 body [data-flick-drag-status="grab"],
 body [data-flick-drag-status="grab"] .flick-group__top {
-  cursor: url("../../assets/cursors/cursor-drag.svg") 12 0, text;
+  cursor: url("../../assets/cursors/cursor-drag.svg") 9 0, grab;
 }
 
 /* Grabbing */
@@ -55,5 +56,5 @@ body [data-flick-drag-status="grabbing"],
 body [data-flick-drag-status="grabbing"] .flick-group__top,
 body [data-gsap-slider-list-status="grabbing"]:hover,
 body [data-gsap-slider-list-status="grabbing"] *:hover {
-  cursor: url("../../assets/cursors/cursor-dragging.svg") 12 0, text;
+  cursor: url("../../assets/cursors/cursor-dragging.svg") 10 0, grabbing;
 }

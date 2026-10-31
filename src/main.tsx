@@ -18,6 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <MantineProvider
         theme={{
+          primaryColor: 'gray',
           fontFamily: FONT_FAMILY.sans,
           headings: { fontFamily: FONT_FAMILY.sans },
           fontFamilyMonospace: FONT_FAMILY.mono,

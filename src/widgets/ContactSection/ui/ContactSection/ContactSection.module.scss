@@ -26,7 +26,7 @@
   }
 
   &__sectionIndex {
-    color: #7ce8dc;
+    color: #d0d0d0;
     letter-spacing: 0.11em;
     text-transform: uppercase;
   }
@@ -41,7 +41,7 @@
     padding: clamp(28px, 5vw, 72px);
     border: 1px solid rgb(255 255 255 / 8%);
     border-radius: 32px;
-    background: #0b1117;
+    background: #101010;
     box-shadow: 0 35px 90px rgb(0 0 0 / 18%);
     color: $white;
     isolation: isolate;
@@ -74,8 +74,8 @@
     left: -300px;
     border-radius: 50%;
     background:
-      radial-gradient(circle at 50% 50%, rgb(66 189 218 / 28%), transparent 56%),
-      radial-gradient(circle at 70% 65%, rgb(128 83 235 / 20%), transparent 48%);
+      radial-gradient(circle at 50% 50%, rgb(165 165 165 / 28%), transparent 56%),
+      radial-gradient(circle at 70% 65%, rgb(104 104 104 / 20%), transparent 48%);
     filter: blur(30px);
     animation: contact-mesh 10s ease-in-out infinite alternate;
   }
@@ -103,7 +103,7 @@
 
     &::after {
       inset: 36%;
-      border-color: rgb(66 189 218 / 16%);
+      border-color: rgb(165 165 165 / 16%);
     }
   }
 
@@ -128,7 +128,7 @@
     width: fit-content;
     align-items: center;
     gap: 8px;
-    color: #78eadb;
+    color: #d1d1d1;
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.04em;
@@ -169,8 +169,8 @@
     width: 36px;
     height: 36px;
     border-radius: 10px;
-    background: rgb(113 235 220 / 10%);
-    color: #71ebdc;
+    background: rgb(208 208 208 / 10%);
+    color: #d0d0d0;
     place-items: center;
   }
 
@@ -185,7 +185,7 @@
 
   &__socialLink {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: 1fr;
     align-items: center;
     gap: 12px;
     padding: 11px 12px;
@@ -201,7 +201,7 @@
       background: rgb(255 255 255 / 4%);
 
       & .contact__socialArrow {
-        color: #79eadc;
+        color: #d1d1d1;
         transform: translateX(2px);
       }
     }
@@ -214,7 +214,7 @@
     border: 1px solid rgb(255 255 255 / 8%);
     border-radius: 11px;
     background: rgb(255 255 255 / 4%);
-    color: #72e7da;
+    color: #cdcdcd;
     place-items: center;
   }
 

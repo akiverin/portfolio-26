@@ -68,12 +68,12 @@
 }
 
 .link {
-  color: #69e2d4;
+  color: #c7c7c7;
   transition: color 0.15s ease;
 
   &:hover,
   &:focus-visible {
-    color: #a0f1e8;
+    color: #dfdfdf;
   }
 }
 
@@ -103,7 +103,7 @@
 
   &:hover,
   &:active {
-    border-color: rgb(105 226 212 / 22%);
+    border-color: rgb(199 199 199 / 22%);
     background-image: none !important;
     background-color: rgb(255 255 255 / 7%);
     box-shadow: none !important;
@@ -134,5 +134,5 @@
   height: 18px;
   flex-shrink: 0;
   margin-top: 2px;
-  accent-color: #42bdda;
+  accent-color: #a5a5a5;
 }

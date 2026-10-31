@@ -83,7 +83,7 @@
   }
 
   &__required {
-    color: #e5484b;
+    color: #6a6a6a;
     margin-left: 2px;
   }
 
@@ -165,8 +165,8 @@
     }
 
     &--selected {
-      border-color: var(--admin-checkbox-accent, #42bdda);
-      background: var(--admin-row-selected, rgb(66, 189, 218, 8%));
+      border-color: var(--admin-checkbox-accent, #a5a5a5);
+      background: var(--admin-row-selected, rgb(165, 165, 165, 8%));
 
       & .modal__selectionMark {
         opacity: 1;
@@ -195,8 +195,8 @@
     height: 20px;
     flex: 0 0 auto;
     border-radius: 50%;
-    background: var(--admin-checkbox-accent, #42bdda);
-    color: #071014;
+    background: var(--admin-checkbox-accent, #a5a5a5);
+    color: #0e0e0e;
     font-size: 12px;
     font-weight: 700;
     opacity: 0;
@@ -271,7 +271,7 @@
 
   &__mediaError {
     margin-right: auto;
-    color: #ff8a8d;
+    color: #a3a3a3;
   }
 
   &__actions {

@@ -7,8 +7,8 @@
   position: relative;
   min-height: var(--page-viewport-height, 100vh);
   padding-block: var(--page-top-padding, 128px) 88px;
-  background: radial-gradient(circle at 80% 4%, rgb(66 189 218 / 8%), transparent 28%), #0e0e0e;
-  color: #f3f7f8;
+  background: radial-gradient(circle at 80% 4%, rgb(165 165 165 / 8%), transparent 28%), #0e0e0e;
+  color: #f6f6f6;
 
   @include smallerThanTablet {
     padding-block: var(--page-top-padding-mobile, 96px) 48px;
@@ -34,7 +34,7 @@
     gap: 14px;
     padding: 42px 48px 36px;
     border-bottom: 1px solid rgb(255 255 255 / 7%);
-    background: linear-gradient(130deg, rgb(66 189 218 / 8%), transparent 42%), #141414;
+    background: linear-gradient(130deg, rgb(165 165 165 / 8%), transparent 42%), #141414;
 
     @include smallerThanTablet {
       padding: 28px 22px;
@@ -100,7 +100,7 @@
     list-style: disc;
 
     & li::marker {
-      color: #69e2d4;
+      color: #c7c7c7;
     }
   }
 }

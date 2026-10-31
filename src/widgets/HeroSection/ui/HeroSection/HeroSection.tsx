@@ -4,13 +4,11 @@ import { useRef, useState } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowDownIcon } from '@phosphor-icons/react/dist/csr/ArrowDown';
-import { ArrowRightIcon } from '@phosphor-icons/react/dist/csr/ArrowRight';
 import { PauseIcon } from '@phosphor-icons/react/dist/csr/Pause';
 import { PlayIcon } from '@phosphor-icons/react/dist/csr/Play';
 import { ANCHORS } from 'shared/configs/routes';
 import logo from 'assets/brand/logo-07-blue.svg';
 import AsciiLandscape from '../AsciiLandscape';
-import HeroMascot from './HeroMascot';
 import styles from './HeroSection.module.scss';
 
 const HeroSection: React.FC = () => {
@@ -74,13 +72,16 @@ const HeroSection: React.FC = () => {
         <div className={styles.hero__actions}>
           <ActionLink
             variant="primary"
+            surface="light"
             href={ANCHORS.PROJECTS}
             className={styles.hero__primaryAction}
           >
-            Как это выглядит <ArrowRightIcon size={19} weight="regular" aria-hidden="true" />
+            Как это выглядит
           </ActionLink>
           <ActionLink
-            variant="secondary"
+            variant="text"
+            surface="light"
+            chevron
             href={ANCHORS.CONTACT}
             className={styles.hero__secondaryAction}
           >

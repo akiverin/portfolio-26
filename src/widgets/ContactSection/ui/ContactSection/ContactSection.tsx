@@ -2,31 +2,20 @@ import { motion } from 'framer-motion';
 import styles from './ContactSection.module.scss';
 import Text from 'shared/ui/Text';
 import ContactForm from 'features/contact/ui/ContactForm';
-import {
-  IconArrowUpRight,
-  IconBrandTelegram,
-  IconClock,
-  IconMail,
-  IconPhone,
-  IconSparkles,
-} from '@tabler/icons-react';
 
 const SOCIALS = [
   {
     href: 'mailto:kiverin03@yandex.ru',
-    icon: IconMail,
     type: 'Email',
     label: 'kiverin03@yandex.ru',
   },
   {
     href: 'https://t.me/andkiv',
-    icon: IconBrandTelegram,
     type: 'Telegram',
     label: '@andkiv',
   },
   {
     href: 'tel:89531370800',
-    icon: IconPhone,
     type: 'Телефон',
     label: '+7 (953) 137-08-00',
   },
@@ -82,7 +71,7 @@ const ContactSection: React.FC = () => {
         <motion.div className={styles.contact__intro} variants={itemVariants}>
           <div className={styles.contact__introTop}>
             <Text tag="span" view="p-14" className={styles.contact__eyebrow}>
-              <IconSparkles size={15} /> Новая задача начинается здесь
+              Новая задача начинается здесь
             </Text>
             <Text tag="h3" view="p-32" weight="bold" className={styles.contact__introTitle}>
               Давайте создадим продукт, который хочется использовать.
@@ -94,9 +83,6 @@ const ContactSection: React.FC = () => {
           </div>
 
           <div className={styles.contact__responseCard}>
-            <span className={styles.contact__responseIcon}>
-              <IconClock size={18} stroke={1.6} />
-            </span>
             <div>
               <Text tag="span" view="p-12" weight="medium">
                 Обычно отвечаю в течение дня
@@ -108,7 +94,7 @@ const ContactSection: React.FC = () => {
           </div>
 
           <div className={styles.contact__socials}>
-            {SOCIALS.map(({ href, icon: Icon, type, label }) => (
+            {SOCIALS.map(({ href, type, label }) => (
               <motion.a
                 key={href}
                 href={href}
@@ -118,9 +104,6 @@ const ContactSection: React.FC = () => {
                 variants={itemVariants}
                 whileHover={{ x: 5 }}
               >
-                <span className={styles.contact__socialIcon}>
-                  <Icon size={19} stroke={1.5} />
-                </span>
                 <span className={styles.contact__socialCopy}>
                   <Text tag="span" view="p-12" className={styles.contact__socialType}>
                     {type}
@@ -129,7 +112,6 @@ const ContactSection: React.FC = () => {
                     {label}
                   </Text>
                 </span>
-                <IconArrowUpRight className={styles.contact__socialArrow} size={17} stroke={1.5} />
               </motion.a>
             ))}
           </div>
